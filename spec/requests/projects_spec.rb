@@ -4,6 +4,7 @@ describe "resource(:projects)" do
   describe "GET" do
     
     before(:each) do
+      Project.all.each{|project| project.destroy}
       @response = request(resource(:projects))
     end
     
@@ -11,22 +12,21 @@ describe "resource(:projects)" do
       @response.should be_successful
     end
 
-    it "contains a list of projects" do
-      @response.should have_xpath("//ul")
+    it "contains an empty list of projects" do
+      @response.should_not have_xpath("//h2")
     end
     
   end
   
   describe "GET" do
     before(:each) do
-      projects = [mock(:project, :name => 'oupsnow'), mock(:project, :name => 'pictrails')]
+      projects = list_mock_project
       Project.should_receive(:all).and_return(projects)
       @response = request(resource(:projects))
     end
     
     it "has a list of projects" do
-      pending
-      @response.should have_xpath("//ul/li")
+      @response.should have_xpath("//h2")
     end
   end
   

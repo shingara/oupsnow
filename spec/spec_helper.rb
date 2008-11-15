@@ -20,3 +20,12 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
 end
+
+def list_mock_project
+  [mock(:project, 
+        :name => 'oupsnow',
+        :description => nil ), 
+    mock(:project, 
+         :name => 'pictrails',
+         :description => 'a gallery in Rails')]
+end

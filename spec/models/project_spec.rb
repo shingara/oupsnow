@@ -3,7 +3,7 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 describe Project do
 
   it "should have valid" do
-    Factory.build(:project).should be_valid
+    Factory.build(:project, :name => 'new_project').should be_valid
   end
 
   it "should invalid without name" do

@@ -1,11 +1,12 @@
 %h1
-  Projects controller, index action
-%p
-  Edit this file in
-  %tt
-    app/views/projects/index.html.erb
-%ul
-- for project in @projects
-  %li= project.name + link_to('Show', url(:project, project)) + link_to('Edit', url(:edit_project,  project))
+  Projects
+
+- @projects.each do |project|
+  %h2
+    %span= project.name
+    %span= link_to('Show', url(:project, project))
+    %span=link_to('Edit', url(:edit_project,  project))
+
+  %p= project.description
 
 = link_to 'New', url(:new_project)
