@@ -8,8 +8,6 @@ end
 
 require "merb-core"
 require "spec" # Satisfies Autotest and anyone else not using the Rake tasks
-require 'factory_girl'
-require File.dirname(__FILE__) + '/factories.rb'
 
 # this loads all plugins required in your init file so don't add them
 # here again, Merb will do it for you
@@ -29,3 +27,5 @@ def list_mock_project
          :name => 'pictrails',
          :description => 'a gallery in Rails')]
 end
+
+require File.dirname(__FILE__) + '/fixtures.rb'

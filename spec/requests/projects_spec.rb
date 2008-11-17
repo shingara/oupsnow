@@ -47,7 +47,7 @@ end
 describe "resource(@project)" do 
   describe "a successful DELETE" do
      before(:each) do
-       @response = request(resource(Factory(:project)), :method => "DELETE")
+       @response = request(resource(Project.gen), :method => "DELETE")
      end
 
      it "should redirect to the index action" do
@@ -69,7 +69,7 @@ end
 
 describe "resource(@project, :edit)" do
   before(:each) do
-    @response = request(resource(Factory(:project), :edit))
+    @response = request(resource(Project.gen, :edit))
   end
   
   it "responds successfully" do
@@ -81,7 +81,7 @@ describe "resource(@project)" do
   
   describe "GET" do
     before(:each) do
-      @response = request(resource(Factory(:project)))
+      @response = request(resource(Project.gen))
     end
   
     it "responds successfully" do
@@ -91,7 +91,7 @@ describe "resource(@project)" do
   
   describe "PUT" do
     before(:each) do
-      @project = Factory(:project)
+      @project = Project.gen
       @response = request(resource(@project), :method => "PUT", 
         :params => { :project => {:id => @project.id, :name => 'update_name'} })
     end
