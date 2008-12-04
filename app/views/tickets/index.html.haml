@@ -1,0 +1,16 @@
+%h1
+  Tickets controller, index action
+%p
+  Edit this file in
+  %tt
+    app/views/tickets/index.html.erb
+%table
+  %tr
+  - for ticket in @tickets
+    %tr
+      %td
+        = link_to 'Show', url(:project_ticket, ticket)
+      %td
+        = link_to 'Edit', url(:edit_project_ticket,  ticket)
+
+= link_to 'New', url(:new_project_ticket)

@@ -1,0 +1,13 @@
+%h1 Tickets controller, new action
+
+%p 
+  Edit this file in 
+  %tt app/views/tickets/new.html.erb
+
+= error_messages_for :ticket
+
+= form_for(@ticket, :action => url(:project_tickets) ) do
+  %p
+    = submit "Create"
+
+= link_to 'Back', url(:project_tickets)

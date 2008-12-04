@@ -1,0 +1,15 @@
+%h1
+  Tickets controller, edit action
+%p
+  Edit this file in
+  %tt
+    app/views/tickets/edit.html.erb
+= error_messages_for :ticket
+
+= form_for(@ticket, :action => url(:ticket, @ticket)) do
+  %p
+    = submit "Update"
+
+= link_to 'Show', url(:ticket, @ticket)
+|
+= link_to 'Back', url(:tickets)
