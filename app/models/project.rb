@@ -8,4 +8,6 @@ class Project
   validates_present :name
   validates_is_unique :name
 
+  has n, :tickets
+
 end
