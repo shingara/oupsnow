@@ -5,6 +5,6 @@
   %tt
     app/views/tickets/show.html.erb
 
-= link_to 'Edit',  url(:edit_ticket,  @ticket)
+= link_to 'Edit',  resource(@project, @ticket, :edit)
 |
-= link_to 'Back', url(:tickets)
+= link_to 'Back', resource(@project, :tickets)

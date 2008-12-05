@@ -9,8 +9,8 @@
   - for ticket in @tickets
     %tr
       %td
-        = link_to 'Show', url(:project_ticket, ticket)
+        = link_to 'Show', resource(@project, ticket)
       %td
-        = link_to 'Edit', url(:edit_project_ticket,  ticket)
+        = link_to 'Edit', resource(@project,  ticket, :edit)
 
-= link_to 'New', url(:new_project_ticket)
+= link_to 'New', resource(@project, :tickets, :new)

@@ -1,5 +1,11 @@
 class Tickets < Application
   # provides :xml, :yaml, :js
+  
+  before :projects
+
+  def projects
+    @project = Project.get(params[:project_id])
+  end
 
   def index
     @tickets = Ticket.all
@@ -28,7 +34,7 @@ class Tickets < Application
   def create(ticket)
     @ticket = Ticket.new(ticket)
     if @ticket.save
-      redirect resource(@ticket), :message => {:notice => "Ticket was successfully created"}
+      redirect resource(@project, @ticket), :message => {:notice => "Ticket was successfully created"}
     else
       message[:error] = "Ticket failed to be created"
       render :new
@@ -39,7 +45,7 @@ class Tickets < Application
     @ticket = Ticket.get(id)
     raise NotFound unless @ticket
     if @ticket.update_attributes(ticket)
-       redirect resource(@ticket)
+       redirect resource(@project, @ticket)
     else
       display @ticket, :edit
     end
@@ -49,7 +55,7 @@ class Tickets < Application
     @ticket = Ticket.get(id)
     raise NotFound unless @ticket
     if @ticket.destroy
-      redirect resource(:tickets)
+      redirect resource(@project, :tickets)
     else
       raise InternalServerError
     end

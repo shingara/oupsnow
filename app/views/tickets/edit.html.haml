@@ -6,10 +6,10 @@
     app/views/tickets/edit.html.erb
 = error_messages_for :ticket
 
-= form_for(@ticket, :action => url(:ticket, @ticket)) do
+= form_for(@ticket, :action => url(@ticket)) do
   %p
     = submit "Update"
 
-= link_to 'Show', url(:ticket, @ticket)
+= link_to 'Show', resource(@project, @ticket)
 |
-= link_to 'Back', url(:tickets)
+= link_to 'Back', resource(@project, :tickets)
