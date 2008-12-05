@@ -5,6 +5,6 @@ class Ticket
   property :title, String
   property :description, Text
 
-  has 1, :project
+  belongs_to :project
 
 end
