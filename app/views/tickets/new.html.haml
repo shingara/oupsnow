@@ -1,12 +1,9 @@
-%h1 Tickets controller, new action
-
-%p 
-  Edit this file in 
-  %tt app/views/tickets/new.html.erb
+%h1 Create a new ticket
 
 = error_messages_for :ticket
 
 = form_for(@ticket, :action => url(:project_tickets) ) do
+  = partial :form
   %p
     = submit "Create"
 

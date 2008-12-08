@@ -1,12 +1,9 @@
-%h1
-  Tickets controller, edit action
-%p
-  Edit this file in
-  %tt
-    app/views/tickets/edit.html.erb
+%h1 Edit ticket
+
 = error_messages_for :ticket
 
-= form_for(@ticket, :action => url(@ticket)) do
+= form_for(@ticket, :action => resource(@project, @ticket)) do
+  = partial :form
   %p
     = submit "Update"
 
