@@ -1,9 +1,6 @@
-%h1
-  Tickets controller, show action
-%p
-  Edit this file in
-  %tt
-    app/views/tickets/show.html.erb
+%h1= @ticket.title
+
+%p= @ticket.description
 
 = link_to 'Edit',  resource(@project, @ticket, :edit)
 |
