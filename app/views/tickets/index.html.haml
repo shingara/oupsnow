@@ -8,6 +8,7 @@
   %tr
   - for ticket in @tickets
     %tr
+      %td= ticket.title
       %td
         = link_to 'Show', resource(@project, ticket)
       %td
