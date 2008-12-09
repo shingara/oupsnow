@@ -9,7 +9,7 @@ class Projects < Application
   def show(id)
     @project = Project.get(id)
     raise NotFound unless @project
-    display @project
+    redirect resource(@project, :tickets)
   end
 
   def new

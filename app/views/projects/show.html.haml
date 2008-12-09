@@ -1,9 +1,0 @@
-%h1= "Project #{@project.name}"
-%p=@project.description
-
-%p=link_to 'Create ticket', url(:new_project_ticket, @project)
-
-%ul
-  - @project.tickets.each do |ticket|
-    %li=ticket.title
-
