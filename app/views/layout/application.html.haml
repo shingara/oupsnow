@@ -4,4 +4,7 @@
   %head
     %title= @title || "Oupsnow"
   %body
-    = catch_content :for_layout
+    %div.header
+      %h1= title_project
+    %div.content
+      = catch_content :for_layout

@@ -5,7 +5,7 @@
   %h2
     %span= project.name
     %span= link_to('Show', url(:project, project))
-    %span=link_to('Edit', url(:edit_project,  project))
+    %span= link_to('Edit', url(:edit_project,  project))
 
   %p= project.description
 

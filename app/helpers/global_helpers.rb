@@ -1,5 +1,11 @@
 module Merb
   module GlobalHelpers
-    # helpers defined here available to all views.  
+
+    def title_project
+      ret = "Oupsnow" 
+      ret += " : #{@project.name}" unless @project.nil? || @project == ""
+      ret
+    end
+
   end
 end
