@@ -1,7 +1,8 @@
-%h1= @ticket.title
+%h1= "Ticket ##{@ticket.id}"
 
-%p= @ticket.description
+#ticket
+  %h2= @ticket.title
 
-= link_to 'Edit',  resource(@project, @ticket, :edit)
-|
-= link_to 'Back', resource(@project, :tickets)
+  %p= @ticket.description
+
+  = link_to 'Edit',  resource(@project, @ticket, :edit)
