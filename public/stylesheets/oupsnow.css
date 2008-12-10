@@ -35,6 +35,31 @@ body {
       padding: 0.2em 20px; }
 
 #content {
-  padding: 20px;
+  padding: 2em;
+  position: relative;
   background: white;
   color: black; }
+  #content table {
+    border-bottom: 1px solid #D7D7D7;
+    border-collapse: collapse;
+    border-spacing: 0;
+    clear: both;
+    margin-top: 1em;
+    width: 100%; }
+    #content table th, #content table td, #content table tr {
+      font-family: Verdana,sans-serif;
+      font-size: 12px;
+      line-height: 1.4em;
+      border: 1px solid #DDDDDD; }
+    #content table thead {
+      background: #F7F7F0 none repeat scroll 0 0; }
+      #content table thead tr {
+        border-bottom: 1.5px solid black; }
+      #content table thead th {
+        border-color: #D7D7D7 #D7D7D7 #999999;
+        border-style: solid;
+        border-width: 1px; }
+    #content table tbody td {
+      border: 1px dotted #DDDDDD;
+      vertical-align: top;
+      padding: 0.1em 0.5em; }

@@ -1,17 +1,14 @@
-%h1
-  Tickets controller, index action
-%p
-  Edit this file in
-  %tt
-    app/views/tickets/index.html.erb
+%h1= "Tickets on project #{@project.name}"
+
 %table
-  %tr
-  - for ticket in @tickets
+  %thead
     %tr
-      %td= ticket.title
-      %td
-        = link_to 'Show', resource(@project, ticket)
-      %td
-        = link_to 'Edit', resource(@project,  ticket, :edit)
+      %th id
+      %th name
+  %tbody
+    - for ticket in @tickets
+      %tr
+        %th= link_to "##{ticket.id}", resource(@project, ticket)
+        %td= ticket.title
 
 = link_to 'New', resource(@project, :tickets, :new)
