@@ -3,8 +3,7 @@
 
 - @projects.each do |project|
   %h2
-    %span= project.name
-    %span= link_to('Show', resource(project, :tickets))
+    %span= link_to project.name, resource(project, :tickets)
     %span= link_to('Edit', url(:edit_project,  project))
 
   %p= project.description
