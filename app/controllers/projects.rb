@@ -1,5 +1,7 @@
 class Projects < Application
   # provides :xml, :yaml, :js
+ 
+  before :ensure_authenticated, :exclude => [:index, :show]
 
   def index
     @projects = Project.all
