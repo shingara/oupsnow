@@ -3,8 +3,15 @@
 %html
   %head
     %title= @title || "Oupsnow"
+    = css_include_tag 'oupsnow'
   %body
-    %div.header
+    %div#header
       %h1= title_project
-    %div.content
+    %div#menu
+      %ul
+        %li= link_to 'Projects', resource(:projects)
+        - if @project
+          %li= link_to 'Tickets', resource(@project, :tickets)
+          %li= link_to 'Add new ticket', resource(@project, :tickets, :new)
+    %div#content
       = catch_content :for_layout
