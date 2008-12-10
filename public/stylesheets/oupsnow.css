@@ -69,3 +69,8 @@ body {
   border: 1px outset #999966;
   margin-top: 1em;
   padding: 0.5em 1em; }
+
+form label {
+  display: block; }
+form textarea {
+  width: 100%; }

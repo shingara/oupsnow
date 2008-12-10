@@ -6,5 +6,5 @@
   = partial :form
   %p
     = submit "Create"
-
-= link_to 'Back', url(:project_tickets)
+    or
+    = link_to 'Cancel', resource(@project, :tickets)
