@@ -8,8 +8,11 @@
 # see merb/merb-auth/setup.rb to see how to disable the salted_user mixin
 # 
 # You will need to setup your database and create a user.
+require 'merb-auth-more/mixins/salted_user'
 class User
   include DataMapper::Resource
+  include Merb::Authentication::Mixins::SaltedUser
+
   
   property :id,     Serial
   property :login,  String

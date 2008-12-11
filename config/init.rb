@@ -22,3 +22,6 @@ end
 Merb::BootLoader.after_app_loads do
   # This will get executed after your app's classes have been loaded.
 end
+
+require 'merb-slices'
+Merb::Slices::config[:merb_auth_slice_password][:layout] = :login
