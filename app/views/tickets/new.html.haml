@@ -1,6 +1,7 @@
 %h1 Create a new ticket
 
-= error_messages_for :ticket
+= message[:error]
+= error_messages_for @ticket
 
 = form_for(@ticket, :action => url(:project_tickets) ) do
   = partial :form

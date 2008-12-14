@@ -20,8 +20,7 @@ describe "resource(:projects)" do
   
   describe "GET" do
     before(:each) do
-      projects = list_mock_project
-      Project.should_receive(:all).and_return(projects)
+      2.of{Project.gen}
       @response = request(resource(:projects))
     end
     
@@ -29,51 +28,68 @@ describe "resource(:projects)" do
       @response.should have_xpath("//h2")
     end
   end
-  
-  describe "a successful POST" do
-    before(:each) do
-      Project.all.destroy!
-      @response = request(resource(:projects), :method => "POST", 
-        :params => { :project => { :name => 'oupsnow' }})
+
+  describe 'with user logged' do
+
+    describe "a successful POST" do
+      before(:each) do
+        Project.all.destroy!
+        @response = post(resource(:projects), :project => { :name => 'oupsnow' }) do |controller|
+          controller.session.should_receive(:authenticated?).and_return(true)
+          yield controller if block_given?
+        end
+      end
+      
+      it "redirects to resource(:projects)" do
+        @response.should redirect_to(resource(Project.first), :message => {:notice => "project was successfully created"})
+      end
+      
     end
-    
-    it "redirects to resource(:projects)" do
-      @response.should redirect_to(resource(Project.first), :message => {:notice => "project was successfully created"})
-    end
-    
   end
 end
 
 describe "resource(@project)" do 
-  describe "a successful DELETE" do
-     before(:each) do
-       @response = request(resource(Project.gen), :method => "DELETE")
-     end
 
-     it "should redirect to the index action" do
-       @response.should redirect_to(resource(:projects))
-     end
+  describe 'with user logged' do
+    describe "a successful DELETE" do
+       before(:each) do
+         @response = delete(resource(Project.gen)) do |controller|
+            controller.session.should_receive(:authenticated?).and_return(true)
+            yield controller if block_given?
+         end
+       end
 
-   end
+       it "should redirect to the index action" do
+         @response.should redirect_to(resource(:projects))
+       end
+
+    end
+  end
 end
 
 describe "resource(:projects, :new)" do
-  before(:each) do
-    @response = request(resource(:projects, :new))
-  end
-  
-  it "responds successfully" do
-    @response.should be_successful
+  describe 'with user logged' do
+    before(:each) do
+      login
+      @response = request(resource(:projects, :new), :method => 'GET')
+    end
+    
+    it "responds successfully" do
+      @response.should be_successful
+    end
   end
 end
 
 describe "resource(@project, :edit)" do
-  before(:each) do
-    @response = request(resource(Project.gen, :edit))
-  end
-  
-  it "responds successfully" do
-    @response.should be_successful
+  describe 'with user logged' do
+    before(:each) do
+      login
+      @response = request(resource(Project.gen, :edit))
+    end
+    
+    it "responds successfully" do
+      @response.should be_successful
+    end
   end
 end
 
@@ -81,23 +97,28 @@ describe "resource(@project)" do
   
   describe "GET" do
     before(:each) do
-      @response = request(resource(Project.gen))
+      @project = Project.gen
+      @response = request(resource(@project))
     end
   
     it "responds successfully" do
-      @response.should be_successful
+      @response.should redirect_to(resource(@project, :tickets))
     end
   end
   
   describe "PUT" do
-    before(:each) do
-      @project = Project.gen
-      @response = request(resource(@project), :method => "PUT", 
-        :params => { :project => {:id => @project.id, :name => 'update_name'} })
-    end
-  
-    it "redirect to the article show action" do
-      @response.should redirect_to(resource(@project))
+    describe 'with user logged' do
+      before(:each) do
+        @project = Project.gen
+        @response = put(resource(@project), :project => {:id => @project.id, :name => 'update_name'} ) do |controller|
+          controller.session.should_receive(:authenticated?).and_return(true)
+          yield controller if block_given?
+        end
+      end
+    
+      it "redirect to the article show action" do
+        @response.should redirect_to(resource(@project))
+      end
     end
   end
   

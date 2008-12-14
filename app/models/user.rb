@@ -10,12 +10,11 @@
 # You will need to setup your database and create a user.
 require 'merb-auth-more/mixins/salted_user'
 class User
-  include DataMapper::Resource
-  include Merb::Authentication::Mixins::SaltedUser
 
+  include DataMapper::Resource
   
   property :id,     Serial
-  property :login,  String
-  property :email,  String
-  
+  property :login,  String, :nullable => false, :unique => true
+  property :email,  String, :nullable => false, :format => :email_address
+
 end

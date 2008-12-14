@@ -10,7 +10,7 @@
     %div#menu
       %ul
         %li= link_to 'Projects', resource(:projects)
-        - if @project
+        - unless @project.nil? || @project.id.nil?
           %li= link_to 'Tickets', resource(@project, :tickets)
           %li= link_to 'Add new ticket', resource(@project, :tickets, :new)
     %div#content

@@ -29,3 +29,22 @@ def list_mock_project
 end
 
 require File.dirname(__FILE__) + '/fixtures.rb'
+
+Merb::Test.add_helpers do
+
+  def create_default_user
+    unless User.first(:login => 'shingara')
+      User.create( :login => 'shingara',
+                  :email => 'cyril.mougel@gmail.com',
+                  :password => 'tintinpouet',
+                  :password_confirmation => 'tintinpouet') or raise "can't create user"
+    end
+  end
+
+  def login
+    create_default_user
+    request('/login', {:method => 'PUT',
+            :params => { :login => 'shingara',
+              :password => 'tintinpouet'}})
+  end
+end

@@ -2,11 +2,8 @@ class Project
   include DataMapper::Resource
   
   property :id, Serial
-  property :name, String
+  property :name, String, :nullable => false, :unique => true
   property :description, Text
-
-  validates_present :name
-  validates_is_unique :name
 
   has n, :tickets
 

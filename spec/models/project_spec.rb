@@ -2,7 +2,7 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 
 describe Project do
 
-  it "should have valid" do
+  it "should be valid" do
     Project.gen.should be_valid
   end
 

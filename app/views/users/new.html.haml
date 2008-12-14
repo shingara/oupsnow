@@ -1,0 +1,16 @@
+%h1 Create an account
+
+= message[:error]
+= error_messages_for @user
+
+= form_for(@user, :action => url(:users) ) do
+
+  %p= text_field :login, :label => 'Login'
+  %p= text_field  :email, :label => 'Email'
+  %p= password_field  :password, :label => 'Password'
+  %p= password_field  :password_confirmation, :label => 'Password confirmation'
+
+  %p
+    = submit "Create"
+
+= link_to 'Back', url(:users)

@@ -19,7 +19,6 @@ describe "resource(Project.first, :tickets)" do
     end
 
     it "contains a list of tickets" do
-      pending
       @response.should have_xpath("//ul")
     end
     
@@ -31,7 +30,6 @@ describe "resource(Project.first, :tickets)" do
     end
     
     it "has a list of tickets" do
-      pending
       @response.should have_xpath("//ul/li")
     end
   end
@@ -41,7 +39,7 @@ describe "resource(Project.first, :tickets)" do
       Project.gen
       Ticket.all.destroy!
       @response = request(resource(Project.first, :tickets), :method => "POST", 
-        :params => { :ticket => { :id => nil }})
+        :params => { :ticket => { :title => 'a new ticket' }})
     end
     
     it "redirects to resource(Project.first, :tickets)" do
