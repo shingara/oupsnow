@@ -4,8 +4,8 @@
 - @projects.each do |project|
   %h2
     %span= link_to project.name, resource(project, :tickets)
-    %span= link_to('Edit', url(:edit_project,  project))
+    %span= link_to('Edit', url(:edit_project,  project)) if session.authenticated? 
 
   %p= project.description
 
-= link_to 'New', url(:new_project)
+= link_to 'New', url(:new_project) if session.authenticated?

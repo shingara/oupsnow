@@ -5,4 +5,4 @@
 
   %p= @ticket.description
 
-  = link_to 'Edit',  resource(@project, @ticket, :edit)
+  = link_to 'Edit',  resource(@project, @ticket, :edit) if session.authenticated?

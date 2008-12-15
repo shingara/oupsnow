@@ -11,4 +11,4 @@
         %th= link_to "##{ticket.id}", resource(@project, ticket)
         %td= ticket.title
 
-= link_to 'New', resource(@project, :tickets, :new)
+= link_to 'New', resource(@project, :tickets, :new) if session.authenticated?

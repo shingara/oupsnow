@@ -12,6 +12,6 @@
         %li= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?
           %li= link_to 'Tickets', resource(@project, :tickets)
-          %li= link_to 'Add new ticket', resource(@project, :tickets, :new)
+          %li= link_to 'Add new ticket', resource(@project, :tickets, :new) if session.authenticated?
     %div#content
       = catch_content :for_layout
