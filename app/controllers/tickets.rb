@@ -2,6 +2,7 @@ class Tickets < Application
   # provides :xml, :yaml, :js
   
   before :projects
+  before :ensure_authenticated, :exclude => [:index, :show]
 
   def projects
     @project = Project.get(params[:project_id])
