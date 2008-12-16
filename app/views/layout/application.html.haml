@@ -5,9 +5,15 @@
     %title= @title || "Oupsnow"
     = css_include_tag 'oupsnow'
   %body
-    %div#header
-      %h1= title_project
-    %div#menu
+    #banner
+      #header
+        %h1= title_project
+      #login_nav.nav
+        %ul
+          %li= link_to('Login', url(:login))
+          %li.last= link_to('Register', url(:new_user))
+
+    #menu.nav
       %ul
         %li= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?

@@ -4,31 +4,43 @@ body {
   margin: 10px;
   padding: 0; }
 
-#header {
-  background: #94DA3A none repeat scroll 0 0;
-  padding: 10px;
-  padding-left: 30px;
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 10px;
-  margin-top: 30px; }
-
-#menu {
-  padding-top: 10px;
+.nav {
   font-family: verdana,'Bitstream Vera Sans',helvetica,arial,sans-seriF;
   font-size: 10px; }
-  #menu ul {
+  .nav ul {
     list-style-image: none;
     list-style-position: outside;
     list-style-type: none;
     text-align: right;
     margin: 0; }
-  #menu li {
-    background: #487858 none repeat scroll 0 0;
-    border-right: 3px solid #092E20;
+  .nav li {
     white-space: no-wrap;
     display: inline;
-    padding: 0.25em 0; }
+    border-right: 1px solid #D7D7D7; }
+  .nav .last {
+    border-right: 0px none; }
+
+#banner {
+  background: #94DA3A none repeat scroll 0 0; }
+  #banner #header {
+    padding: 10px;
+    padding-left: 30px;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: 10px;
+    margin-top: 30px; }
+  #banner #login_nav {
+    color: black;
+    margin-right: 10px; }
+    #banner #login_nav li {
+      padding-right: 0.5em;
+      padding-left: 0.5em; }
+
+#menu {
+  padding-top: 10px; }
+  #menu li {
+    background: #487858 none repeat scroll 0 0;
+    border-right: 3px solid #092E20; }
     #menu li a:link, #menu li a:visited {
       color: white;
       text-decoration: none;
