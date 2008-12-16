@@ -1,13 +1,17 @@
-class Project
+class Function
   include DataMapper::Resource
+
+  ADMIN = 'Admin'
   
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
-  property :description, Text
 
-  has n, :tickets
-  has n, :members 
+  has n, :members
   has n, :users, :through => :members
-  has n, :functions, :through => :members
+  has n, :projects, :through => :members
+
+  def self.admin
+    first(:name => ADMIN)
+  end
 
 end

@@ -17,4 +17,8 @@ class User
   property :login,  String, :nullable => false, :unique => true
   property :email,  String, :nullable => false, :format => :email_address
 
+  has n, :members
+  has n, :functions, :through => :members
+  has n, :projects, :through => :members
+
 end
