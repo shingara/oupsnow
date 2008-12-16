@@ -1,15 +1,8 @@
-%h1
-  Users controller, edit action
-%p
-  Edit this file in
-  %tt
-    app/views/users/edit.html.erb
+%h1 Edit your settings
+
 = error_messages_for @user
 
 = form_for(@user, :action => url(:user, @user)) do
+  %p=text_field :email, :label => 'Email'
   %p
     = submit "Update"
-
-= link_to 'Show', url(:user, @user)
-|
-= link_to 'Back', url(:users)

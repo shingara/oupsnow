@@ -106,7 +106,7 @@ describe "resource(@user)", :given => "a user exists" do
     end
   
     it "redirect to the article show action" do
-      @response.should redirect_to(resource(@user))
+      @response.should redirect_to(resource(:projects))
     end
   end
   

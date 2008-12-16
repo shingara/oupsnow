@@ -20,8 +20,7 @@ class Users < Application
 
   def edit(id)
     only_provides :html
-    @user = User.get(id)
-    raise NotFound unless @user
+    @user = session.user
     display @user
   end
 
@@ -39,7 +38,7 @@ class Users < Application
     @user = User.get(id)
     raise NotFound unless @user
     if @user.update_attributes(user)
-       redirect resource(@user)
+       redirect resource(:projects)
     else
       display @user, :edit
     end

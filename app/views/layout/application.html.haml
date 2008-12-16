@@ -10,7 +10,10 @@
         %h1= title_project
       #login_nav.nav
         %ul
-          %li= link_to('Login', url(:login))
+          - unless session.authenticated?
+            %li= link_to('Login', url(:login))
+          - else
+            %li= link_to('Setting', url(:edit_user, session.user))
           %li.last= link_to('Register', url(:new_user))
 
     #menu.nav
