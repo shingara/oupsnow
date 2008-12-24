@@ -11,7 +11,7 @@ module OupsNow
     desc 'first_value', 'create first user and admin function'
     def first_value
       require 'merb-core'
-      Merb.start_environment(
+      ::Merb.start_environment(
         :environment => ENV['MERB_ENV'] || 'development')
       User.create(:login => 'admin', 
                   :email => 'admin@admin.com',
@@ -27,7 +27,7 @@ module OupsNow
     desc 'generate_some_data', 'generate some data'
     def generate_some_data
       require 'merb-core'
-      Merb.start_environment(
+      ::Merb.start_environment(
         :environment => ENV['MERB_ENV'] || 'development')
       require 'spec/fixtures'
       3.of{Project.gen}

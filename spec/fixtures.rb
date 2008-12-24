@@ -18,7 +18,7 @@ Project.fixture {{
   :name => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
   :tickets => (0..10).of {Ticket.make},
-  :members => [:function => admin_function, :user => admin]
+  :members => [:function => Function.first(:name => 'Admin'), :user => User.first(:login => 'admin')]
 }}
 
 Ticket.fixture {{
