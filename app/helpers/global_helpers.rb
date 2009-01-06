@@ -15,5 +15,8 @@ module Merb
       authenticated? && session.user.admin?(project)
     end
 
+    def sub_menu
+    end
+
   end
 end

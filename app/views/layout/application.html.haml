@@ -23,5 +23,6 @@
           %li= link_to 'Tickets', resource(@project, :tickets)
           %li= link_to 'Add new ticket', resource(@project, :tickets, :new) if authenticated?
           %li= link_to 'Settings', url(:project_settings_members, @project) if admin?(@project)
+    = sub_menu
     %div#content
       = catch_content :for_layout
