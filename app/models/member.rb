@@ -11,5 +11,8 @@ class Member
   validates_present :user
   validates_present :project
 
+  def admin?
+    function.admin?
+  end
 
 end

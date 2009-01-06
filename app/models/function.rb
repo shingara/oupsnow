@@ -14,4 +14,8 @@ class Function
     first(:name => ADMIN)
   end
 
+  def admin?
+    name == ADMIN
+  end
+
 end

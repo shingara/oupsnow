@@ -41,10 +41,22 @@ Merb::Test.add_helpers do
     end
   end
 
+  def create_default_admin
+    unless User.first(:login => 'admin')
+      User.gen(:login => 'admin')
+    end
+  end
+
   def login
     create_default_user
     request('/login', {:method => 'PUT',
             :params => { :login => 'shingara',
               :password => 'tintinpouet'}})
+  end
+
+  def login_admin
+    create_default_admin
+    request('/login', {:method => 'PUT',
+            :params => {:login => 'admin', :password => 'tintinpouet'}})
   end
 end

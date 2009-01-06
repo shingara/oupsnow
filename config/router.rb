@@ -30,6 +30,9 @@ Merb::Router.prepare do
   resources :users
   resources :projects do
     resources :tickets
+    namespace(:settings) do
+      resources :members
+    end
   end
   # RESTful routes
   # resources :posts
@@ -45,4 +48,5 @@ Merb::Router.prepare do
   
   # Change this for your home page to be available at /
   match('/').to(:controller => 'projects', :action =>'index')
+
 end
