@@ -1,16 +1,8 @@
 class Users < Application
   # provides :xml, :yaml, :js
 
-  def index
-    @users = User.all
-    display @users
-  end
-
-  def show(id)
-    @user = User.get(id)
-    raise NotFound unless @user
-    display @user
-  end
+  before :ensure_authenticated, :exclude => [:new, :create]
+  before :only_own_account, :only => [:edit, :update]
 
   def new
     only_provides :html
@@ -27,7 +19,7 @@ class Users < Application
   def create(user)
     @user = User.new(user)
     if @user.save
-      redirect resource(@user), :message => {:notice => "User was successfully created"}
+      redirect resource(@user, :edit), :message => {:notice => "User was successfully created"}
     else
       message[:error] = "User failed to be created"
       render :new
@@ -51,6 +43,15 @@ class Users < Application
       redirect resource(:users)
     else
       raise InternalServerError
+    end
+  end
+
+  private
+
+  def only_own_account
+    @user = User.get(params[:id])
+    unless @user == session.user
+      raise Unauthenticated
     end
   end
 

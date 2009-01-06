@@ -52,6 +52,7 @@ Merb::Test.add_helpers do
     request('/login', {:method => 'PUT',
             :params => { :login => 'shingara',
               :password => 'tintinpouet'}})
+    User.first(:login => 'shingara')
   end
 
   def login_admin
