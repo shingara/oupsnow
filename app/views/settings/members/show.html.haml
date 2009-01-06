@@ -1,10 +1,10 @@
 %h1
-  Members controller, show action
-%p
-  Edit this file in
-  %tt
-    app/views/members/show.html.erb
+  Member 
+  = "#{@member.user.login} "
+  of project 
+  = @project.name
 
-= link_to 'Edit',  url(:edit_member,  @member)
-|
-= link_to 'Back', url(:members)
+%ul
+  %li
+    Role : 
+    = @member.function.name

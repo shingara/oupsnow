@@ -10,5 +10,5 @@
   %tbody
     - for member in @members
       %tr
-        %td=link_to(member.user.login, resource(member.user))
+        %td=link_to(member.user.login, url(:project_settings_member, @project, member))
         %td=member.function.name
