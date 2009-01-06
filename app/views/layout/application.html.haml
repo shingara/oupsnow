@@ -10,7 +10,7 @@
         %h1= title_project
       #login_nav.nav
         %ul
-          - unless session.authenticated?
+          - unless authenticated?
             %li= link_to('Login', url(:login))
           - else
             %li= link_to('My profile', url(:edit_user, session.user))
@@ -21,6 +21,7 @@
         %li= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?
           %li= link_to 'Tickets', resource(@project, :tickets)
-          %li= link_to 'Add new ticket', resource(@project, :tickets, :new) if session.authenticated?
+          %li= link_to 'Add new ticket', resource(@project, :tickets, :new) if authenticated?
+          %li= link_to 'Settings', url(:project_settings_members, @project) if admin?(@project)
     %div#content
       = catch_content :for_layout

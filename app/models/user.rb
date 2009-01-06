@@ -8,7 +8,6 @@
 # see merb/merb-auth/setup.rb to see how to disable the salted_user mixin
 # 
 # You will need to setup your database and create a user.
-require 'merb-auth-more/mixins/salted_user'
 class User
 
   include DataMapper::Resource
@@ -20,5 +19,9 @@ class User
   has n, :members
   has n, :functions, :through => :members
   has n, :projects, :through => :members
+
+  def admin?(project)
+    members.first(:project_id => project.id).admin?
+  end
 
 end

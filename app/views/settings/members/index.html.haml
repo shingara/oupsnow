@@ -1,0 +1,14 @@
+%h1 
+  Member on project :
+  = @project.name
+
+%table
+  %thead
+    %tr
+      %th User
+      %th Role
+  %tbody
+    - for member in @members
+      %tr
+        %td=link_to(member.user.login, resource(member.user))
+        %td=member.function.name

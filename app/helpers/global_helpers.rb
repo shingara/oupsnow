@@ -7,5 +7,13 @@ module Merb
       ret
     end
 
+    def authenticated?
+      session.user
+    end
+
+    def admin?(project)
+      authenticated? && session.user.admin?(project)
+    end
+
   end
 end

@@ -31,6 +31,7 @@ Merb::Router.prepare do
   resources :projects do
     resources :tickets
     namespace(:settings) do
+      match('/').to(:controller => 'members', :action => 'index')
       resources :members
     end
   end
