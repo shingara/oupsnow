@@ -24,6 +24,10 @@ class User
     members.first(:project_id => project.id).admin?
   end
 
+  def admin_on_one_project?
+    !members.first(:function_id => Function.admin.id).nil?
+  end
+
   def self.not_in_project(project)
     all(:id.not => project.users.map{|u| u.id})
   end

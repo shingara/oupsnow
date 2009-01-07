@@ -2,6 +2,7 @@ class Projects < Application
   # provides :xml, :yaml, :js
  
   before :ensure_authenticated, :exclude => [:index, :show]
+  before :need_admin, :exclude => [:index, :show]
 
   def index
     @projects = Project.all
@@ -55,6 +56,14 @@ class Projects < Application
       redirect resource(:projects)
     else
       raise InternalServerError
+    end
+  end
+
+  private
+
+  def need_admin
+    unless session.user.admin_on_one_project?
+      raise Unauthenticated
     end
   end
 
