@@ -24,5 +24,3 @@ dependency "dm-timestamps", dm_gems_version
 dependency "dm-types", dm_gems_version        
 dependency "dm-validations", dm_gems_version  
 dependency "dm-sweatshop", dm_gems_version
-
-dependency "nokogiri", '1.0.7'
