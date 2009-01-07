@@ -1,13 +1,12 @@
-%h1 Members controller, new action
-
-%p 
-  Edit this file in 
-  %tt app/views/members/new.html.erb
+%h1 
+  Add Member to project 
+  = @project.name
 
 = error_messages_for @member
 
-= form_for(@member, :action => url(:members) ) do
+= form_for(@member, :action => url(:project_settings_members, @project) ) do
+
+  %p=select :user_id, :collection => User.not_in_project(@project), :text_method => 'login', :value_method => 'id'
+
   %p
     = submit "Create"
-
-= link_to 'Back', url(:members)

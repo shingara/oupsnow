@@ -12,3 +12,4 @@
       %tr
         %td=link_to(member.user.login, url(:project_settings_member, @project, member))
         %td=member.function.name
+%p=link_to 'Add member', url(:new_project_settings_member, @project)

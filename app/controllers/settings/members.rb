@@ -30,8 +30,10 @@ module Settings
   
     def create(member)
       @member = Member.new(member)
+      @member.function_id = Function.first(:name => 'Developper').id
+      @member.project_id = @project.id
       if @member.save
-        redirect resource(@member), :message => {:notice => "Member was successfully created"}
+        redirect url(:project_settings_members, @project), :message => {:notice => "Member was successfully created"}
       else
         message[:error] = "Member failed to be created"
         render :new
