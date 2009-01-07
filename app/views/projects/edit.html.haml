@@ -5,7 +5,3 @@
 = form_for(@project, :action => url(:project, @project)) do
   = partial :form
   %p= submit "Update"
-
-= link_to 'Show', url(:project, @project)
-|
-= link_to 'Back', url(:projects)
