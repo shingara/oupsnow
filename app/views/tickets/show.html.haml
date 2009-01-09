@@ -16,6 +16,17 @@
     %span= tag.name
 
 #ticket_update
+  - @ticket.ticket_updates.each do |up|
+    - up.properties_update.each do |prop|
+      %p
+        = prop[0]
+        is change from 
+        = prop[1]
+        to 
+        = prop[2] 
+    %p=up.description
+
+#ticket_update_form
   %h3 Update this ticket
   = form_for(@ticket, :action => resource(@project, @ticket)) do 
     = partial :form
