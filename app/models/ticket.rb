@@ -19,7 +19,7 @@ class Ticket
   before :valid?, :define_state_new
 
   def generate_update(ticket)
-    t = ticket_updates.build
+    t = ticket_updates.new
     #TODO: see why, by default is not created with default value. Bug ???
     t.properties_update = []
     unless ticket[:description].blank?
@@ -28,10 +28,11 @@ class Ticket
     end
     [:title, :state_id, :member_id].each do |type_change|
       #TODO: see better than eval
-      if eval("#{type_change}").to_s != ticket[type_change.to_sym]
+      if eval("#{type_change}").to_s != ticket[type_change.to_sym].to_s
         t.properties_update << [type_change, send(type_change), ticket[type_change]]
       end
     end
+    return if t.description.nil? && t.properties_update.empty?
     t.save
     update_attributes(ticket)
   end

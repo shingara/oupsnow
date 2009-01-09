@@ -18,6 +18,17 @@ describe Ticket do
       @old_description = @t.description
       @old_title = @t.title
       @t.generate_update(@t.attributes.merge(ticket))
+      @t.reload
+    end
+
+    describe 'no change' do
+      before(:each) do
+        generate_ticket({:description => ''})
+      end
+
+      it 'should not create ticket_update if no change' do
+        @t.ticket_updates.should_not have(1).items
+      end
     end
 
     describe 'change only description' do
