@@ -1,2 +1,5 @@
 %p= text_field :title, :label => 'title', :size => 40
 %p= text_area  :description, :label => 'Description', :cols => 40, :rows => 15
+%p= text_field :tag_list, :label => 'tags', :value => @ticket.tag_list.join(', ')
+%p= select :member_id, :collection => Member.all(:project_id => @project.id), :text_method => 'user_name', :value_method => 'id', :prompt => 'assigned_to'
+%p= select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id'

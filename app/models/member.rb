@@ -18,4 +18,8 @@ class Member
     function.admin?
   end
 
+  def user_name
+    user.login
+  end
+
 end

@@ -5,7 +5,6 @@
 
 = form_for(@ticket, :action => url(:project_tickets) ) do
   = partial :form
-  %p= text_field :tag_list, :label => 'tags'
   %p
     = submit "Create"
     or

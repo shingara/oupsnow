@@ -27,3 +27,8 @@ Ticket.fixture {{
   :tag_list => (1..5).of { /\w+/.generate }.join(','),
 }}
 
+State.fixture {{
+  :name => /\w+/.gen,
+}}
+State.gen(:name => 'new')
+

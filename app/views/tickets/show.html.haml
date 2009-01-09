@@ -14,3 +14,10 @@
   %h3 Tags
   - @ticket.tags.each do |tag|
     %span= tag.name
+
+#ticket_update
+  %h3 Update this ticket
+  = form_for(@ticket, :action => resource(@project, @ticket)) do 
+    = partial :form
+    %p
+      = submit "Update"
