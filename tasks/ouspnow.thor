@@ -19,6 +19,7 @@ module OupsNow
                   :password_confirmation => 'oupsnow')
       Function.create(:name => 'Admin')
       Function.create(:name => 'Developper')
+      State.create(:name => 'new')
     end
 
   end

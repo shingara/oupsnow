@@ -14,7 +14,7 @@ class Tickets < Application
   end
 
   def show(id)
-    @ticket = Ticket.get(id)
+    @ticket = Ticket.get(params[:id])
     raise NotFound unless @ticket
     display @ticket
   end
@@ -34,6 +34,7 @@ class Tickets < Application
 
   def create(ticket)
     @ticket = Ticket.new(ticket)
+    @ticket.project_id = @project.id
     if @ticket.save
       redirect resource(@project, @ticket), :message => {:notice => "Ticket was successfully created"}
     else

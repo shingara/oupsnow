@@ -12,6 +12,15 @@ class Project
 
   after :destroy, :destroy_tickets
 
+  def new_num_ticket
+    max_num_ticket = tickets.max(:num)
+    if max_num_ticket.nil?
+      1
+    else
+      max_num_ticket.succ
+    end
+  end
+
   # Destroy all ticket depend on this project
   # non needing when cascading come
   def destroy_tickets

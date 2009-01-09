@@ -1,4 +1,7 @@
-%h1= "Ticket ##{@ticket.id}"
+%h1= "Ticket ##{@ticket.num}"
+
+#ticket_status
+  %span=@ticket.state.name
 
 #ticket
   %h2= @ticket.title
@@ -6,3 +9,8 @@
   %p= @ticket.description
 
   = link_to 'Edit',  resource(@project, @ticket, :edit) if admin?(@project)
+
+#ticket_side
+  %h3 Tags
+  - @ticket.tags.each do |tag|
+    %span= tag.name
