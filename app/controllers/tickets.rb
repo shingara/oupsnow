@@ -9,7 +9,7 @@ class Tickets < Application
   end
 
   def index
-    @tickets = Ticket.all
+    @tickets = Ticket.all :project_id => @project.id
     display @tickets
   end
 
