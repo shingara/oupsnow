@@ -18,8 +18,9 @@
 %ul#ticket_update
   - @ticket.ticket_updates.each do |up|
     %li{:id => "ticket_update-#{@ticket.num}-#{up.id}"}
-      - up.properties_update.each do |prop|
-        %p= update_field(prop)
+      %ul{:id => "properties_change-#{@ticket.num}-#{up.id}"}
+        - up.properties_update.each do |prop|
+          %li= update_field(prop)
       %p=up.description
 
 #ticket_update_form
