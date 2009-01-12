@@ -24,7 +24,7 @@ Project.fixture {{
 Ticket.fixture {{
   :title => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
-  :tag_list => (1..5).of { /\w+/.generate }.join(','),
+  :tag_list => (1..2).of { /\w+/.generate }.join(','),
 }}
 
 State.fixture {{

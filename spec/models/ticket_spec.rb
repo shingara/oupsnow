@@ -2,6 +2,8 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 
 describe Ticket do
 
+  TAG_LIST = 'bar,foo,ko,ok'
+
   before :all do
     Project.gen
     State.gen(:name => 'new')
@@ -14,7 +16,8 @@ describe Ticket do
   describe '#generate_update' do
 
     def generate_ticket(ticket)
-      @t = Ticket.gen(:project_id => Project.first.id)
+      @t = Ticket.gen(:project_id => Project.first.id,
+                     :tag_list => TAG_LIST)
       @old_description = @t.description
       @old_title = @t.title
       @t.generate_update(@t.attributes.merge(ticket))
@@ -23,7 +26,7 @@ describe Ticket do
 
     describe 'no change' do
       before(:each) do
-        generate_ticket({:description => ''})
+        generate_ticket({:description => '', :tag_list => TAG_LIST})
       end
 
       it 'should not create ticket_update if no change' do
@@ -33,7 +36,8 @@ describe Ticket do
 
     describe 'change only description' do
       before(:each) do
-        generate_ticket({:description => 'new description'})
+        generate_ticket({:description => 'new description', 
+                        :tag_list => TAG_LIST})
       end
 
       it 'should not update ticket' do
@@ -55,7 +59,8 @@ describe Ticket do
 
     describe 'change only title' do
       before(:each) do
-        generate_ticket({:title => 'new title', :description => ''})
+        generate_ticket({:title => 'new title', :description => '', 
+                        :tag_list => TAG_LIST})
       end
 
       it 'should update title ticket' do
@@ -77,7 +82,9 @@ describe Ticket do
 
     describe 'change title with description' do
       before(:each) do
-        generate_ticket({:title => 'new title', :description => 'yahoo'})
+        generate_ticket({:title => 'new title', 
+                        :description => 'yahoo',
+                        :tag_list => TAG_LIST})
       end
 
       it 'should update title ticket' do
@@ -103,8 +110,11 @@ describe Ticket do
 
     describe 'change title, state with description' do
       before(:each) do
-        State.all(:name => 'check').destroy!
-        generate_ticket({:title => 'new title', :description => 'yahoo', :state_id => State.gen(:name => 'check').id})
+        State.all(:name => 'check').each{|s| s.destroy}
+        generate_ticket({:title => 'new title', 
+                        :description => 'yahoo', 
+                        :state_id => State.gen(:name => 'check').id,
+                        :tag_list => TAG_LIST})
       end
 
       it 'should update title ticket' do

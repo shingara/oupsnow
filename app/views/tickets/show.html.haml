@@ -23,6 +23,8 @@
           %li= update_field(prop)
       %p=up.description
 
+= error_messages_for @ticket
+
 #ticket_update_form
   %h3 Update this ticket
   = form_for(@ticket, :action => resource(@project, @ticket)) do 

@@ -47,9 +47,9 @@ class Tickets < Application
     @ticket = Ticket.get(id)
     raise NotFound unless @ticket
     if @ticket.generate_update(ticket)
-       redirect resource(@project, @ticket)
+      redirect resource(@project, @ticket)
     else
-      display @ticket, :edit
+      display @ticket, :show
     end
   end
 

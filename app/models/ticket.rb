@@ -18,6 +18,12 @@ class Ticket
   before :valid?, :define_num_ticket
   before :valid?, :define_state_new
 
+  before :destroy, :delete_ticket_updates
+
+  def delete_ticket_updates
+    ticket_updates.each {|tu| tu.destroy}
+  end
+
   def generate_update(ticket)
     t = ticket_updates.new
     #TODO: see why, by default is not created with default value. Bug ???
@@ -32,9 +38,23 @@ class Ticket
         t.properties_update << [type_change, send(type_change), ticket[type_change]]
       end
     end
-    return if t.description.nil? && t.properties_update.empty?
-    t.save
-    update_attributes(ticket)
+
+    #TODO: no update if no same order
+    #TODO: no update if several space
+    if frozen_tag_list != ticket[:tag_list]
+      t.properties_update << [:tag_list, frozen_tag_list, ticket[:tag_list]]
+    end
+
+    return true if t.description.nil? && t.properties_update.empty?
+    unless update_attributes(ticket)
+      puts "pas d'update"
+      p errors
+    else
+      unless t.save
+        puts "pas de save"
+        p t.errors
+      end
+    end
   end
 
   private
