@@ -46,14 +46,8 @@ class Ticket
     end
 
     return true if t.description.nil? && t.properties_update.empty?
-    unless update_attributes(ticket)
-      puts "pas d'update"
-      p errors
-    else
-      unless t.save
-        puts "pas de save"
-        p t.errors
-      end
+    if update_attributes(ticket)
+      t.save
     end
   end
 

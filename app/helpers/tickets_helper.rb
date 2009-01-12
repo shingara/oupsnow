@@ -9,7 +9,7 @@ module Merb
       case prop[0]
       when :state_id
         "Status"
-      when :tag_id
+      when :tag_list
         "Tag"
       when :member_id
         "Responsible"
@@ -31,8 +31,8 @@ module Merb
       case state
       when :state_id
         State.get(field).name
-      when :tag_id
-        Tag.get(field).name
+      when :tag_list
+        field
       when :member_id
         Member.get(field).user_name
       when :title
