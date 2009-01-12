@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 given "a ticket exists" do
-  Project.gen
-  Ticket.gen
+  p = Project.gen
+  Ticket.gen(:project_id => p.id)
 end
 
 given "logged user" do
@@ -30,6 +30,10 @@ describe "resource(Project.first, :tickets)" do
     before(:each) do
       @response = request(resource(Project.first, :tickets))
     end
+
+    after(:each) do
+      Ticket.all.each {|t| t.destroy}
+    end
     
     it "has a list of tickets" do
       @response.should have_xpath("//ul/li")
@@ -40,9 +44,14 @@ describe "resource(Project.first, :tickets)" do
     before(:each) do
       Project.gen
       login
-      Ticket.all.destroy!
+      Ticket.all.each{|t| t.destroy}
       @response = request(resource(Project.first, :tickets), :method => "POST", 
-        :params => { :ticket => { :title => 'a new ticket' }})
+        :params => { :ticket => { :title => 'a new ticket'},
+                      :project_id => Project.first.id})
+    end
+
+    after :each do
+      Ticket.all.each {|t| t.destroy}
     end
     
     it "redirects to resource(Project.first, :tickets)" do
@@ -59,6 +68,10 @@ describe "resource(Project.first, @ticket)" do
         @response = request(resource(Project.first, Ticket.first), :method => "DELETE")
       end
 
+      after :each do
+        Ticket.all.each {|t| t.destroy}
+      end
+
       it "should redirect to the index action" do
         @response.should redirect_to(resource(Project.first, :tickets))
       end
@@ -68,7 +81,7 @@ describe "resource(Project.first, @ticket)" do
 
   describe 'with anonymous user' do
     it "can't delete tiket" do
-      @response = request(resource(Project.first, Ticket.gen), :method => "DELETE")
+      @response = request(resource(Project.first, Ticket.gen(:project_id => Project.first.id)), :method => "DELETE")
       @response.body
     end
   end
@@ -88,6 +101,10 @@ describe "resource(Project.first, @ticket, :edit)", :given => "a ticket exists" 
   before(:each) do
     @response = request(resource(Project.first, Ticket.first, :edit))
   end
+
+  after :each do
+    Ticket.all.each {|t| t.destroy}
+  end
   
   it "responds successfully" do
     @response.status.should == 401
@@ -98,7 +115,13 @@ describe "resource(Project.first, @ticket)", :given => "a ticket exists" do
   
   describe "GET" do
     before(:each) do
-      @response = request(resource(Project.gen, Ticket.gen))
+      p = Project.gen
+      t = Ticket.gen(:project_id => p.id)
+      @response = request(resource(p,t))
+    end
+
+    after :each do
+      Ticket.all.each {|t| t.destroy}
     end
   
     it "responds successfully" do
@@ -109,10 +132,14 @@ describe "resource(Project.first, @ticket)", :given => "a ticket exists" do
   describe "PUT" do
     describe "with user logged", :given => 'logged user' do
       before(:each) do
-        @ticket = Ticket.gen
         @project = Project.gen
+        @ticket = Ticket.gen(:project_id => @project.id)
         @response = request(resource(@project, @ticket), :method => "PUT", 
           :params => { :ticket => {:id => @ticket.id} })
+      end
+
+      after :each do
+        Ticket.all.each {|t| t.destroy}
       end
     
       it "redirect to the article show action" do

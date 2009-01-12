@@ -41,9 +41,12 @@ class Ticket
 
     #TODO: no update if no same order
     #TODO: no update if several space
-    if frozen_tag_list != ticket[:tag_list]
+    tag_list = ticket[:tag_list]
+    @tag_list = [] if @tag_list.nil?
+    if frozen_tag_list != @tag_list.join(',')
       t.properties_update << [:tag_list, frozen_tag_list, ticket[:tag_list]]
     end
+    tag_list = frozen_tag_list
 
     return true if t.description.nil? && t.properties_update.empty?
     if update_attributes(ticket)
@@ -54,6 +57,7 @@ class Ticket
   private
 
   def define_num_ticket
+    project = Project.get(project_id) if project.nil?
     self.num = project.new_num_ticket if self.num.nil?
   end
 

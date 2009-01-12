@@ -141,6 +141,20 @@ describe Ticket do
         @t.ticket_updates[0].properties_update.should == [[:title, @old_title, 'new title'],[:state_id, State.first(:name => 'new').id, State.first(:name => 'check').id]]
       end
     end
+
+    describe 'about tag change' do
+      it 'should not see change if only space' do
+        generate_ticket({:tag_list => TAG_LIST.split(',').map{|t| t + ' '}.join(','), :description => ''})
+        @t.ticket_updates.should be_empty
+      end
+
+      it 'should no see change if order change' do
+        generate_ticket({:tag_list => TAG_LIST.split(',').map{|t| t + ' '}.reverse.join(','), :description => ''})
+        @t.ticket_updates.should be_empty
+      end
+    end
+    
   end
+
 
 end
