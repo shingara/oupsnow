@@ -5,6 +5,11 @@
 
 #ticket
   %h2= @ticket.title
+  %p.date
+    Reported by 
+    =@ticket.created_by.login
+    |
+    =@ticket.created_at
 
   %p= @ticket.description
 
