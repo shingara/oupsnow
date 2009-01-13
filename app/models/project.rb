@@ -10,7 +10,8 @@ class Project
   has n, :users, :through => :members
   has n, :functions, :through => :members
 
-  after :destroy, :destroy_tickets
+  before :destroy, :destroy_tickets
+  before :destroy, :destroy_members
 
   def new_num_ticket
     max_num_ticket = tickets.max(:num)
@@ -24,7 +25,11 @@ class Project
   # Destroy all ticket depend on this project
   # non needing when cascading come
   def destroy_tickets
-    Ticket.all(:project_id => id).destroy!
+    tickets.each{|t| t.destroy}
+  end
+
+  def destroy_members
+    members.each{|m| m.destroy}
   end
 
 end

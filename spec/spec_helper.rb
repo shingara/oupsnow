@@ -45,6 +45,9 @@ Merb::Test.add_helpers do
     unless User.first(:login => 'admin')
       User.gen(:login => 'admin')
     end
+    unless User.first(:login => 'admin').admin_on_one_project?
+      Project.gen
+    end
   end
 
   def login

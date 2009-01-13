@@ -34,7 +34,12 @@ module Merb
       when :tag_list
         field
       when :member_id
-        Member.get(field).user_name
+        m = Member.get(field)
+        if m.nil?
+          ""
+        else
+          m.user_name
+        end
       when :title
         field
       end

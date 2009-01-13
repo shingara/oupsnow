@@ -29,19 +29,17 @@ describe "resource(:projects)" do
     end
   end
 
-  describe 'with user logged' do
+  describe 'with admin user' do
 
     describe "a successful POST" do
       before(:each) do
-        Project.all.destroy!
-        @response = post(resource(:projects), :project => { :name => 'oupsnow' }) do |controller|
-          controller.session.should_receive(:authenticated?).and_return(true)
-          yield controller if block_given?
-        end
+        Project.all.each{|p| p.destroy}
+        login_admin
+        @response = request(resource(:projects), :method => "POST", :params => {:project => { :name => 'oupsnow' }})
       end
       
       it "redirects to resource(:projects)" do
-        @response.should redirect_to(resource(Project.first), :message => {:notice => "project was successfully created"})
+        @response.should redirect_to(resource(Project.first(:name => 'oupsnow'), :tickets), :message => {:notice => "project was successfully created"})
       end
       
     end
@@ -50,17 +48,16 @@ end
 
 describe "resource(@project)" do 
 
-  describe 'with user logged' do
+  describe 'with admin user' do
     describe "a successful DELETE" do
        before(:each) do
-         @response = delete(resource(Project.gen)) do |controller|
-            controller.session.should_receive(:authenticated?).and_return(true)
-            yield controller if block_given?
-         end
+         login_admin
+         @project = Project.gen
+         @response = request(resource(@project))
        end
 
        it "should redirect to the index action" do
-         @response.should redirect_to(resource(:projects))
+         @response.should redirect_to(resource(@project, :tickets))
        end
 
     end
@@ -75,6 +72,17 @@ describe "resource(:projects, :new)" do
     end
     
     it "responds successfully" do
+      @response.status.should == 401
+    end
+  end
+
+  describe 'with admin user' do
+    before(:each) do
+      login_admin
+      @response = request(resource(:projects, :new), :method => 'GET')
+    end
+    
+    it "responds successfully" do
       @response.should be_successful
     end
   end
@@ -84,6 +92,17 @@ describe "resource(@project, :edit)" do
   describe 'with user logged' do
     before(:each) do
       login
+      @response = request(resource(Project.gen, :edit))
+    end
+    
+    it "responds successfully" do
+      @response.status.should == 401
+    end
+  end
+
+  describe 'with admin logged' do
+    before(:each) do
+      login_admin
       @response = request(resource(Project.gen, :edit))
     end
     
@@ -107,17 +126,15 @@ describe "resource(@project)" do
   end
   
   describe "PUT" do
-    describe 'with user logged' do
+    describe 'with admin user' do
       before(:each) do
         @project = Project.gen
-        @response = put(resource(@project), :project => {:id => @project.id, :name => 'update_name'} ) do |controller|
-          controller.session.should_receive(:authenticated?).and_return(true)
-          yield controller if block_given?
-        end
+        login_admin
+        @response = request(resource(@project), :method => "PUT", :params => {:project => {:id => @project.id, :name => 'update_name'}} )
       end
     
       it "redirect to the article show action" do
-        @response.should redirect_to(resource(@project))
+        @response.should redirect_to(resource(@project, :tickets))
       end
     end
   end

@@ -32,7 +32,7 @@ class Projects < Application
     @project = Project.new(project)
     @project.members.build(:user => session.user, :function => Function.admin)
     if @project.save
-      redirect resource(@project), :message => {:notice => "Project was successfully created"}
+      redirect resource(@project, :tickets), :message => {:notice => "Project was successfully created"}
     else
       message[:error] = "Project failed to be created"
       render :new
@@ -43,7 +43,7 @@ class Projects < Application
     @project = Project.get(id)
     raise NotFound unless @project
     if @project.update_attributes(project)
-       redirect resource(@project)
+       redirect resource(@project, :tickets)
     else
       display @project, :edit
     end
