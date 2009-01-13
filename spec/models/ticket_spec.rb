@@ -10,14 +10,16 @@ describe Ticket do
   end
 
   it "should be valid" do
-    Ticket.gen(:project_id => Project.first.id).should be_valid
+    Ticket.gen(:project_id => Project.first.id,
+              :member_create_id => Project.first.members.first.user_id).should be_valid
   end
 
   describe '#generate_update' do
 
     def generate_ticket(ticket)
       @t = Ticket.gen(:project_id => Project.first.id,
-                     :tag_list => TAG_LIST)
+                     :tag_list => TAG_LIST,
+                     :member_create_id => Project.first.members.first.user_id)
       @old_description = @t.description
       @old_title = @t.title
       @t.generate_update(@t.attributes.merge(ticket))

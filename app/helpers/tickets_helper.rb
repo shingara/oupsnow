@@ -11,7 +11,7 @@ module Merb
         "Status"
       when :tag_list
         "Tag"
-      when :member_id
+      when :assigned_to
         "Responsible"
       when :title
         "Title"
@@ -33,12 +33,12 @@ module Merb
         State.get(field).name
       when :tag_list
         field
-      when :member_id
-        m = Member.get(field)
+      when :member_assigned_id
+        m = User.get(field)
         if m.nil?
           ""
         else
-          m.user_name
+          m.login
         end
       when :title
         field

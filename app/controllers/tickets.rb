@@ -4,6 +4,8 @@ class Tickets < Application
   before :projects
   before :ensure_authenticated, :exclude => [:index, :show]
 
+  params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id]
+
   def projects
     @project = Project.get(params[:project_id])
   end
@@ -35,6 +37,7 @@ class Tickets < Application
   def create(ticket)
     @ticket = Ticket.new(ticket)
     @ticket.project_id = @project.id
+    @ticket.created_by = session.user
     if @ticket.save
       redirect resource(@project, @ticket), :message => {:notice => "Ticket was successfully created"}
     else
@@ -50,16 +53,6 @@ class Tickets < Application
       redirect resource(@project, @ticket)
     else
       display @ticket, :show
-    end
-  end
-
-  def destroy(id)
-    @ticket = Ticket.get(id)
-    raise NotFound unless @ticket
-    if @ticket.destroy
-      redirect resource(@project, :tickets)
-    else
-      raise InternalServerError
     end
   end
 

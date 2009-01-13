@@ -32,7 +32,14 @@ module OupsNow
       ::Merb.start_environment(
         :environment => ENV['MERB_ENV'] || 'development')
       require 'spec/fixtures'
-      3.of{Project.gen}
+      3.of{
+        p = Project.gen
+        (0..10).of {
+          Ticket.gen(
+            :project_id => p.id,
+            :member_create_id => p.members.first.user_id)
+        }
+      }
     end
   end
 end

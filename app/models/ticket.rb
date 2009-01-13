@@ -7,13 +7,17 @@ class Ticket
   property :created_at, DateTime
   property :num, Integer, :nullable => false
   property :state_id, Integer, :nullable => false
+  property :member_create_id, Integer, :nullable => false
 
   belongs_to :project
-  belongs_to :member
+  belongs_to :created_by, :class_name => "User", :child_key => [:member_create_id]
+  belongs_to :assigned_to, :class_name => "User", :child_key => [:member_assigned_id]
   belongs_to :state
   has n, :ticket_updates
 
   has_tags
+
+  validates_with_method :users_in_members
 
   before :valid?, :define_num_ticket
   before :valid?, :define_state_new
@@ -24,6 +28,26 @@ class Ticket
     ticket_updates.each {|tu| tu.destroy}
   end
 
+  def users_in_members
+    error_member = true
+    unless member_create_id.nil?
+      if Member.first(:user_id => member_create_id,
+                   :project_id => project_id).nil?
+        errors.add(:created_by, 'The user to create ticket need member of project')
+        error_member = false
+      end
+    end
+
+    unless member_assigned_id.nil?
+      if Member.first(:user_id => member_assigned_id,
+                      :project_id => project_id).nil?
+        errors.add(:assigned_to, 'The user to assigned ticket need member of project')
+        error_member = false
+      end
+    end
+    return error_member
+  end
+
   def generate_update(ticket)
     t = ticket_updates.new
     #TODO: see why, by default is not created with default value. Bug ???
@@ -32,7 +56,7 @@ class Ticket
       t.description = ticket[:description]
       ticket.delete(:description)
     end
-    [:title, :state_id, :member_id].each do |type_change|
+    [:title, :state_id, :member_assigned_id].each do |type_change|
       #TODO: see better than eval
       if eval("#{type_change}").to_s != ticket[type_change.to_sym].to_s
         t.properties_update << [type_change, send(type_change), ticket[type_change]]
