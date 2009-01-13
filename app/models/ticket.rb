@@ -65,10 +65,9 @@ class Ticket
 
     #TODO: no update if no same order
     #TODO: no update if several space
-    tag_list = ticket[:tag_list]
-    @tag_list = [] if @tag_list.nil?
-    if frozen_tag_list != @tag_list.join(',')
-      t.properties_update << [:tag_list, frozen_tag_list, ticket[:tag_list]]
+
+    if frozen_tag_list != list_tag(ticket[:tag_list]).join(',')
+      t.properties_update << [:tag_list, frozen_tag_list, list_tag(ticket[:tag_list]).join(',')]
     end
     tag_list = frozen_tag_list
 
@@ -76,6 +75,12 @@ class Ticket
     if update_attributes(ticket)
       t.save
     end
+  end
+
+  def list_tag(string)
+    string.to_s.split(',').map { |name| 
+      name.gsub(/[^\w_-]/i, '').strip 
+    }.uniq.sort
   end
 
   private

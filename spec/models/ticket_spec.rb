@@ -20,7 +20,6 @@ describe Ticket do
       @t = Ticket.gen(:project_id => Project.first.id,
                      :tag_list => TAG_LIST,
                      :member_create_id => Project.first.members.first.user_id)
-      @old_description = @t.description
       @old_title = @t.title
       @t.generate_update(@t.attributes.merge(ticket))
       @t.reload
