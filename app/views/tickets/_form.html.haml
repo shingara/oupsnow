@@ -1,5 +1,5 @@
 %p= text_field :title, :label => 'title', :size => 40
 %p= text_area  '', :name => 'ticket[description]', :label => 'Description', :cols => 40, :rows => 15
 %p= text_field :tag_list, :label => 'tags', :value => @ticket.tag_list.join(', ')
-%p= select :member_assigned_id, :collection => Member.all(:project_id => @project.id), :text_method => 'user_name', :selected =>:member_assigned_id, :value_method => 'user_id', :prompt => 'assigned_to'
+%p= select :member_assigned_id, :collection => Member.all(:project_id => @project.id).map{|m| m.user},:text_method => 'login', :value_method => 'id', :selected => @ticket.member_assigned_id.to_s, :prompt => 'assigned_to'
 %p= select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id'

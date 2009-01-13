@@ -40,6 +40,9 @@ module OupsNow
             :member_create_id => p.members.first.user_id)
         }
       }
+      State.create(:name => 'open')
+      State.create(:name => 'closed')
+
     end
   end
 end
