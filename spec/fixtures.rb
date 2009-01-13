@@ -7,6 +7,10 @@ User.fixture {{
   :password_confirmation => 'tintinpouet'
 }}
 
+Function.fixture {{
+  :name => /\w+/.gen
+}}
+
 Function.fixture(:admin) {{
   :name => 'Admin'
 }}

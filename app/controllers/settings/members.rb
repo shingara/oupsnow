@@ -21,13 +21,6 @@ module Settings
       display @member
     end
   
-    def edit(id)
-      only_provides :html
-      @member = Member.get(id)
-      raise NotFound unless @member
-      display @member
-    end
-  
     def create(member)
       @member = Member.new(member)
       @member.function_id = Function.first(:name => 'Developper').id
@@ -40,26 +33,6 @@ module Settings
       end
     end
   
-    def update(id, member)
-      @member = Member.get(id)
-      raise NotFound unless @member
-      if @member.update_attributes(member)
-         redirect resource(@member)
-      else
-        display @member, :edit
-      end
-    end
-  
-    def destroy(id)
-      @member = Member.get(id)
-      raise NotFound unless @member
-      if @member.destroy
-        redirect resource(:members)
-      else
-        raise InternalServerError
-      end
-    end
-
     private
 
     def admin_authenticated

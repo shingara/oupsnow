@@ -63,4 +63,10 @@ Merb::Test.add_helpers do
     request('/login', {:method => 'PUT',
             :params => {:login => 'admin', :password => 'tintinpouet'}})
   end
+
+  def need_developper_function
+    if Function.first(:name => 'Developper').nil?
+      Function.gen(:name => 'Developper')
+    end
+  end
 end
