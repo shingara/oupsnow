@@ -23,6 +23,10 @@
 %ul#ticket_update
   - @ticket.ticket_updates.each do |up|
     %li{:id => "ticket_update-#{@ticket.num}-#{up.id}"}
+      %h4
+        =up.created_by.login
+        |
+        =up.created_at
       %ul{:id => "properties_change-#{@ticket.num}-#{up.id}"}
         - up.properties_update.each do |prop|
           %li= update_field(prop)

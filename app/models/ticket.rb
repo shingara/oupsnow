@@ -48,7 +48,7 @@ class Ticket
     return error_member
   end
 
-  def generate_update(ticket)
+  def generate_update(ticket, user)
     t = ticket_updates.new
     #TODO: see why, by default is not created with default value. Bug ???
     t.properties_update = []
@@ -73,6 +73,7 @@ class Ticket
 
     return true if t.description.nil? && t.properties_update.empty?
     if update_attributes(ticket)
+      t.created_by = user
       t.save
     end
   end

@@ -21,7 +21,7 @@ describe Ticket do
                      :tag_list => TAG_LIST,
                      :member_create_id => Project.first.members.first.user_id)
       @old_title = @t.title
-      @t.generate_update(@t.attributes.merge(ticket))
+      @t.generate_update(@t.attributes.merge(ticket), Project.first.members.first.user)
       @t.reload
     end
 
