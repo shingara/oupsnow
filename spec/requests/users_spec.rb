@@ -9,7 +9,7 @@ def create_user_by_request
 end
 
 given "a user exists" do
-  User.all.destroy!
+  User.all.each {|u| u.destroy}
   login
 end
 
@@ -17,7 +17,7 @@ describe "resource(:users)" do
 
   describe "a successful POST" do
     before(:each) do
-      User.all.destroy!
+      User.all.each {|u| u.destroy}
       @response = create_user_by_request
     end
     

@@ -20,6 +20,12 @@ class User
   has n, :functions, :through => :members
   has n, :projects, :through => :members
 
+  before :destroy, :delete_member
+
+  def delete_member
+    members.destroy!
+  end
+
   def admin?(project)
     members.first(:project_id => project.id).admin?
   end
