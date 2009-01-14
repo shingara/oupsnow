@@ -32,26 +32,38 @@ require File.dirname(__FILE__) + '/fixtures.rb'
 
 Merb::Test.add_helpers do
 
+  def delete_project_and_user
+    Project.all.each {|p| p.destroy}
+    User.all.each {|u| u.destroy}
+    Function.all.destroy!
+  end
+
   def create_default_user
-    unless User.first(:login => 'shingara')
-      User.create( :login => 'shingara',
-                  :email => 'cyril.mougel@gmail.com',
-                  :password => 'tintinpouet',
-                  :password_confirmation => 'tintinpouet') or raise "can't create user"
-    end
+    delete_project_and_user
+    create_default_admin
+    u = User.create( :login => 'shingara',
+                :email => 'cyril.mougel@gmail.com',
+                :password => 'tintinpouet',
+                :password_confirmation => 'tintinpouet') or raise "can't create user"
+    Project.first.members.create(:function_id => Function.gen.id,
+                                :user_id => u.id)
   end
 
   def create_default_admin
-    unless User.first(:login => 'admin')
-      User.gen(:login => 'admin')
-    end
-    unless User.first(:login => 'admin').admin_on_one_project?
-      Project.gen
-    end
+    delete_project_and_user
+    User.gen(:login => 'admin')
+    Project.gen
+    Project.first.members.create(:function_id => Function.gen(:admin).id,
+                                :user_id => User.first(:login => 'admin').id)
+    Ticket.gen(:project_id => Project.first.id,
+               :member_create_id => User.first.id)
+    Ticket.first.ticket_updates.create(:member_create_id => User.first.id,
+                                      :description => 'a good update')
   end
 
   def login
     create_default_user
+    request('/logout')
     request('/login', {:method => 'PUT',
             :params => { :login => 'shingara',
               :password => 'tintinpouet'}})
@@ -65,12 +77,13 @@ Merb::Test.add_helpers do
 
   def login_admin
     create_default_admin
+    request('/logout')
     request('/login', {:method => 'PUT',
             :params => {:login => 'admin', :password => 'tintinpouet'}})
   end
 
   def need_developper_function
-    if Function.first(:name => 'Developper').nil?
+    unless Function.first(:name => 'Developper')
       Function.gen(:name => 'Developper')
     end
   end

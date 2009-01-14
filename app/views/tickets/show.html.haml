@@ -31,6 +31,7 @@
         - up.properties_update.each do |prop|
           %li= update_field(prop)
       %p=up.description
+      %p=link_to 'edit', resource(@project, @ticket, up, :edit) if admin?(@project)
 
 = error_messages_for @ticket
 

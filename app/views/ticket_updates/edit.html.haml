@@ -1,0 +1,10 @@
+%h1 Edit this ticket comments
+
+= error_messages_for @ticket_update
+
+= form_for(@ticket_update, :action => resource(@project, @ticket, @ticket_update)) do
+  %p= text_area  @ticket_update.description, :name => 'ticket_update[description]', :label => 'Description', :cols => 40, :rows => 15
+  %p
+    = submit "Update"
+    or
+    = link_to 'Cancel', resource(@project, @ticket)

@@ -9,7 +9,6 @@ def create_user_by_request
 end
 
 given "a user exists" do
-  User.all.each {|u| u.destroy}
   login
 end
 

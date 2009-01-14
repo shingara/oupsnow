@@ -20,10 +20,29 @@ class User
   has n, :functions, :through => :members
   has n, :projects, :through => :members
 
+  has n, :created_tickets, :class_name => "Ticket", :child_key => [:member_create_id]
+  has n, :assigned_tickets, :class_name => "Ticket", :child_key => [:member_assigned_id]
+  has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id]
+
   before :destroy, :delete_member
+  before :destroy, :delete_created_tickets
+  before :destroy, :delete_assigned_tickets
+  before :destroy, :delete_ticket_updates
 
   def delete_member
     members.destroy!
+  end
+
+  def delete_created_tickets
+    created_tickets.all.each {|t| t.destroy}
+  end
+
+  def delete_assigned_tickets
+    assigned_tickets.all.each {|t| t.destroy}
+  end
+
+  def delete_ticket_updates
+    ticket_updates.all.each {|t| t.destroy}
   end
 
   def admin?(project)

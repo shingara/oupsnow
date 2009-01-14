@@ -32,6 +32,7 @@ Merb::Router.prepare do
     resources :tickets do
       member :edit_main_description, :method => :get
       member :update_main_description, :method => :put
+      resources :ticket_updates
     end
     namespace(:settings) do
       match('/').to(:controller => 'members', :action => 'index')

@@ -3,13 +3,11 @@ class Tickets < Application
   
   before :projects
   before :ensure_authenticated, :exclude => [:index, :show]
-  before :admin_project, :only => [:edit_main_description, :update_main_description]
+  before :admin_project, :only => [:edit_main_description, 
+                                    :update_main_description]
 
   params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id]
 
-  def projects
-    @project = Project.get(params[:project_id])
-  end
 
   def index
     @tickets = Ticket.all :project_id => @project.id
@@ -65,14 +63,6 @@ class Tickets < Application
       redirect resource(@project, @ticket)
     else
       display @ticket, :show
-    end
-  end
-
-  private
-
-  def admin_project
-    unless session.user.admin?(@project)
-      raise Unauthenticated
     end
   end
 

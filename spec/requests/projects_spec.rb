@@ -128,8 +128,8 @@ describe "resource(@project)" do
   describe "PUT" do
     describe 'with admin user' do
       before(:each) do
-        @project = Project.gen
         login_admin
+        @project = Project.first
         @response = request(resource(@project), :method => "PUT", :params => {:project => {:id => @project.id, :name => 'update_name'}} )
       end
     
