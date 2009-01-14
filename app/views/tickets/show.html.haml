@@ -13,7 +13,7 @@
 
   %p= @ticket.description
 
-  = link_to 'Edit',  resource(@project, @ticket, :edit) if admin?(@project)
+  = link_to 'Edit',  resource(@project, @ticket, :edit_main_description) if admin?(@project)
 
 #ticket_side
   %h3 Tags

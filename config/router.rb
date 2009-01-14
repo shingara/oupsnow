@@ -29,7 +29,10 @@ Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do
   resources :users
   resources :projects do
-    resources :tickets
+    resources :tickets do
+      member :edit_main_description, :method => :get
+      member :update_main_description, :method => :put
+    end
     namespace(:settings) do
       match('/').to(:controller => 'members', :action => 'index')
       resources :members

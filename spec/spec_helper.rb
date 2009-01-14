@@ -55,7 +55,12 @@ Merb::Test.add_helpers do
     request('/login', {:method => 'PUT',
             :params => { :login => 'shingara',
               :password => 'tintinpouet'}})
-    User.first(:login => 'shingara')
+    u = User.first(:login => 'shingara')
+    u.members(:function_id => Function.admin.id).each do |m|
+      m.function = Function.first(:name.not => Function::ADMIN)
+      m.save
+    end
+    u
   end
 
   def login_admin

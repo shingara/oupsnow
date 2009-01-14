@@ -76,17 +76,82 @@ describe "resource(Project.first, :tickets, :new)" do
   end
 end
 
-describe "resource(Project.first, @ticket, :edit)", :given => "a ticket exists" do
-  before(:each) do
-    @response = request(resource(Project.first, Ticket.first, :edit))
+describe "doesn't access to anonymous", :shared => true do
+  before :each do
+    req
   end
 
-  after :each do
-    Ticket.all.each {|t| t.destroy}
+  it 'should respond 401' do
+    @response.status.should == 401
   end
-  
+
+  it 'should not update ticket description' do
+    Ticket.first.description.should_not == 'yahoo'
+  end
+
+end
+
+describe "doesn't access with user logged", :shared => true do
+
+  before :each do
+    login
+    req
+  end
+
   it "responds successfully" do
     @response.status.should == 401
+  end
+
+  it 'should not update ticket description' do
+    Ticket.first.description.should_not == 'yahoo'
+  end
+end
+
+describe "resource(Project.first, @ticket, :edit_main_description)", :given => "a ticket exists" do
+  def req
+    @response = request(resource(Project.first, Ticket.first, :edit_main_description))
+  end
+
+  it_should_behave_like "doesn't access to anonymous"
+  it_should_behave_like "doesn't access with user logged"
+
+
+  describe 'with admin user logged' do
+
+    before :each do
+      login_admin
+      req
+    end
+
+    it "responds successfully" do
+      @response.should be_successful
+    end
+  end
+end
+
+describe "resource(Project.first, @ticket, :update_main_description)", :given => "a ticket exists" do
+  def req
+    @response = request(resource(Project.first, Ticket.first, :update_main_description), :method => "PUT", :params => {:ticket => {:description => 'yahoo'}})
+  end
+
+  it_should_behave_like "doesn't access to anonymous"
+  it_should_behave_like "doesn't access with user logged"
+
+
+  describe 'with admin user logged' do
+
+    before :each do
+      login_admin
+      req
+    end
+
+    it "responds successfully" do
+      @response.should redirect_to(resource(Project.first, Ticket.first))
+    end
+
+    it "should update ticket description" do
+      Ticket.first.description.should == 'yahoo'
+    end
   end
 end
 
