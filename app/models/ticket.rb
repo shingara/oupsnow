@@ -84,7 +84,13 @@ class Ticket
     return true if t.description.nil? && t.properties_update.empty?
     if update_attributes(ticket)
       t.created_by = user
-      t.save
+      bool_return = t.save
+      Event.create(:eventable_class => t.class,
+                   :eventable_id => t.id,
+                   :user_id => member_create_id,
+                   :event_type => :updated,
+                   :project_id => project_id)
+      bool_return
     end
   end
 

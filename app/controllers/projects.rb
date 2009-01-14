@@ -15,6 +15,12 @@ class Projects < Application
     redirect resource(@project, :tickets)
   end
 
+  def overview(id)
+    @project = Project.get(id)
+    raise NotFound unless @project
+    display @project
+  end
+
   def new
     only_provides :html
     @project = Project.new
