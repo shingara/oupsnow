@@ -23,11 +23,13 @@ class User
   has n, :created_tickets, :class_name => "Ticket", :child_key => [:member_create_id]
   has n, :assigned_tickets, :class_name => "Ticket", :child_key => [:member_assigned_id]
   has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id]
+  has n, :events
 
   before :destroy, :delete_member
   before :destroy, :delete_created_tickets
   before :destroy, :delete_assigned_tickets
   before :destroy, :delete_ticket_updates
+  before :destroy, :delete_events
 
   def delete_member
     members.destroy!
@@ -43,6 +45,10 @@ class User
 
   def delete_ticket_updates
     ticket_updates.all.each {|t| t.destroy}
+  end
+
+  def delete_events
+    events.destroy!
   end
 
   def admin?(project)

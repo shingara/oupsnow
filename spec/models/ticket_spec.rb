@@ -5,13 +5,24 @@ describe Ticket do
   TAG_LIST = 'bar,foo,ko,ok'
 
   before :all do
-    Project.gen
-    State.gen(:name => 'new')
+    create_default_admin
+  end
+
+  def valid_ticket
+    Ticket.gen(:project_id => Project.first.id,
+              :member_create_id => Project.first.members.first.user_id).should be_valid
   end
 
   it "should be valid" do
-    Ticket.gen(:project_id => Project.first.id,
-              :member_create_id => Project.first.members.first.user_id).should be_valid
+    valid_ticket
+  end
+
+  describe '#create' do
+    it 'should generate Event of ticket creation' do
+      lambda do
+        valid_ticket
+      end.should change(Event, :count)
+    end
   end
 
   describe '#generate_update' do

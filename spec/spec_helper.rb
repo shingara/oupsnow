@@ -36,6 +36,7 @@ Merb::Test.add_helpers do
     Project.all.each {|p| p.destroy}
     User.all.each {|u| u.destroy}
     Function.all.destroy!
+    State.all.destroy!
   end
 
   def create_default_user
@@ -53,6 +54,8 @@ Merb::Test.add_helpers do
     delete_project_and_user
     User.gen(:login => 'admin')
     Project.gen
+    State.gen(:name => 'new')
+    State.gen(:name => 'check')
     Project.first.members.create(:function_id => Function.gen(:admin).id,
                                 :user_id => User.first(:login => 'admin').id)
     Ticket.gen(:project_id => Project.first.id,

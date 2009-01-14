@@ -24,6 +24,15 @@ class Ticket
 
   before :destroy, :delete_ticket_updates
 
+  after :create, :write_event
+
+  def write_event
+    Event.create(:eventable_class => self.class,
+                 :eventable_id => id,
+                 :user_id => member_create_id,
+                 :event_type => :created)
+  end
+
   def delete_ticket_updates
     ticket_updates.each {|tu| tu.destroy}
   end
