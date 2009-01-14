@@ -30,7 +30,8 @@ class Ticket
     Event.create(:eventable_class => self.class,
                  :eventable_id => id,
                  :user_id => member_create_id,
-                 :event_type => :created)
+                 :event_type => :created,
+                 :project_id => project_id)
   end
 
   def delete_ticket_updates

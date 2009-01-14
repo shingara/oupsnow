@@ -15,7 +15,8 @@ class TicketUpdate
     Event.create(:eventable_class => self.class,
                  :eventable_id => id,
                  :user_id => member_create_id,
-                 :event_type => :updated)
+                 :event_type => :updated,
+                 :project_id => ticket.project_id)
   end
 
 
