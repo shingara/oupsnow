@@ -16,7 +16,6 @@ class Event
     if eventable_class == "Ticket"
       eval "#{eventable_class}.get(eventable_id)"
     elsif eventable_class == "TicketUpdate"
-      p  "#{eventable_class}.get(eventable_id).ticket"
       eval "#{eventable_class}.get(eventable_id).ticket"
     end
   end

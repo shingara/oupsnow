@@ -1,7 +1,7 @@
 %ul
   - @project.events(:order => [:created_at.desc]).each do |event|
     %li
-      %span= event.created_at
+      %span= time_overview(event.created_at)
       =link_to event.little_description, resource(@project, event.ticket)
       was
       =event.event_type
