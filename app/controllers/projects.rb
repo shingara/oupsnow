@@ -12,7 +12,7 @@ class Projects < Application
   def show(id)
     @project = Project.get(id)
     raise NotFound unless @project
-    redirect resource(@project, :tickets)
+    redirect resource(@project, :overview)
   end
 
   def overview(id)
