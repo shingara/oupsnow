@@ -75,6 +75,9 @@ body {
       border: 1px dotted #DDDDDD;
       vertical-align: top;
       padding: 0.1em 0.5em; }
+  #content #login {
+    margin: auto;
+    width: 25%; }
 
 #ticket {
   background: #FFFFDD none repeat scroll 0 0;
