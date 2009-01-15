@@ -12,7 +12,11 @@ module Merb
     end
 
     def admin?(project)
-      authenticated? && session.user.admin?(project)
+      if authenticated? 
+        session.user.admin?(project)
+      else
+        false
+      end
     end
 
     def sub_menu

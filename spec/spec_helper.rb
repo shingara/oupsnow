@@ -32,6 +32,16 @@ require File.dirname(__FILE__) + '/fixtures.rb'
 
 Merb::Test.add_helpers do
 
+
+  def logout
+    request('/logout')
+  end
+
+  def delete_default_member_from_project(project)
+    project.members(:user_id => User.first(:login => 'shingara').id).destroy!
+    project.save
+  end
+
   def delete_project_and_user
     Project.all.each {|p| p.destroy}
     User.all.each {|u| u.destroy}

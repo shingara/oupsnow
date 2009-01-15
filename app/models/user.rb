@@ -52,7 +52,12 @@ class User
   end
 
   def admin?(project)
-    members.first(:project_id => project.id).admin?
+    m = members.first(:project_id => project.id)
+    if m
+      m.admin?
+    else
+      false
+    end
   end
 
   def admin_on_one_project?

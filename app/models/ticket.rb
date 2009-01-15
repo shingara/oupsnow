@@ -39,23 +39,14 @@ class Ticket
   end
 
   def users_in_members
-    error_member = true
-    unless member_create_id.nil?
-      if Member.first(:user_id => member_create_id,
-                   :project_id => project_id).nil?
-        errors.add(:created_by, 'The user to create ticket need member of project')
-        error_member = false
-      end
-    end
-
     unless member_assigned_id.nil?
       if Member.first(:user_id => member_assigned_id,
                       :project_id => project_id).nil?
         errors.add(:assigned_to, 'The user to assigned ticket need member of project')
-        error_member = false
+        return false
       end
     end
-    return error_member
+    return true
   end
 
   def generate_update(ticket, user)

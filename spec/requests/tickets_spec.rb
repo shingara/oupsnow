@@ -42,25 +42,70 @@ describe "resource(Project.first, :tickets)" do
   end
   
   describe "a successful POST" do
-    before(:each) do
-      Project.gen
-      login
-      pf = Project.first
-      pf.members.build(:user_id => User.first(:login => 'shingara').id,
-                       :function_id => Function.first.id)
-      pf.save
-      Ticket.all.each{|t| t.destroy}
+
+    def post_request(pf)
       @response = request(resource(pf, :tickets), :method => "POST", 
         :params => { :ticket => { :title => 'a new ticket'},
                       :project_id => pf.id})
     end
 
-    after :each do
-      Ticket.all.each {|t| t.destroy}
+    describe 'with anonymous user' do
+      before :each do
+        logout
+        Project.gen unless Project.first
+        post_request(Project.first)
+      end
+
+      it 'should not access' do
+        @response.status.should == 401
+      end
     end
-    
-    it "redirects to resource(Project.first, :tickets)" do
-      @response.should redirect_to(resource(Project.first, Ticket.first), :message => {:notice => "ticket was successfully created"})
+
+    describe 'ticket creation success', :shared => true do
+
+      it 'should create ticket' do
+        Ticket.first.should_not be_nil
+      end
+
+      it "redirects to resource(Project.first, :tickets)" do
+        @response.should redirect_to(resource(Project.first, Ticket.first), :message => {:notice => "ticket was successfully created"})
+      end
+
+      it 'project should have one ticket' do
+        @project.tickets.should have(1).items
+      end
+      
+      after :each do
+        Ticket.all.each {|t| t.destroy}
+      end
+
+    end
+
+
+    describe 'with user logged, member of project but not admin' do
+      before(:each) do
+        login
+        @project = Project.first
+        @project.members.build(:user_id => User.first(:login => 'shingara').id,
+                         :function_id => Function.first.id)
+        @project.save
+        Ticket.all.each{|t| t.destroy}
+        post_request(@project)
+      end
+
+      it_should_behave_like 'ticket creation success'
+    end
+
+    describe 'with user logged, no member of project but not admin' do
+      before(:each) do
+        login
+        @project = Project.first
+        delete_default_member_from_project(@project)
+        Ticket.all.each{|t| t.destroy}
+        post_request(@project)
+      end
+
+      it_should_behave_like 'ticket creation success'
     end
     
   end
