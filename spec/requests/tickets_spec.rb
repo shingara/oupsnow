@@ -1,15 +1,5 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
-given "a ticket exists" do
-  p = Project.gen
-  Ticket.gen(:project_id => p.id,
-            :member_create_id => p.members.first.user_id)
-end
-
-given "logged user" do
-  login
-end
-
 describe "resource(Project.first, :tickets)" do
   describe "GET" do
     
@@ -27,8 +17,9 @@ describe "resource(Project.first, :tickets)" do
     
   end
   
-  describe "GET", :given => "a ticket exists" do
+  describe "GET" do
     before(:each) do
+      login
       @response = request(resource(Project.first, :tickets))
     end
 
@@ -43,10 +34,11 @@ describe "resource(Project.first, :tickets)" do
   
   describe "a successful POST" do
 
-    def post_request(pf)
-      @response = request(resource(pf, :tickets), :method => "POST", 
+    def post_request(project, options = {})
+      puts 'request'
+      @response = request(resource(project, :tickets), :method => "POST", 
         :params => { :ticket => { :title => 'a new ticket'},
-                      :project_id => pf.id})
+                      :project_id => project.id}.merge(options))
     end
 
     describe 'with anonymous user' do
@@ -63,22 +55,24 @@ describe "resource(Project.first, :tickets)" do
 
     describe 'ticket creation success', :shared => true do
 
+      before :each do
+        @project.tickets.each {|t| t.destroy}
+        post_request(@project)
+        @project.reload
+      end
+
       it 'should create ticket' do
-        Ticket.first.should_not be_nil
+        @project.tickets.first.should_not be_nil
       end
 
       it "redirects to resource(Project.first, :tickets)" do
-        @response.should redirect_to(resource(Project.first, Ticket.first), :message => {:notice => "ticket was successfully created"})
+        @response.should redirect_to(resource(@project, @project.tickets.first), :message => {:notice => "ticket was successfully created"})
       end
 
       it 'project should have one ticket' do
         @project.tickets.should have(1).items
       end
       
-      after :each do
-        Ticket.all.each {|t| t.destroy}
-      end
-
     end
 
 
@@ -89,11 +83,10 @@ describe "resource(Project.first, :tickets)" do
         @project.members.build(:user_id => User.first(:login => 'shingara').id,
                          :function_id => Function.first.id)
         @project.save
-        Ticket.all.each{|t| t.destroy}
-        post_request(@project)
       end
 
       it_should_behave_like 'ticket creation success'
+
     end
 
     describe 'with user logged, no member of project but not admin' do
@@ -101,11 +94,10 @@ describe "resource(Project.first, :tickets)" do
         login
         @project = Project.first
         delete_default_member_from_project(@project)
-        Ticket.all.each{|t| t.destroy}
-        post_request(@project)
       end
 
       it_should_behave_like 'ticket creation success'
+
     end
     
   end
@@ -152,9 +144,13 @@ describe "doesn't access with user logged", :shared => true do
   end
 end
 
-describe "resource(Project.first, @ticket, :edit_main_description)", :given => "a ticket exists" do
+describe "resource(Project.first, @ticket, :edit_main_description)" do
   def req
     @response = request(resource(Project.first, Ticket.first, :edit_main_description))
+  end
+
+  before :each do
+    login
   end
 
   it_should_behave_like "doesn't access to anonymous"
@@ -174,9 +170,13 @@ describe "resource(Project.first, @ticket, :edit_main_description)", :given => "
   end
 end
 
-describe "resource(Project.first, @ticket, :update_main_description)", :given => "a ticket exists" do
+describe "resource(Project.first, @ticket, :update_main_description)" do
   def req
     @response = request(resource(Project.first, Ticket.first, :update_main_description), :method => "PUT", :params => {:ticket => {:description => 'yahoo'}})
+  end
+
+  before :each do
+    login
   end
 
   it_should_behave_like "doesn't access to anonymous"
@@ -200,7 +200,11 @@ describe "resource(Project.first, @ticket, :update_main_description)", :given =>
   end
 end
 
-describe "resource(Project.first, @ticket)", :given => "a ticket exists" do
+describe "resource(Project.first, @ticket)" do
+
+  before :each do
+    login
+  end
   
   describe "GET" do
     before(:each) do
@@ -220,8 +224,9 @@ describe "resource(Project.first, @ticket)", :given => "a ticket exists" do
   end
   
   describe "PUT" do
-    describe "with user logged", :given => 'logged user' do
+    describe "with user logged"do
       before(:each) do
+        login
         @project = Project.gen
         @ticket = Ticket.gen(:project_id => @project.id,
                             :member_create_id => @project.members.first.user_id)
