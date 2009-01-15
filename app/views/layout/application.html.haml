@@ -21,6 +21,7 @@
       %ul
         %li= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?
+          %li= link_to 'Overview', resource(@project, :overview)
           %li= link_to 'Tickets', resource(@project, :tickets)
           %li= link_to 'Add new ticket', resource(@project, :tickets, :new) if authenticated?
           %li= link_to 'Settings', url(:project_settings_members, @project) if admin?(@project)

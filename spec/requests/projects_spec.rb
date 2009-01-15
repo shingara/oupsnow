@@ -141,3 +141,49 @@ describe "resource(@project)" do
   
 end
 
+
+describe 'it should be successful' , :shared => true do
+  it 'should be successful' do
+    @response.should be_successful
+  end
+end
+
+describe 'resource(@project, :overview)' do
+  def test_request
+    @response = request(resource(@project, :overview))
+  end
+
+  describe 'anonymous user' do
+    before :each do
+      logout
+      Project.gen unless Project.first
+      @project = Project.first
+      test_request
+    end
+
+    it_should_behave_like 'it should be successful'
+  end
+
+  describe 'login user' do
+    before :each do
+      login
+      Project.gen unless Project.first
+      @project = Project.first
+      test_request
+    end
+
+    it_should_behave_like 'it should be successful'
+  end
+
+  describe 'admin user' do
+    before :each do
+      login_admin
+      Project.gen unless Project.first
+      @project = Project.first
+      test_request
+    end
+
+    it_should_behave_like 'it should be successful'
+  end
+
+end
