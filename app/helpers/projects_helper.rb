@@ -15,7 +15,7 @@ module Merb
         @previous_date = date
         return "<span>#{date.strftime('%B %d')}</span>"
       else
-        return "<span>#{date.strftime('%H %M')}</span>"
+        return "<span>#{date.strftime('%H:%M')}</span>"
       end
     end
   end
