@@ -78,6 +78,11 @@ body {
   #content #login {
     margin: auto;
     width: 25%; }
+  #content #register {
+    margin: auto;
+    width: 50%; }
+    #content #register input.field {
+      width: 100%; }
 
 #ticket {
   background: #FFFFDD none repeat scroll 0 0;

@@ -1,16 +1,15 @@
-%h1 Create an account
+#register
+  %h1 Create an account
 
-= message[:error]
-= error_messages_for @user
+  = message[:error]
+  = error_messages_for @user
 
-= form_for(@user, :action => url(:users) ) do
+  = form_for(@user, :action => url(:users) ) do
 
-  %p= text_field :login, :label => 'Login'
-  %p= text_field  :email, :label => 'Email'
-  %p= password_field  :password, :label => 'Password'
-  %p= password_field  :password_confirmation, :label => 'Password confirmation'
+    %p= text_field :login, :label => 'Login', :class => 'field'
+    %p= text_field  :email, :label => 'Email', :class => 'field'
+    %p= password_field  :password, :label => 'Password', :class => 'field'
+    %p= password_field  :password_confirmation, :label => 'Password confirmation', :class => 'field'
 
-  %p
-    = submit "Create"
-
-= link_to 'Back', url(:users)
+    %p
+      = submit "Create"
