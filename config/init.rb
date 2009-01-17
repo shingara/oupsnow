@@ -17,6 +17,7 @@ end
  
 Merb::BootLoader.before_app_loads do
   # This will get executed after dependencies have been loaded but before your app's classes have loaded.
+  load_from_source('will_paginate')
 end
  
 Merb::BootLoader.after_app_loads do
@@ -25,3 +26,8 @@ end
 
 require 'merb-slices'
 Merb::Slices::config[:merb_auth_slice_password][:layout] = :login
+
+def load_from_source(src)
+  $:.unshift File.join(Merb.root, "src/#{src}/lib")
+  require "src/#{src}/init.rb"
+end

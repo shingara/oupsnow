@@ -1,0 +1,3 @@
+[submodule "src/will_paginate"]
+	path = src/will_paginate
+	url = git://github.com/mislav/will_paginate.git
