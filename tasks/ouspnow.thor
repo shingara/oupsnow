@@ -34,7 +34,7 @@ module OupsNow
       require 'spec/fixtures'
       3.of{
         p = Project.gen
-        (0..10).of {
+        (20..40).of {
           Ticket.gen(
             :project_id => p.id,
             :member_create_id => p.members.first.user_id)
