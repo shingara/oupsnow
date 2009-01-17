@@ -11,4 +11,6 @@
         %th= link_to "##{ticket.id}", resource(@project, ticket)
         %td= ticket.title
 
+= will_paginate @tickets
+
 = link_to 'New', resource(@project, :tickets, :new) if session.authenticated?

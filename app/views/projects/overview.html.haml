@@ -1,5 +1,5 @@
 %ul
-  - @project.events(:order => [:created_at.desc]).each do |event|
+  - @events.each do |event|
     %li
       %span= time_overview(event.created_at)
       =link_to event.little_description, resource(@project, event.ticket)
@@ -8,4 +8,4 @@
       by
       =event.user.login
 
-
+= will_paginate @events

@@ -8,9 +8,10 @@ class Tickets < Application
 
   params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id]
 
-
   def index
-    @tickets = Ticket.all :project_id => @project.id
+    @tickets = Ticket.paginate(:project_id => @project.id,
+                               :page => params[:page],
+                               :per_page => 20)
     display @tickets
   end
 
