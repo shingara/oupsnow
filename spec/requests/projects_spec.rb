@@ -57,7 +57,7 @@ describe "resource(@project)" do
        end
 
        it "should redirect to the index action" do
-         @response.should redirect_to(resource(@project, :tickets))
+         @response.should redirect_to(resource(@project, :overview))
        end
 
     end
@@ -121,7 +121,7 @@ describe "resource(@project)" do
     end
   
     it "responds successfully" do
-      @response.should redirect_to(resource(@project, :tickets))
+      @response.should redirect_to(resource(@project, :overview))
     end
   end
   

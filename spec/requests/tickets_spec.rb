@@ -35,7 +35,6 @@ describe "resource(Project.first, :tickets)" do
   describe "a successful POST" do
 
     def post_request(project, options = {})
-      puts 'request'
       @response = request(resource(project, :tickets), :method => "POST", 
         :params => { :ticket => { :title => 'a new ticket'},
                       :project_id => project.id}.merge(options))
@@ -172,7 +171,9 @@ end
 
 describe "resource(Project.first, @ticket, :update_main_description)" do
   def req
-    @response = request(resource(Project.first, Ticket.first, :update_main_description), :method => "PUT", :params => {:ticket => {:description => 'yahoo'}})
+    @response = request(resource(Project.first, Ticket.first, :update_main_description), 
+                        :method => "PUT", 
+                        :params => {:ticket => {:description => 'yahoo'}})
   end
 
   before :each do
@@ -224,14 +225,39 @@ describe "resource(Project.first, @ticket)" do
   end
   
   describe "PUT" do
+
+    def put_request
+      @project = Project.first
+      @ticket = @project.tickets.first
+      @response = request(resource(@project, @ticket), :method => "PUT", 
+                          :params => { :ticket => {:id => @ticket.id} })
+    end
+
+    describe "with anonymous" do
+      before :each do
+        create_default_admin
+        logout
+        Project.first.tickets.first.ticket_updates.each {|tu| tu.destroy}
+        put_request
+      end
+
+      it 'should be successful' do
+        @response.status.should == 401
+      end
+
+      it 'should not change ticket' do
+        @ticket.should == Project.first.tickets.first
+      end
+
+      it 'should not create ticket update' do
+        Project.first.tickets.first.ticket_updates.should be_empty
+      end
+    end
+
     describe "with user logged"do
       before(:each) do
         login
-        @project = Project.gen
-        @ticket = Ticket.gen(:project_id => @project.id,
-                            :member_create_id => @project.members.first.user_id)
-        @response = request(resource(@project, @ticket), :method => "PUT", 
-          :params => { :ticket => {:id => @ticket.id} })
+        put_request
       end
 
       after :each do

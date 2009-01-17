@@ -33,11 +33,12 @@
       %p=up.description
       %p=link_to 'edit', resource(@project, @ticket, up, :edit) if admin?(@project)
 
-= error_messages_for @ticket
+- if authenticated?
+  = error_messages_for @ticket
 
-#ticket_update_form
-  %h3 Update this ticket
-  = form_for(@ticket, :action => resource(@project, @ticket)) do 
-    = partial :form
-    %p
-      = submit "Update"
+  #ticket_update_form
+    %h3 Update this ticket
+    = form_for(@ticket, :action => resource(@project, @ticket)) do 
+      = partial :form
+      %p
+        = submit "Update"
