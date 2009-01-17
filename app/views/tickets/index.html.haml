@@ -9,7 +9,7 @@
   %tbody
     - for ticket in @tickets
       %tr
-        %th= link_to "##{ticket.id}", resource(@project, ticket)
+        %th= link_to "##{ticket.num}", resource(@project, ticket)
         %td= ticket.title
         %td= ticket.assigned_to ? ticket.assigned_to.login : ""
 
