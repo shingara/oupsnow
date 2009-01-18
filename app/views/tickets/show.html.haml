@@ -13,7 +13,7 @@
 
   %p= @ticket.description
 
-  = link_to 'Edit',  resource(@project, @ticket, :edit_main_description) if admin?(@project)
+  .edit= link_to 'Edit',  resource(@project, @ticket, :edit_main_description) if admin?(@project)
 
 #ticket_side
   %h3 Tags
@@ -22,7 +22,7 @@
 
 %ul#ticket_update
   - @ticket.ticket_updates.each do |up|
-    %li{:id => "ticket_update-#{@ticket.num}-#{up.id}"}
+    %li{:id => "ticket_update-#{@ticket.num}-#{up.id}", :class => 'top-ticket-update'}
       %h4
         =up.created_by.login
         |
@@ -31,7 +31,7 @@
         - up.properties_update.each do |prop|
           %li= update_field(prop)
       %p=up.description
-      %p=link_to 'edit', resource(@project, @ticket, up, :edit) if admin?(@project)
+      .edit=link_to 'edit', resource(@project, @ticket, up, :edit) if admin?(@project)
 
 - if authenticated?
   = error_messages_for @ticket

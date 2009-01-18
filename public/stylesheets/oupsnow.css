@@ -95,7 +95,21 @@ body {
   background: #FFFFDD none repeat scroll 0 0;
   border: 1px outset #999966;
   margin-top: 1em;
-  padding: 0.5em 1em; }
+  padding: 0.5em 1em;
+  position: relative; }
+
+.edit {
+  position: absolute;
+  right: 10px;
+  top: 10px; }
+
+#ticket_update {
+  padding-left: 0px; }
+  #ticket_update li.top-ticket-update {
+    position: relative;
+    list-style-image: none;
+    list-style-type: none;
+    border-top: 1px solid; }
 
 form label {
   display: block; }
