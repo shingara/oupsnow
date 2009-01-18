@@ -5,13 +5,17 @@
     %tr
       %th id
       %th name
-      %th assigned_to
+      %th responsabile
+      %th status
+      %th priority
   %tbody
     - for ticket in @tickets
       %tr
         %th= link_to "##{ticket.num}", resource(@project, ticket)
         %td= ticket.title
         %td= ticket.assigned_to ? ticket.assigned_to.login : ""
+        %td= ticket.state.name
+        %td= ticket.priority ? ticket.priority.name : ""
 
 = will_paginate @tickets
 
