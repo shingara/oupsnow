@@ -1,12 +1,15 @@
-%h1 
-  Add Member to project 
-  = @project.name
+- if User.not_in_project(@project).size > 0
+  %h1 
+    Add Member to project 
+    = @project.name
 
-= error_messages_for @member
+  = error_messages_for @member
 
-= form_for(@member, :action => url(:project_settings_members, @project) ) do
+  = form_for(@member, :action => url(:project_settings_members, @project) ) do
 
-  %p=select :user_id, :collection => User.not_in_project(@project), :text_method => 'login', :value_method => 'id'
+    %p=select :user_id, :collection => User.not_in_project(@project), :text_method => 'login', :value_method => 'id'
 
-  %p
-    = submit "Create"
+    %p
+      = submit "Create"
+- else
+  %p There are no more user not already in your. So you can't add member to project
