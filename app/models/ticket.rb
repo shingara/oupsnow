@@ -8,11 +8,13 @@ class Ticket
   property :num, Integer, :nullable => false
   property :state_id, Integer, :nullable => false
   property :member_create_id, Integer, :nullable => false
+  property :priority_id, Integer
 
   belongs_to :project
   belongs_to :created_by, :class_name => "User", :child_key => [:member_create_id]
   belongs_to :assigned_to, :class_name => "User", :child_key => [:member_assigned_id]
   belongs_to :state
+  belongs_to :priority
   has n, :ticket_updates
 
   has_tags
@@ -57,7 +59,7 @@ class Ticket
       t.description = ticket[:description]
       ticket.delete(:description)
     end
-    [:title, :state_id, :member_assigned_id].each do |type_change|
+    [:title, :state_id, :member_assigned_id, :priority_id].each do |type_change|
       #TODO: see better than eval
       if eval("#{type_change}").to_s != ticket[type_change.to_sym].to_s
         t.properties_update << [type_change, send(type_change), ticket[type_change]]

@@ -15,6 +15,8 @@ module Merb
         "Responsible"
       when :title
         "Title"
+      when :priority_id
+        "Priority"
       end
     end
 
@@ -42,6 +44,13 @@ module Merb
         end
       when :title
         field
+      when :priority_id
+        s = Priority.get(field)
+        if s.nil?
+          ""
+        else
+          s.name
+        end
       end
     end
 

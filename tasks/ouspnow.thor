@@ -20,6 +20,15 @@ module OupsNow
       Function.create(:name => 'Admin')
       Function.create(:name => 'Developper')
       State.create(:name => 'new')
+      State.create(:name => 'open')
+      State.create(:name => 'resolved')
+      State.create(:name => 'hold')
+      State.create(:name => 'closed')
+      State.create(:name => 'invalid')
+      Priority.create(:name => 'Low')
+      Priority.create(:name => 'Normal')
+      Priority.create(:name => 'High')
+      Priority.create(:name => 'Urgent')
     end
 
   end
@@ -40,9 +49,14 @@ module OupsNow
             :member_create_id => p.members.first.user_id)
         }
       }
-      State.create(:name => 'open')
-      State.create(:name => 'closed')
+    end
+  end
 
+  class Converter < Thor
+
+    desc 'convert_from_redmine', 'convert from Redmine'
+    def convert_from_redmine
+      require 'task/converter/redmine.rb'
     end
   end
 end

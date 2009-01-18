@@ -41,6 +41,10 @@ State.fixture {{
   :name => /\w+/.gen,
 }}
 
+Priority.fixture {{
+  :name => /\w+/.gen,
+}}
+
 
 State.gen(:name => 'new')
 
