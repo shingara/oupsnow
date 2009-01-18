@@ -23,7 +23,7 @@ class TicketUpdates < Application
   end
 
   def ticket
-    @ticket = Ticket.get(params[:ticket_id])
+    @ticket = Ticket.first(:num => params[:num], :project_id => params[:project_id])
   end
   
 end

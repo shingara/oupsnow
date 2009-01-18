@@ -30,7 +30,7 @@ Merb::Router.prepare do
   resources :users
   resources :projects do
     member :overview, :method => :get
-    resources :tickets do
+    resources :tickets, :identify => 'num' do
       member :edit_main_description, :method => :get
       member :update_main_description, :method => :put
       resources :ticket_updates

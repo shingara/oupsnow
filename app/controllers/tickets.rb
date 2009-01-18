@@ -15,8 +15,8 @@ class Tickets < Application
     display @tickets
   end
 
-  def show(id)
-    @ticket = Ticket.get(params[:id])
+  def show(project_id, num)
+    @ticket = Ticket.first(:num => num, :project_id => project_id)
     raise NotFound unless @ticket
     display @ticket
   end
@@ -27,15 +27,15 @@ class Tickets < Application
     display @ticket
   end
 
-  def edit_main_description(id)
+  def edit_main_description(project_id, num)
     only_provides :html
-    @ticket = Ticket.get(id)
+    @ticket = Ticket.first(:num => num, :project_id => project_id)
     raise NotFound unless @ticket
     display @ticket
   end
 
-  def update_main_description(id, ticket)
-    @ticket = Ticket.get(id)
+  def update_main_description(project_id, num, ticket)
+    @ticket = Ticket.first(:num => num, :project_id => project_id)
     raise NotFound unless @ticket
     @ticket.description = ticket[:description]
     if @ticket.save
@@ -57,8 +57,8 @@ class Tickets < Application
     end
   end
 
-  def update(id, ticket)
-    @ticket = Ticket.get(id)
+  def update(project_id, num, ticket)
+    @ticket = Ticket.first(:num => num, :project_id => project_id)
     raise NotFound unless @ticket
     if @ticket.generate_update(ticket, session.user)
       redirect resource(@project, @ticket)
