@@ -15,6 +15,8 @@ class User
   property :id,     Serial
   property :login,  String, :nullable => false, :unique => true
   property :email,  String, :nullable => false, :unique => true, :format => :email_address
+  property :firstname, String
+  property :lastname, String
 
   has n, :members
   has n, :functions, :through => :members
