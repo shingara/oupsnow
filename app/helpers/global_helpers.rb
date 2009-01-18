@@ -40,7 +40,7 @@ module Merb
     end
 
     def projects_actual
-      if @request.params[:controller] == 'projects' && @request.params[:action] != 'overview'
+      if @request.params[:controller] == 'projects' && @request.params[:action] != 'overview' && @request.params[:action] != 'edit'
         "actual"
       else
         ""
@@ -56,7 +56,8 @@ module Merb
     end
 
     def settings_actual
-      if @request.params[:controller] =~ /settings\/\S+/
+      if @request.params[:controller] =~ /settings\/\S+/ ||
+        @request.params[:controller] == 'projects' && @request.params[:action] == 'edit'
         "actual"
       else
         ""
