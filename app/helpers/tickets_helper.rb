@@ -11,7 +11,7 @@ module Merb
         "Status"
       when :tag_list
         "Tag"
-      when :assigned_to
+      when :member_assigned_id
         "Responsible"
       when :title
         "Title"
