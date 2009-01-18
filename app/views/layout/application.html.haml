@@ -19,12 +19,12 @@
 
     #menu.nav
       %ul
-        %li= link_to 'Projects', resource(:projects)
+        %li{:class => projects_actual}= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?
-          %li= link_to 'Overview', resource(@project, :overview)
-          %li= link_to 'Tickets', resource(@project, :tickets)
-          %li= link_to 'Add new ticket', resource(@project, :tickets, :new) if authenticated?
-          %li= link_to 'Settings', url(:project_settings_members, @project) if admin?(@project)
-    = sub_menu
+          %li{:class => overview_actual}=link_to 'Overview', resource(@project, :overview)
+          %li{:class => tickets_actual}= link_to 'Tickets', resource(@project, :tickets)
+          %li{:class => tickets_new_actual}= link_to 'Add new ticket', resource(@project, :tickets, :new) if authenticated?
+          %li{:class => settings_actual}= link_to 'Settings', url(:project_settings_members, @project) if admin?(@project)
+      = sub_menu
     %div#content
       = catch_content :for_layout

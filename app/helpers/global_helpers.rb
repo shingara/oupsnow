@@ -22,5 +22,46 @@ module Merb
     def sub_menu
     end
 
+    def overview_actual
+      if @request.params[:controller] == 'projects' && @request.params[:action] == 'overview'
+        "actual"
+      else
+        ""
+      end
+    end
+
+    def tickets_actual
+      if @request.params[:controller] == 'tickets' && @request.params[:action] != 'new' ||
+        @request.params[:controller] ==  'ticket_updates'
+        "actual"
+      else
+        ""
+      end
+    end
+
+    def projects_actual
+      if @request.params[:controller] == 'projects' && @request.params[:action] != 'overview'
+        "actual"
+      else
+        ""
+      end
+    end
+
+    def tickets_new_actual
+      if @request.params[:controller] == 'tickets' && @request.params[:action] == 'new'
+        "actual"
+      else
+        ""
+      end
+    end
+
+    def settings_actual
+      if @request.params[:controller] =~ /settings\/\S+/
+        "actual"
+      else
+        ""
+      end
+    end
+
   end
 end
