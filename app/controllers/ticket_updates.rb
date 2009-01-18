@@ -23,7 +23,7 @@ class TicketUpdates < Application
   end
 
   def ticket
-    @ticket = Ticket.first(:num => params[:num], :project_id => params[:project_id])
+    @ticket = Ticket.get_by_permalink(params[:project_id], params[:ticket_permalink])
   end
   
 end

@@ -91,6 +91,14 @@ class Ticket
     }.uniq.sort
   end
 
+  def ticket_permalink
+    "#{num}"
+  end
+
+  def self.get_by_permalink(project_id, permalink)
+    Ticket.first(:num => permalink, :project_id => project_id)
+  end
+
   private
 
   def define_num_ticket

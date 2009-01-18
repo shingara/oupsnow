@@ -15,8 +15,8 @@ class Tickets < Application
     display @tickets
   end
 
-  def show(project_id, num)
-    @ticket = Ticket.first(:num => num, :project_id => project_id)
+  def show(project_id, ticket_permalink)
+    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     display @ticket
   end
@@ -27,15 +27,15 @@ class Tickets < Application
     display @ticket
   end
 
-  def edit_main_description(project_id, num)
+  def edit_main_description(project_id, ticket_permalink)
     only_provides :html
-    @ticket = Ticket.first(:num => num, :project_id => project_id)
+    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     display @ticket
   end
 
-  def update_main_description(project_id, num, ticket)
-    @ticket = Ticket.first(:num => num, :project_id => project_id)
+  def update_main_description(project_id, ticket_permalink, ticket)
+    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     @ticket.description = ticket[:description]
     if @ticket.save
@@ -57,8 +57,8 @@ class Tickets < Application
     end
   end
 
-  def update(project_id, num, ticket)
-    @ticket = Ticket.first(:num => num, :project_id => project_id)
+  def update(project_id, ticket_permalink, ticket)
+    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     if @ticket.generate_update(ticket, session.user)
       redirect resource(@project, @ticket)
