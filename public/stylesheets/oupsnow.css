@@ -11,12 +11,10 @@ body {
     list-style-image: none;
     list-style-position: outside;
     list-style-type: none;
-    text-align: right;
     margin: 0; }
   .nav li {
     white-space: no-wrap;
-    display: inline;
-    border-right: 1px solid #D7D7D7; }
+    display: inline; }
   .nav .last {
     border-right: 0px none; }
 
@@ -32,19 +30,28 @@ body {
   #banner #login_nav {
     color: black;
     margin-right: 10px; }
+    #banner #login_nav ul {
+      text-align: right; }
     #banner #login_nav li {
       padding-right: 0.5em;
       padding-left: 0.5em; }
 
 #menu {
-  padding-top: 10px; }
+  padding-top: 10px;
+  background: #94DA3F; }
   #menu li {
-    background: #487858 none repeat scroll 0 0;
-    border-right: 3px solid #092E20; }
+    background: #487858 none repeat scroll 0 0; }
     #menu li a:link, #menu li a:visited {
       color: white;
       text-decoration: none;
       padding: 0.2em 20px; }
+  #menu li.actual {
+    background: #FF7868 none repeat scroll 0 0; }
+  #menu #sub_menu {
+    background: #8fff64;
+    padding-top: 5px; }
+    #menu #sub_menu li {
+      background: #f87858 none repeat scroll 0 0; }
 
 #content {
   padding: 2em;

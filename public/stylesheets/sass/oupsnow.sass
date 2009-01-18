@@ -13,12 +13,10 @@ body
     list-style-image: none
     list-style-position: outside
     list-style-type: none
-    text-align: right
     margin: 0
   li
     white-space: no-wrap
     display: inline
-    border-right: 1px solid #D7D7D7
 
   .last
     border-right: 0px none
@@ -40,6 +38,9 @@ body
     color: black
     margin-right: 10px
 
+    ul
+      text-align: right
+
     li
       padding-right: 0.5em
       padding-left: 0.5em
@@ -47,15 +48,25 @@ body
 #menu
 
   padding-top: 10px
+  background: #94DA3F
 
   li
     background: #487858 none repeat scroll 0 0
-    border-right: 3px solid #092E20
 
     a:link,a:visited
       color: white
       text-decoration: none
       padding: 0.2em 20px
+    
+  li.actual
+    background: #FF7868 none repeat scroll 0 0
+
+
+  #sub_menu
+    background: #8fff64
+    padding-top: 5px
+    li
+      background: #f87858 none repeat scroll 0 0
 
 #content
   padding: 2em
