@@ -3,9 +3,9 @@
 = message[:error]
 = error_messages_for @ticket
 
-= form_for(@ticket, :action => url(:project_tickets) ) do
+= form_for(@ticket, :action => url(:project_tickets), :id => 'ticket_form' ) do
   = partial :form
-  %p
+  %p.btns
     = submit "Create"
     or
     = link_to 'Cancel', resource(@project, :tickets)

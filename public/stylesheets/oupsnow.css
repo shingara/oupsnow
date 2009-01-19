@@ -18,6 +18,11 @@ body {
   .nav .last {
     border-right: 0px none; }
 
+.btns {
+  margin: 18px 0 0;
+  padding: 9px;
+  text-align: right; }
+
 #banner {
   background: #94DA3A none repeat scroll 0 0; }
   #banner #header {
@@ -110,6 +115,23 @@ body {
     list-style-image: none;
     list-style-type: none;
     border-top: 1px solid; }
+
+#ticket_update_form, #ticket_form {
+  display: block; }
+  #ticket_update_form select,   #ticket_form select {
+    width: 100%; }
+  #ticket_update_form .group_main,   #ticket_form .group_main {
+    float: left;
+    display: block;
+    width: 60%; }
+  #ticket_update_form .group_more,   #ticket_form .group_more {
+    display: block;
+    margin-left: 62%;
+    margin-top: 10px; }
+  #ticket_update_form .taggings,   #ticket_form .taggings {
+    clear: both; }
+    #ticket_update_form .taggings input,     #ticket_form .taggings input {
+      width: 98%; }
 
 form label {
   display: block; }

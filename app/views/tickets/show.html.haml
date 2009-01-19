@@ -40,5 +40,5 @@
     %h3 Update this ticket
     = form_for(@ticket, :action => resource(@project, @ticket)) do 
       = partial :form
-      %p
+      %p.btns
         = submit "Update"
