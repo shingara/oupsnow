@@ -1,0 +1,10 @@
+%h1 Add a priority
+
+= error_messages_for @priority
+
+= form_for(@priority, :action => resource(:admin, :priorities) ) do
+  %p= text_field :name, :label => 'Name'
+  %p
+    = submit "Create"
+
+= link_to 'Back', resource(:admin, :priorities)

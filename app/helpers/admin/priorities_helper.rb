@@ -1,6 +1,6 @@
 module Merb
   module Admin
-    module FunctionsHelper
+    module PrioritiesHelper
       include Admin::GlobalHelper
   
     end

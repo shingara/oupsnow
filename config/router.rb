@@ -30,6 +30,7 @@ Merb::Router.prepare do
   namespace(:admin) do
     match('/').to(:controller => 'functions', :action => 'index').name(:root)
     resources :functions
+    resources :priorities
   end
 
   resources :users

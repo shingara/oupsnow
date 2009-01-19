@@ -1,0 +1,12 @@
+%h1
+  Priorities
+
+%table
+  %thead
+    %tr
+      %th Name
+  %tbody
+    - for priority in @priorities
+      %tr
+        %td= priority.name
+%p=link_to 'Add priorities', resource(:admin, :priorities, :new)
