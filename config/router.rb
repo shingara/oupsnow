@@ -27,6 +27,11 @@
 
 Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do
+  namespace(:admin) do
+    match('/').to(:controller => 'functions', :action => 'index').name(:root)
+    resources :functions
+  end
+
   resources :users
   resources :projects do
     member :overview, :method => :get

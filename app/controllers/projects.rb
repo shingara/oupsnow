@@ -70,10 +70,5 @@ class Projects < Application
 
   private
 
-  def need_admin
-    unless session.user.admin_on_one_project?
-      raise Unauthenticated
-    end
-  end
 
 end # Projects

@@ -1,0 +1,12 @@
+%h1 
+  Functions
+
+%table
+  %thead
+    %tr
+      %th Name
+  %tbody
+    - for function in @functions
+      %tr
+        %td=function.name
+%p=link_to 'Add function', resource(:admin, :functions, :new)

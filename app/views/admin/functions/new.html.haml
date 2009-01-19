@@ -1,0 +1,10 @@
+%h1 Add a function
+
+= error_messages_for @function
+
+= form_for(@function, :action => resource(:admin, :functions) ) do
+  %p= text_field :name, :label => 'Name'
+  %p
+    = submit "Create"
+
+= link_to 'Back', resource(:admin, :functions)

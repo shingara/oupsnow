@@ -19,6 +19,14 @@ module Merb
       end
     end
 
+    def admin_on_one_project?
+      if authenticated? 
+        session.user.admin_on_one_project?
+      else
+        false
+      end
+    end
+
     def sub_menu
     end
 
