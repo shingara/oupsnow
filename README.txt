@@ -25,8 +25,8 @@ With the tar.gz or any other archive:
  * Extract sources to a folder
  * Create a database.yml file in the config directory. Generate by example by <kbd>rake db:database_yaml</kbd>. 
  * Create your database with tool on your database
- * Generate the good schema in your database: <kbd>rake db:automigrate</kbd>
- * Add first data in your database: <kbd>thor oups_now:bootstrap:first_value </kbd>
+ * Generate the good schema in your database: <kbd>MERB_ENV="production" rake db:automigrate</kbd>
+ * Add first data in your database: <kbd>MERB_ENV="production" thor oups_now:bootstrap:first_value </kbd>
  * Start the server in production mode : <kbd>merb -e production</kbd>
 
 h2. Demo Website

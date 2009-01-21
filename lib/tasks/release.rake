@@ -57,6 +57,14 @@ namespace :release do
     system("git push origin --tags")
   end
 
+  desc 'Upload website files to rubyforge'
+  task :upload_website do
+    host = "#{RUBY_FORGE_USER}@rubyforge.org"
+    remote_dir = "/var/www/gforge-projects/#{RUBY_FORGE_PROJECT}/"
+    local_dir = 'website'
+    sh %{rsync -aCv #{local_dir}/ #{host}:#{remote_dir}}
+  end
+
   desc "Publish the release files to RubyForge."
   task :rubyforge_upload => [:package] do
     files = ["tgz", "zip"].map { |ext| "pkg/#{PKG_FILE_NAME}.#{ext}" }
