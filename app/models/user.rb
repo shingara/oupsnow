@@ -63,6 +63,7 @@ class User
   end
 
   def admin_on_one_project?
+    return true if Project.count == 0
     !members.first(:function_id => Function.admin.id).nil?
   end
 

@@ -15,7 +15,8 @@
           - else
             %li= link_to('My profile', url(:edit_user, session.user))
             %li.last= link_to 'Logout', url(:logout)
-            %li.last= link_to 'Administration', url(:admin_root) if admin_on_one_project?
+            - if admin_on_one_project?
+              %li.last= link_to 'Administration', url(:admin_root)
 
     #menu.nav
       %ul
@@ -23,8 +24,10 @@
         - unless @project.nil? || @project.id.nil?
           %li{:class => overview_actual}=link_to 'Overview', resource(@project, :overview)
           %li{:class => tickets_actual}= link_to 'Tickets', resource(@project, :tickets)
-          %li{:class => tickets_new_actual}= link_to 'Add new ticket', resource(@project, :tickets, :new) if authenticated?
-          %li{:class => settings_actual}= link_to 'Settings', url(:project_settings_members, @project) if admin?(@project)
+          - if authenticated?
+            %li{:class => tickets_new_actual}= link_to 'Add new ticket', resource(@project, :tickets, :new)
+          - if admin? @project
+            %li{:class => settings_actual}= link_to 'Settings', url(:project_settings_members, @project)
       = sub_menu
     %div#content
       = catch_content :for_layout
