@@ -15,7 +15,7 @@
           - else
             %li= link_to('My profile', url(:edit_user, session.user))
             %li.last= link_to 'Logout', url(:logout)
-            - if admin_on_one_project?
+            - if global_admin?
               %li.last= link_to 'Administration', url(:admin_root)
 
     #menu.nav

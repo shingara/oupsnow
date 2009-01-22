@@ -62,7 +62,8 @@ Merb::Test.add_helpers do
 
   def create_default_admin
     delete_project_and_user
-    User.gen(:login => 'admin')
+    User.gen(:login => 'admin',
+            :global_admin => 'true')
     Project.gen
     State.gen(:name => 'new')
     State.gen(:name => 'check')

@@ -17,6 +17,7 @@ class User
   property :email,  String, :nullable => false, :unique => true, :format => :email_address
   property :firstname, String
   property :lastname, String
+  property :global_admin, Boolean
 
   has n, :members
   has n, :functions, :through => :members
@@ -56,15 +57,10 @@ class User
   def admin?(project)
     m = members.first(:project_id => project.id)
     if m
-      m.admin?
+      m.project_admin?
     else
       false
     end
-  end
-
-  def admin_on_one_project?
-    return true if Project.count == 0
-    !members.first(:function_id => Function.admin.id).nil?
   end
 
   def self.not_in_project(project)

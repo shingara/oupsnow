@@ -1,3 +1,9 @@
+== HEAD
+
+ * Define a global admin user by user. This global admin can be made
+   everything. Oupsnow administration and project settings
+ * Define a project admin by function. A user with this function can be update
+   settting about project. Not other project and administration of Oupsnow
 == 2009-01-21
 
  * Initial release

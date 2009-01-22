@@ -2,7 +2,7 @@ module Settings
   class Members < Application
     # provides :xml, :yaml, :js
     
-    before :admin_authenticated
+    before :project_admin_authenticated
   
     def index(project_id)
       @members = Member.all(:project_id => project_id)
@@ -35,12 +35,12 @@ module Settings
   
     private
 
-    def admin_authenticated
+    def project_admin_authenticated
       @project = Project.get(params[:project_id])
       raise Unauthenticated unless session.user
       member = @project.members.first(:user_id => session.user.id)
       raise Unauthenticated if member.nil?
-      raise Unauthenticated unless member.admin?
+      raise Unauthenticated unless member.project_admin?
     end
 
   end # Members

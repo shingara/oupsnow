@@ -1,10 +1,9 @@
 class Function
   include DataMapper::Resource
 
-  ADMIN = 'Admin'
-  
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
+  property :project_admin, Boolean
 
   has n, :members
   has n, :users, :through => :members
@@ -17,11 +16,7 @@ class Function
   end
 
   def self.admin
-    first(:name => ADMIN)
-  end
-
-  def admin?
-    name == ADMIN
+    Function.first(:project_admin => true)
   end
 
 end

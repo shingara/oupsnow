@@ -4,6 +4,8 @@ class Users < Application
   before :ensure_authenticated, :exclude => [:new, :create]
   before :only_own_account, :only => [:edit, :update]
 
+  params_accessible :user => [:login, :firstname, :lastname, :email, :password, :password_confirmation]
+
   def new
     only_provides :html
     @user = User.new

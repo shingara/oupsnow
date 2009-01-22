@@ -4,24 +4,27 @@ User.fixture {{
   :login => /\w+/.gen,
   :email => "#{/\w+/.gen}.#{/\w+/.gen}@gmail.com",
   :password => "tintinpouet",
-  :password_confirmation => 'tintinpouet'
+  :password_confirmation => 'tintinpouet',
+  :global_admin => false,
 }}
 
 Function.fixture {{
-  :name => /\w+/.gen
+  :name => /\w+/.gen,
+  :project_admin => false,
 }}
 
 Function.fixture(:admin) {{
-  :name => 'Admin'
+  :name => 'Admin',
+  :project_admin => true,
 }}
 
-admin = User.gen(:login => 'admin')
+admin = User.gen(:login => 'admin', :global_admin => true)
 admin_function = Function.gen(:admin)
 
 Project.fixture {{
   :name => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
-  :members => [:function => Function.first(:name => 'Admin'), :user => User.first(:login => 'admin')]
+  :members => [:function => Function.admin, :user => User.first(:login => 'admin')]
 }}
 
 Member.fixture {{

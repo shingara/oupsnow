@@ -19,9 +19,9 @@ module Merb
       end
     end
 
-    def admin_on_one_project?
+    def global_admin?
       if authenticated? 
-        session.user.admin_on_one_project?
+        session.user.global_admin?
       else
         false
       end

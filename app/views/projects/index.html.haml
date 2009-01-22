@@ -7,4 +7,4 @@
 
   %p= project.description
 
-= link_to 'New', url(:new_project) if admin_on_one_project?
+= link_to 'New', url(:new_project) if global_admin?

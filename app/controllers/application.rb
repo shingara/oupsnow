@@ -2,7 +2,7 @@ class Application < Merb::Controller
   private
 
   def need_admin
-    unless session.user.admin_on_one_project?
+    unless session.user.global_admin?
       raise Unauthenticated
     end
   end

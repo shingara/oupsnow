@@ -16,9 +16,10 @@ module OupsNow
       User.create(:login => 'admin', 
                   :email => 'admin@admin.com',
                   :password => 'oupsnow',
-                  :password_confirmation => 'oupsnow')
-      Function.create(:name => 'Admin')
-      Function.create(:name => 'Developper')
+                  :password_confirmation => 'oupsnow',
+                  :global_admin => true)
+      Function.create(:name => 'Admin', :project_admin => true)
+      Function.create(:name => 'Developper', :project_admin => false)
       State.create(:name => 'new')
       State.create(:name => 'open')
       State.create(:name => 'resolved')
