@@ -5,6 +5,9 @@
 = form_for(@function, :action => resource(:admin, :functions) ) do
   %p= text_field :name, :label => 'Name'
   %p
+    %span Project admin?
+    = check_box :name => "function[project_admin]", :value => true, :checked => @function.project_admin
+  %p
     = submit "Create"
 
 = link_to 'Back', resource(:admin, :functions)

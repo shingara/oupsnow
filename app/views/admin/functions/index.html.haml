@@ -5,8 +5,10 @@
   %thead
     %tr
       %th Name
+      %th Project admin
   %tbody
     - for function in @functions
       %tr
-        %td=function.name
+        %td= function.name
+        %td=check_box :name => "project_admin[#{function.id}]", :boolean => function.project_admin, :checked => function.project_admin
 %p=link_to 'Add function', resource(:admin, :functions, :new)
