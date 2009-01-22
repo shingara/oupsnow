@@ -48,6 +48,15 @@ module Admin
         display @function, :edit
       end
     end
+
+    def update_all(project_admin)
+      project_admin.each do |k, v|
+        f = Function.get(k)
+        f.project_admin = (v == "1".to_s)
+        f.save
+      end
+      redirect resource(:admin, :functions), :message => 'All functions updated'
+    end
   
     def destroy(id)
       @function = Function.get(id)

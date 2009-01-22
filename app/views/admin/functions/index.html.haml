@@ -1,14 +1,18 @@
 %h1 
   Functions
 
-%table
-  %thead
-    %tr
-      %th Name
-      %th Project admin
-  %tbody
-    - for function in @functions
+= form :action => resource(:admin, :functions, :update_all), :method => 'PUT' do
+  %table
+    %thead
       %tr
-        %td= function.name
-        %td=check_box :name => "project_admin[#{function.id}]", :boolean => function.project_admin, :checked => function.project_admin
-%p=link_to 'Add function', resource(:admin, :functions, :new)
+        %th Name
+        %th Project admin
+    %tbody
+      - for function in @functions
+        %tr
+          %td= function.name
+          %td=check_box :name => "project_admin[#{function.id}]", :boolean => true, :checked => function.project_admin
+  %p
+    =link_to 'Add function', resource(:admin, :functions, :new)
+    =submit "Update all functions"
+
