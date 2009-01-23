@@ -57,7 +57,11 @@ module OupsNow
 
     desc 'convert_from_redmine', 'convert from Redmine'
     def convert_from_redmine
-      require 'task/converter/redmine.rb'
+      require 'merb-core'
+      ::Merb.start_environment(
+        :environment => ENV['MERB_ENV'] || 'development')
+      require 'tasks/converter/redmine.rb'
+      RedmineConverter.convert
     end
   end
 end

@@ -2,7 +2,7 @@ class Ticket
   include DataMapper::Resource
   
   property :id, Serial
-  property :title, String, :nullable => false
+  property :title, String, :nullable => false, :length => 256
   property :description, Text
   property :created_at, DateTime
   property :num, Integer, :nullable => false
@@ -18,6 +18,7 @@ class Ticket
   has n, :ticket_updates
 
   has_tags
+  property :frozen_tag_list, String, :length => 256
 
   validates_with_method :users_in_members
 
