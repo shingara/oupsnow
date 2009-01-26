@@ -1,6 +1,9 @@
 module Admin
   class Priorities < Application
     # provides :xml, :yaml, :js
+
+    before :ensure_authenticated
+    before :need_admin
   
     def index
       @priorities = Priority.all

@@ -1,0 +1,14 @@
+%h1 User
+
+%p
+  Firstname :
+  = @user.firstname
+%p
+  Lastname :
+  = @user.lastname
+%p
+  Email :
+  = @user.email
+
+%p
+  = link_to 'Back', resource(:admin, :users)

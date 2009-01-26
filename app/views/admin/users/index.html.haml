@@ -1,0 +1,17 @@
+%h1
+  Users
+
+%table
+  %thead
+    %tr
+      %th Login
+      %th Firstname
+      %th Lastname
+      %th Email
+  %tbody
+    - for user in @users
+      %tr
+        %td= link_to user.login, resource(:admin, user)
+        %td= user.firstname
+        %td= user.lastname
+        %td= user.email
