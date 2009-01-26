@@ -19,7 +19,7 @@ class BaseConverter
 
   def import_user(old_user, &block)
     user = block.call(old_user)
-    user.password = 'ouspnow'
+    user.password = 'oupsnow'
     user.password_confirmation = 'oupsnow'
     unless user.save!
       raise ConverterError.new ("We can't import all user. the convert stop. The import error is : #{user.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
