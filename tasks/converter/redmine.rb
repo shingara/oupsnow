@@ -1,6 +1,3 @@
-
-DataMapper.setup(:redmine, 'postgres://localhost/redmine')
-
 require 'tasks/converter/base.rb'
 require 'tasks/converter/redmine/user.rb'
 require 'tasks/converter/redmine/project.rb'
