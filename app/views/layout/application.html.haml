@@ -23,6 +23,7 @@
         %li{:class => projects_actual}= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?
           %li{:class => overview_actual}=link_to 'Overview', resource(@project, :overview)
+          %li{:class => milestone_actual}=link_to 'Milestone', resource(@project, :milestones)
           %li{:class => tickets_actual}= link_to 'Tickets', resource(@project, :tickets)
           - if authenticated?
             %li{:class => tickets_new_actual}= link_to 'Add new ticket', resource(@project, :tickets, :new)

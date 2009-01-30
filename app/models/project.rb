@@ -10,6 +10,7 @@ class Project
   has n, :users, :through => :members
   has n, :functions, :through => :members
   has n, :events
+  has n, :milestones
 
   before :destroy, :destroy_tickets
   before :destroy, :destroy_members

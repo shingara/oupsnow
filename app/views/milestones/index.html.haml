@@ -1,0 +1,12 @@
+%h1
+  Milestone of project 
+  = @project.name
+
+%ul
+  - @milestones.each do |milestone|
+    %li 
+      = milestone.name
+
+- if admin? @project
+  %p
+    = link_to 'New milestone', resource(@project, :milestones, :new)

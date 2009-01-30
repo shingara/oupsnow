@@ -1,0 +1,8 @@
+%h1 Create a new milestone
+
+= error_messages_for @milestone
+
+= form_for(@milestone, :action => resource(@project, :milestones) ) do
+  = partial :form
+  %p
+    = submit "Create"

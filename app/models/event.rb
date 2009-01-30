@@ -17,6 +17,8 @@ class Event
       eval "#{eventable_class}.get(eventable_id)"
     elsif eventable_class == "TicketUpdate"
       eval "#{eventable_class}.get(eventable_id).ticket"
+    elsif eventable_class = Milestone
+      eval "#{eventable_class}.get(eventable_id)"
     end
   end
 

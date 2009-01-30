@@ -38,6 +38,14 @@ module Merb
       end
     end
 
+    def milestone_actual
+      if @request.params[:controller] == 'milestones'
+        "actual"
+      else
+        ""
+      end
+    end
+
     def tickets_actual
       if @request.params[:controller] == 'tickets' && @request.params[:action] != 'new' ||
         @request.params[:controller] ==  'ticket_updates'

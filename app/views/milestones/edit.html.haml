@@ -1,0 +1,10 @@
+%h1 
+  Edit milestones :
+  = @milestone.name
+
+= error_messages_for @milestone
+
+= form_for(@milestone, :action => resource(@project, @milestone)) do
+  = partial :form
+  %p
+    = submit "Update"

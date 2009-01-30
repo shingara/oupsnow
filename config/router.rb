@@ -39,6 +39,7 @@ Merb::Router.prepare do
   resources :users
   resources :projects do
     member :overview, :method => :get
+    resources :milestones
     resources :tickets, :identify => 'ticket_permalink' do
       member :edit_main_description, :method => :get
       member :update_main_description, :method => :put
