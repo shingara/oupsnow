@@ -1,6 +1,7 @@
 class Redmine::JournalDetail
   include DataMapper::Resource
 
+  property :id, Serial
   property :journal_id, Integer
   property :property, String
   property :prop_key, String
@@ -23,8 +24,8 @@ class Redmine::JournalDetail
         Priority.first(:name => Redmine::Enumeration.get(value).name).id]
     when 'fixed_version_id'
       [:milestone_id,
-        Milestone.first(:name => Redmine::Version.get(old_value).name).id,
-        Milestone.first(:name => Redmine::Version.get(value).name).id]
+        old_value ? Milestone.first(:name => Redmine::Version.get(old_value).name).id : nil,
+        value ? Milestone.first(:name => Redmine::Version.get(value).name).id : nil]
     when 'subject'
       [:title, old_value, value]
     else

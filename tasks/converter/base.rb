@@ -123,7 +123,6 @@ class BaseConverter
 
   def import_milestone(old_milestone, &block)
     milestone = block.call(old_milestone)
-    milestone.valid?
     unless milestone.save!
       raise ConverterError.new ("We can't import all milestones. the convert stop. The import error is : #{milestone.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
     end

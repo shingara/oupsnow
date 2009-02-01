@@ -1,6 +1,7 @@
 class Redmine::Version
   include DataMapper::Resource
 
+  property :id, Serial
   property :project_id, Integer
   property :name, String
   property :description, String
