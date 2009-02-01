@@ -30,6 +30,10 @@ class Ticket
 
   after :create, :write_event
 
+  def open
+    all(:state_id => State.first(:name.not => 'closed').id)
+  end
+
   def write_event
     Event.create(:eventable_class => self.class,
                  :eventable_id => id,

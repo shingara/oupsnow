@@ -22,14 +22,18 @@ class Milestone
 
   def percent_complete
     return 0 if tickets.size == 0
-    ((ticket_open.to_f / tickets.size.to_f) * 100).to_f
+    ((ticket_open_count.to_f / tickets.size.to_f) * 100).to_f
   end
 
-  def ticket_open
+  def ticket_open_count
     tickets.count(:state_id.not => State.first(:name => 'closed').id)
   end
 
-  def ticket_closed
+  def ticket_open
+    tickets.all(:state_id.not => State.first(:name => 'closed').id)
+  end
+
+  def ticket_closed_count
     #TODO: define a closed state to all state
     tickets.count(:state_id => State.first(:name => 'closed').id)
   end

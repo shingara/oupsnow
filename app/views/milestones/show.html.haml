@@ -2,4 +2,20 @@
   = @milestone.name
 
 %p
+  = @milestone.ticket_open_count
+  Tickets remain,
+  = @milestone.tickets.count
+  Tickets total.
+
+=partial :pbar, :milestone => @milestone
+
+%p
   = @milestone.description
+
+%ul
+  - @milestone.ticket_open.each do |ticket|
+    %li
+      %span="##{ticket.num}"
+      =link_to ticket.title, resource(@project, ticket)
+      = ticket.tag_list.join(', ')
+

@@ -1,7 +1,7 @@
 %ul#milestones
   - @milestones.each do |milestone|
     %li
-      %h3= milestone.name
+      %h3= link_to milestone.name, resource(@project, milestone)
       %span= milestone.description
       %ul.milestone-information
         %li
@@ -13,8 +13,7 @@
         - if milestone.expected_at
           %li.last
             %span= milestone.expected_at
-      %div.pbar-container
-        %div.pbar{:style => "width: #{milestone.percent_complete.to_i}%;"}
+      =partial :pbar, :milestone => milestone
 
 - if admin? @project
   %p
