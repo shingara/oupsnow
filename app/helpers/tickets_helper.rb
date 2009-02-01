@@ -17,6 +17,8 @@ module Merb
         "Title"
       when :priority_id
         "Priority"
+      when :milestone_id
+        "Milestone"
       end
     end
 
@@ -46,6 +48,13 @@ module Merb
         field
       when :priority_id
         s = Priority.get(field)
+        if s.nil?
+          ""
+        else
+          s.name
+        end
+      when :milestone_id
+        s = Milestone.get(field)
         if s.nil?
           ""
         else

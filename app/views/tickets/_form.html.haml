@@ -5,6 +5,7 @@
   %p= select :member_assigned_id, :collection => Member.all(:project_id => @project.id).map{|m| m.user},:text_method => 'login', :value_method => 'id', :selected => @ticket.member_assigned_id.to_s, :prompt => '-- None --', :label => "Who's is responsabile ?"
   %p= select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id', :selected => @ticket.state_id.to_s, :label => 'Ticket status'
   %p= select :priority_id, :collection => Priority.all, :text_method => :name, :value_method => :id, :selected => @ticket.priority_id.to_s, :prompt => '-- None --', :label => 'Ticket Priority'
+  %p= select :milestone_id, :collection => Milestone.all, :text_method => :name, :value_method => :id, :selected => @ticket.milestone_id.to_s, :prompt => '-- None --', :label => 'Milestone'
 .taggings
   %p= text_field :tag_list, :label => 'tags', :value => @ticket.tag_list.join(', '), :label => 'Choose some tags'
 

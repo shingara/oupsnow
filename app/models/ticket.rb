@@ -15,6 +15,7 @@ class Ticket
   belongs_to :assigned_to, :class_name => "User", :child_key => [:member_assigned_id]
   belongs_to :state
   belongs_to :priority
+  belongs_to :milestone
   has n, :ticket_updates
 
   has_tags
@@ -60,16 +61,14 @@ class Ticket
       t.description = ticket[:description]
       ticket.delete(:description)
     end
-    [:title, :state_id, :member_assigned_id, :priority_id].each do |type_change|
+    [:title, :state_id, :member_assigned_id, :priority_id, :milestone_id].each do |type_change|
       #TODO: see better than eval
       if eval("#{type_change}").to_s != ticket[type_change.to_sym].to_s
         t.properties_update << [type_change, send(type_change), ticket[type_change]]
       end
     end
 
-    #TODO: no update if no same order
-    #TODO: no update if several space
-
+    ticket[:tag_list].downcase!
     if frozen_tag_list != list_tag(ticket[:tag_list]).join(',')
       t.properties_update << [:tag_list, frozen_tag_list, list_tag(ticket[:tag_list]).join(',')]
     end
