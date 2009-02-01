@@ -12,14 +12,18 @@ class Event
   belongs_to :user
   belongs_to :project
 
+  # Generate the instance of event. It's like a polymorphic system
+  # 
+  # TODO: We can use Eval(eventable_class) or Module.const_get(eventable_class).
+  # If we have time test a benchmarck
   def ticket
     case eventable_class
     when "Ticket"
-      send(eventable_class).get(eventable_id)
+      Module.const_get(eventable_class).get(eventable_id)
     when "TicketUpdate"
-      send(eventable_class).get(eventable_id).ticket
-    when Milestone
-      send(eventable_class).get(eventable_id)
+      Module.const_get(eventable_class).get(eventable_id).ticket
+    when "Milestone"
+      Module.const_get(eventable_class).get(eventable_id)
     end
   end
 
