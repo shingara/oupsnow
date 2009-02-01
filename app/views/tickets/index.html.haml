@@ -6,6 +6,7 @@
       %th responsabile
       %th status
       %th priority
+      %th milestone
   %tbody
     - for ticket in @tickets
       %tr
@@ -14,6 +15,7 @@
         %td= ticket.assigned_to ? ticket.assigned_to.login : ""
         %td= ticket.state.name
         %td= ticket.priority ? ticket.priority.name : ""
+        %td= ticket.milestone ? ticket.milestone.name : ""
 
 = will_paginate @tickets
 
