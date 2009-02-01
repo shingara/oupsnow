@@ -31,7 +31,7 @@ With the tar.gz or any other archive:
 
 h2. Demo Website
 
-A demo website of Oupsnow is available to the "demo of oupsnow":http://pictrails.shingara.fr
+A demo website of Oupsnow is available to the "demo of oupsnow":http://oupsnow.shingara.fr
 
 An account of admin is accessible with login/pass : admin/oupsnow
 
