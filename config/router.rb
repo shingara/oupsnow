@@ -34,6 +34,7 @@ Merb::Router.prepare do
     end
     resources :priorities
     resources :users
+    resources :states
   end
 
   resources :users

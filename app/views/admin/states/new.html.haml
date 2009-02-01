@@ -1,0 +1,10 @@
+%h1 Add a state
+
+= error_messages_for @state
+
+= form_for(@state, :action => resource(:admin, :states) ) do
+  %p= text_field :name, :label => 'Name'
+  %p
+    = submit "Create"
+
+= link_to 'Back', resource(:admin, :states)

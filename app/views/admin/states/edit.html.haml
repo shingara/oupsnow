@@ -1,0 +1,15 @@
+%h1
+  States controller, edit action
+%p
+  Edit this file in
+  %tt
+    app/views/states/edit.html.erb
+= error_messages_for @state
+
+= form_for(@state, :action => url(:state, @state)) do
+  %p
+    = submit "Update"
+
+= link_to 'Show', url(:state, @state)
+|
+= link_to 'Back', url(:states)
