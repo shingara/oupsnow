@@ -18,11 +18,7 @@ class Project
 
   def new_num_ticket
     max_num_ticket = tickets.max(:num)
-    if max_num_ticket.nil?
-      1
-    else
-      max_num_ticket.succ
-    end
+    (max_num_ticket || 0).succ
   end
 
   # Destroy all ticket depend on this project

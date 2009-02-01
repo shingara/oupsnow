@@ -21,8 +21,8 @@ class Milestone
   alias_method :title, :name
 
   def percent_complete
-    return 0 if tickets.size == 0
-    ((ticket_open_count.to_f / tickets.size.to_f) * 100).to_f
+    return 0 if tickets.empty?
+    100.0 * ticket_open_count / tickets.size
   end
 
   def ticket_open_count

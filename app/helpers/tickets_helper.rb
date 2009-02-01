@@ -39,27 +39,15 @@ module Merb
         field
       when :member_assigned_id
         m = User.get(field)
-        if m.nil?
-          ""
-        else
-          m.login
-        end
+        m ? m.login : ""
       when :title
         field
       when :priority_id
-        s = Priority.get(field)
-        if s.nil?
-          ""
-        else
-          s.name
-        end
+        p = Priority.get(field)
+        p ? p.name : ""
       when :milestone_id
-        s = Milestone.get(field)
-        if s.nil?
-          ""
-        else
-          s.name
-        end
+        m = Milestone.get(field)
+        m ? m.name : ""
       end
     end
 

@@ -6,12 +6,7 @@ module Merb
     end
 
     def time_overview(date)
-      if @previous_date.nil?
-        @previous_date = date
-        return "<span>#{date.strftime('%B %d')}</span>"
-      end
-
-      unless date.day == @previous_date.day
+      if @previous_date.nil? || date.day != @previous_date.day
         @previous_date = date
         return "<span>#{date.strftime('%B %d')}</span>"
       else

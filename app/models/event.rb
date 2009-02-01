@@ -13,16 +13,17 @@ class Event
   belongs_to :project
 
   def ticket
-    if eventable_class == "Ticket"
-      eval "#{eventable_class}.get(eventable_id)"
-    elsif eventable_class == "TicketUpdate"
-      eval "#{eventable_class}.get(eventable_id).ticket"
-    elsif eventable_class = Milestone
-      eval "#{eventable_class}.get(eventable_id)"
+    case eventable_class
+    when "Ticket"
+      send(eventable_class).get(eventable_id)
+    when "TicketUpdate"
+      send(eventable_class).get(eventable_id).ticket
+    when Milestone
+      send(eventable_class).get(eventable_id)
     end
   end
 
-  def little_description
+  def short_description
     ticket.title
   end
 

@@ -56,11 +56,7 @@ class User
 
   def admin?(project)
     m = members.first(:project_id => project.id)
-    if m
-      m.project_admin?
-    else
-      false
-    end
+    m && m.project_admin?
   end
 
   def self.not_in_project(project)

@@ -3,7 +3,7 @@ module Merb
 
     def title_project
       ret = "Oupsnow" 
-      ret += " : #{@project.name}" unless @project.nil? || @project == ""
+      ret += " : #{@project.name}" if @project && @project.name == ""
       ret
     end
 
@@ -12,72 +12,48 @@ module Merb
     end
 
     def admin?(project)
-      if authenticated? 
-        session.user.admin?(project)
-      else
-        false
-      end
+      authenticated? && session.user.admin?(project)
     end
 
     def global_admin?
-      if authenticated? 
-        session.user.global_admin?
-      else
-        false
-      end
+      authenticated? && session.user.global_admin?
     end
 
     def sub_menu
     end
 
+    def actual_or_not(bool)
+      bool ? "actual" : ""
+    end
+
     def overview_actual
-      if @request.params[:controller] == 'projects' && @request.params[:action] == 'overview'
-        "actual"
-      else
-        ""
-      end
+      actual_or_not(@request.params[:controller] == 'projects' &&
+                    @request.params[:action] == 'overview')
     end
 
     def milestone_actual
-      if @request.params[:controller] == 'milestones'
-        "actual"
-      else
-        ""
-      end
+      actual_or_not(@request.params[:controller] == 'milestones')
     end
 
     def tickets_actual
-      if @request.params[:controller] == 'tickets' && @request.params[:action] != 'new' ||
-        @request.params[:controller] ==  'ticket_updates'
-        "actual"
-      else
-        ""
-      end
+      actual_or_not((@request.params[:controller] == 'tickets' && @request.params[:action] != 'new') ||
+                     @request.params[:controller] == 'ticket_updates')
     end
 
     def projects_actual
-      if @request.params[:controller] == 'projects' && @request.params[:action] != 'overview' && @request.params[:action] != 'edit'
-        "actual"
-      else
-        ""
-      end
+      actual_or_not(@request.params[:controller] == 'projects' &&
+                    @request.params[:action] != 'overview' &&
+                    @request.params[:action] != 'edit')
     end
 
     def tickets_new_actual
-      if @request.params[:controller] == 'tickets' && @request.params[:action] == 'new'
-        "actual"
-      else
-        ""
-      end
+      actual_or_not(@request.params[:controller] == 'tickets' &&
+                    @request.params[:action] == 'new')
     end
 
     def settings_actual
-      if @request.params[:controller] =~ /settings\/\S+/ ||
-        @request.params[:controller] == 'projects' && @request.params[:action] == 'edit'
-        "actual"
-      else
-        ""
-      end
+      actual_or_not( @request.params[:controller] =~ /settings\/\S+/ ||
+                    (@request.params[:controller] == 'projects' && @request.params[:action] == 'edit'))
     end
 
   end

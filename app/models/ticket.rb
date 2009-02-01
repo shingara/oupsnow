@@ -2,7 +2,7 @@ class Ticket
   include DataMapper::Resource
   
   property :id, Serial
-  property :title, String, :nullable => false, :length => 256
+  property :title, String, :nullable => false, :length => 255
   property :description, Text
   property :created_at, DateTime
   property :num, Integer, :nullable => false
@@ -19,7 +19,7 @@ class Ticket
   has n, :ticket_updates
 
   has_tags
-  property :frozen_tag_list, String, :length => 256
+  property :frozen_tag_list, String, :length => 255
 
   validates_with_method :users_in_members
 
@@ -66,8 +66,7 @@ class Ticket
       ticket.delete(:description)
     end
     [:title, :state_id, :member_assigned_id, :priority_id, :milestone_id].each do |type_change|
-      #TODO: see better than eval
-      if eval("#{type_change}").to_s != ticket[type_change.to_sym].to_s
+      if send(type_change).to_s != ticket[type_change].to_s
         t.properties_update << [type_change, send(type_change), ticket[type_change]]
       end
     end
@@ -108,12 +107,12 @@ class Ticket
   private
 
   def define_num_ticket
-    project = Project.get(project_id) if project.nil?
-    self.num = project.new_num_ticket if self.num.nil?
+    project  ||= Project.get(project_id)
+    self.num ||= project.new_num_ticket
   end
 
   def define_state_new
-    self.state_id = State.first(:name => 'new').id if self.state_id.nil?
+    self.state_id ||= State.first(:name => 'new').id
   end
 
 end
