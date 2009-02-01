@@ -48,6 +48,15 @@ module Admin
         display @state, :edit
       end
     end
+
+    def update_all(closed)
+      closed.each do |k, v|
+        s = State.get(k)
+        s.closed = (v == "1".to_s)
+        s.save
+      end
+      redirect resource(:admin, :states), :message => 'All states updated'
+    end
   
     def destroy(id)
       @state = State.get(id)

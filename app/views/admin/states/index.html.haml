@@ -1,12 +1,19 @@
 %h1
   States
 
-%table
-  %thead
-    %tr
-      %th Name
-  %tbody
-    - for state in @states
+= message
+
+= form :action => resource(:admin, :states, :update_all), :method => 'PUT' do
+  %table
+    %thead
       %tr
-        %td= state.name
-%p=link_to 'Add states', resource(:admin, :states, :new)
+        %th Name
+        %th Closed?
+    %tbody
+      - for state in @states
+        %tr
+          %td= state.name
+          %td=check_box :name => "closed[#{state.id}]", :boolean => true, :checked => state.closed
+  %p
+    =link_to 'Add states', resource(:admin, :states, :new)
+    =submit "Update all states"

@@ -1,5 +1,8 @@
 == HEAD
 
+ * Add a closed option in state. This option define if a state define a ticket
+   closed or not it's use in milestone
+ * Add a administration of State. You see all state and you can add some new
  * Add converter Redmine to Oupsnow in a thor task
  * Add milestone for each project
  * Add a list of User in admin part

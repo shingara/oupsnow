@@ -3,6 +3,7 @@ class State
   
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
+  property :closed, Boolean, :default => false
 
   has n, :tickets
 
