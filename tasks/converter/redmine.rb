@@ -60,6 +60,9 @@ class RedmineConverter < BaseConverter
                     :project_id => Project.first(:name => Redmine::Project.get(rd_milestone.project_id).name).id)
     end
 
+    p Milestone.count
+    dsf
+
     #TODO: integrate event (WARNING event create in after hook)
     tickets = convert.import_tickets do |rd_ticket|
       Ticket.new(:title => rd_ticket.subject,
