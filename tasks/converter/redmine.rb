@@ -8,6 +8,9 @@ require 'tasks/converter/redmine/tracker.rb'
 require 'tasks/converter/redmine/category.rb'
 require 'tasks/converter/redmine/issue.rb'
 require 'tasks/converter/redmine/status.rb'
+require 'tasks/converter/redmine/version.rb'
+require 'tasks/converter/redmine/journal.rb'
+require 'tasks/converter/redmine/journal_detail.rb'
 
 
 class RedmineConverter < BaseConverter
@@ -49,8 +52,16 @@ class RedmineConverter < BaseConverter
       Priority.new(:name => rd_priority.name)
     end
 
-    convert.import_tickets do |rd_ticket|
-      p rd_ticket
+    #TODO: integrate event
+    convert.import_milestones do |rd_milestone|
+      Milestone.new(:name => rd_milestone.name,
+                    :description => rd_milestone.description,
+                    :expected_at => rd_milestone.effective_date,
+                    :project_id => Project.first(:name => Redmine::Project.get(rd_milestone.project_id).name).id)
+    end
+
+    #TODO: integrate event (WARNING event create in after hook)
+    tickets = convert.import_tickets do |rd_ticket|
       Ticket.new(:title => rd_ticket.subject,
                  :description => rd_ticket.description,
                  :created_at => rd_ticket.created_on,
@@ -59,8 +70,18 @@ class RedmineConverter < BaseConverter
                  :priority_id => Priority.first(:name => rd_ticket.priority.name).id,
                  :project_id => Project.first(:name => rd_ticket.project.name).id,
                  :member_assigned_id => rd_ticket.assigned_to ? User.first(:login => rd_ticket.assigned_to.login).id : nil,
+                 :milestone_id => Milestone.first(:name => rd_ticket.version.name).id,
                  :tag_list => [rd_ticket.tracker.name, 
                    (rd_ticket.category ? rd_ticket.category.name : "")])
+    end
+
+    #TODO: integrate event
+    convert.import_ticket_updates do |rd_ticket_update_old|
+      TicketUpdate.new (:ticket_id => tickets[rd_ticket_update_old.journalized_id].id,
+                        :member_create_id => User.first(:login => rd_ticket_update_old.user.login).id,
+                        :created_at => rd_ticket_update_old.created_on,
+                        :description => rd_ticket_update_old.notes,
+                        :properties_update => rd_ticket_update_old.properties_update)
     end
   end
 
@@ -88,8 +109,16 @@ class RedmineConverter < BaseConverter
     Redmine::Enumeration.all(:opt => 'IPRI')
   end
 
+  def old_milestones
+    Redmine::Version.all
+  end
+
   def old_tickets
     Redmine::Issue.all
+  end
+
+  def old_ticket_updates
+    Redmine::Journal.all(:journalized_type => 'Issue')
   end
 
 end

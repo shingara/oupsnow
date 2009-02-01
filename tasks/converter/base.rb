@@ -111,14 +111,33 @@ class BaseConverter
     end
   end
 
-  def import_tickets(&block)
-    puts 'Start migration of ticket'
-    tickets = []
-    old_tickets.each do |old_ticket|
-      tickets << import_ticket(old_ticket, &block)
+  def import_milestones(&block)
+    puts 'Start migration of milestone'
+    milestones = []
+    old_milestones.each do |old_milestone|
+      milestones << import_milestone(old_milestone, &block)
     end
   rescue ConverterError => e
-    puts "Only member : #{tickets.map {|t| t.title}.join(', ')} are import."
+    puts "Only member : #{milestones.map {|t| t.name}.join(', ')} are import."
+  end
+
+  def import_milestone(old_milestone, &block)
+    milestone = block.call(old_milestone)
+    milestone.valid?
+    unless milestone.save!
+      raise ConverterError.new ("We can't import all milestones. the convert stop. The import error is : #{milestone.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
+    end
+  end
+
+  def import_tickets(&block)
+    puts 'Start migration of ticket'
+    tickets = {}
+    old_tickets.each do |old_ticket|
+      tickets[old_ticket.id] = import_ticket(old_ticket, &block)
+    end
+    tickets
+  rescue ConverterError => e
+    puts "Only member : #{tickets.each_values.map {|t| t.title}.join(', ')} are import."
   end
 
   def import_ticket(old_ticket, &block)
@@ -126,6 +145,25 @@ class BaseConverter
     ticket.valid?
     unless ticket.save!
       raise ConverterError.new ("We can't import all tickets. the convert stop. The import error is : #{ticket.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
+    end
+    ticket
+  end
+
+  def import_ticket_updates(&block)
+    puts 'Start migration of ticket update'
+    ticket_updates = []
+    old_ticket_updates.each do |old_ticket_update|
+      ticket_updates << import_ticket_update(old_ticket_update, &block)
+    end
+  rescue ConverterError => e
+    puts "Only member : #{ticket_updates.map {|t| t.title}.join(', ')} are import."
+  end
+
+  def import_ticket_update(old_ticket_update, &block)
+    ticket_update = block.call(old_ticket_update)
+    ticket_update.valid?
+    unless ticket_update.save!
+      raise ConverterError.new ("We can't import all tickets. the convert stop. The import error is : #{ticket_update.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
     end
   end
 
@@ -146,7 +184,15 @@ class BaseConverter
     raise NotImplementError
   end
 
-  def old_ticket
+  def old_milestones
+    raise NotImplementError
+  end
+
+  def old_tickets
+    raise NotImplementError
+  end
+
+  def old_ticket_updates
     raise NotImplementError
   end
 end

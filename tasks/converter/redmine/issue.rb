@@ -11,9 +11,11 @@ class Redmine::Issue
   property :author_id, Integer
   property :created_on, DateTime
   property :tracker_id, Integer
+  property :fixed_version_id, Integer
 
 
   belongs_to :assigned_to, :class_name => "User", :child_key => [:assigned_to_id]
+  belongs_to :version, :class_name => "Version", :child_key => [:fixed_version_id]
   belongs_to :created_by, :class_name => "User", :child_key => [:author_id]
   belongs_to :project
   belongs_to :status
