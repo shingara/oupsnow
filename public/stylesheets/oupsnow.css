@@ -23,6 +23,16 @@ body {
   padding: 9px;
   text-align: right; }
 
+.pbar-container {
+  border: 2px solid #FFFFFF;
+  background: #DDDDDD none repeat scroll 0 0;
+  height: 33px;
+  width: 100%; }
+
+.pbar {
+  height: 33px;
+  background: #227700 none repeat scroll 0 0; }
+
 #banner {
   background: #94DA3A none repeat scroll 0 0; }
   #banner #header {
@@ -132,6 +142,23 @@ body {
     clear: both; }
     #ticket_update_form .taggings input,     #ticket_form .taggings input {
       width: 98%; }
+
+#milestones ul {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+  margin: 0; }
+#milestones li {
+  white-space: no-wrap;
+  display: inline; }
+  #milestones li .milestone-information {
+    text-align: center; }
+    #milestones li .milestone-information li {
+      border-right: 1px solid;
+      padding-right: 10px;
+      padding-left: 10px; }
+    #milestones li .milestone-information .last {
+      border-right: 0px none; }
 
 form label {
   display: block; }

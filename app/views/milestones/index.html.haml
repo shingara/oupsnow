@@ -2,10 +2,23 @@
   Milestone of project 
   = @project.name
 
-%ul
+%ul#milestones
   - @milestones.each do |milestone|
-    %li 
-      = milestone.name
+    %li
+      %h3= milestone.name
+      %span= milestone.description
+      %ul.milestone-information
+        %li
+          %span= milestone.percent_complete.to_i
+          %span % completed
+        %li
+          %span= milestone.ticket_open
+          %span open issues
+        - if milestone.expected_at
+          %li.last
+            %span= milestone.expected_at
+      %div.pbar-container
+        %div.pbar{:style => "width: #{milestone.percent_complete.to_i}%;"}
 
 - if admin? @project
   %p
