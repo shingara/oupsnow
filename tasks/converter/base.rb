@@ -126,6 +126,7 @@ class BaseConverter
     unless milestone.save!
       raise ConverterError.new ("We can't import all milestones. the convert stop. The import error is : #{milestone.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
     end
+    milestone.write_event_create(User.first(:global_admin => true))
   end
 
   def import_tickets(&block)
@@ -145,6 +146,9 @@ class BaseConverter
     unless ticket.save!
       raise ConverterError.new ("We can't import all tickets. the convert stop. The import error is : #{ticket.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
     end
+    event = ticket.write_create_event
+    event.created_at = ticket.created_at
+    event.save
     ticket
   end
 
@@ -164,6 +168,9 @@ class BaseConverter
     unless ticket_update.save!
       raise ConverterError.new ("We can't import all tickets. the convert stop. The import error is : #{ticket_update.errors.map {|k,v| "#{k} #{v}"}.join(', ')}")
     end
+    event = ticket_update.write_event
+    event.created_at = ticket_update.created_at
+    event.save
   end
 
 
