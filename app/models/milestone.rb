@@ -22,20 +22,20 @@ class Milestone
 
   def percent_complete
     return 0 if tickets.empty?
-    100.0 * ticket_open_count / tickets.size
+    100.0 * ticket_closed_count / tickets.size
   end
 
   def ticket_open_count
-    tickets.count(:state_id.not => State.first(:name => 'closed').id)
+    tickets.count(:state_id.not => State.closed.map{|s| s.id})
   end
 
   def ticket_open
-    tickets.all(:state_id.not => State.first(:name => 'closed').id)
+    tickets.all(:state_id.not => State.closed.map{|s| s.id})
   end
 
   def ticket_closed_count
     #TODO: define a closed state to all state
-    tickets.count(:state_id => State.first(:name => 'closed').id)
+    tickets.count(:state_id => State.closed.map{|s| s.id})
   end
 
 

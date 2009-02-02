@@ -13,4 +13,8 @@ class State
     tickets.each {|t| t.destroy}
   end
 
+  def self.closed
+    all(:closed => true)
+  end
+
 end
