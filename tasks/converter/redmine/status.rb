@@ -2,6 +2,7 @@ class Redmine::Status
   include DataMapper::Resource
   property :id, Serial
   property :name, String
+  property :is_closed, Boolean
 
   def self.repository_name
     :redmine

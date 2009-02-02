@@ -44,7 +44,8 @@ class RedmineConverter < BaseConverter
 
     #State
     convert.import_states do |rd_state|
-      State.new(:name => rd_state.name)
+      State.new(:name => rd_state.name,
+               :closed => rd_state.is_closed)
     end
 
     #Priority
