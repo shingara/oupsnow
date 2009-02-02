@@ -11,7 +11,7 @@
     |
     =@ticket.created_at
 
-  %p= @ticket.description
+  %p= textilized @ticket.description
 
   .edit= link_to 'Edit',  resource(@project, @ticket, :edit_main_description) if admin?(@project)
 
@@ -30,7 +30,7 @@
       %ul{:id => "properties_change-#{@ticket.num}-#{up.id}"}
         - up.properties_update.each do |prop|
           %li= update_field(prop)
-      %p=up.description
+      %p= textilized up.description
       .edit=link_to 'edit', resource(@project, @ticket, up, :edit) if admin?(@project)
 
 - if authenticated?

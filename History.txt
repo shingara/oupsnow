@@ -1,5 +1,6 @@
 == HEAD
 
+ * Add Redcloth formating in project/ticket/milestone description
  * Add a closed option in state. This option define if a state define a ticket
    closed or not it's use in milestone
  * Add a administration of State. You see all state and you can add some new

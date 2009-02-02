@@ -56,5 +56,9 @@ module Merb
                     (@request.params[:controller] == 'projects' && @request.params[:action] == 'edit'))
     end
 
+    def textilized(text)
+      RedCloth.new(text).to_html
+    end
+
   end
 end

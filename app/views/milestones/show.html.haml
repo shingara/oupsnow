@@ -10,7 +10,7 @@
 =partial :pbar, :milestone => @milestone
 
 %p
-  = @milestone.description
+  = textilized @milestone.description
 
 %ul
   - @milestone.ticket_open.each do |ticket|

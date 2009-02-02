@@ -5,6 +5,6 @@
   %h2
     %span= link_to project.name, resource(project, :overview)
 
-  %p= project.description
+  %p= textilized project.description
 
 = link_to 'New', url(:new_project) if global_admin?

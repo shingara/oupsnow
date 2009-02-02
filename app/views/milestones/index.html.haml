@@ -2,7 +2,7 @@
   - @milestones.each do |milestone|
     %li
       %h3= link_to milestone.name, resource(@project, milestone)
-      %span= milestone.description
+      %span= textilized milestone.description
       %ul.milestone-information
         %li
           %span= milestone.percent_complete.to_i
