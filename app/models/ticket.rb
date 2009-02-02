@@ -28,13 +28,11 @@ class Ticket
 
   before :destroy, :delete_ticket_updates
 
-  after :create, :write_event
-
   def open
     all(:state_id => State.first(:name.not => 'closed').id)
   end
 
-  def write_event
+  def write_create_event
     Event.create(:eventable_class => self.class,
                  :eventable_id => id,
                  :user_id => member_create_id,
