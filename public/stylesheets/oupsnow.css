@@ -164,3 +164,11 @@ form label {
   display: block; }
 form textarea {
   width: 100%; }
+
+#footer {
+  text-align: center;
+  clear: both;
+  font-size: 0.9em; }
+  #footer a, #footer a:link, #footer a:visited {
+    text-decoration: none;
+    color: white; }
