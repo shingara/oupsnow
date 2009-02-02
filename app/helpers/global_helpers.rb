@@ -22,37 +22,37 @@ module Merb
     def sub_menu
     end
 
-    def actual_or_not(bool)
-      bool ? "actual" : ""
+    def current_or_not(bool)
+      bool ? "current" : ""
     end
 
-    def overview_actual
-      actual_or_not(@request.params[:controller] == 'projects' &&
+    def overview_current
+      current_or_not(@request.params[:controller] == 'projects' &&
                     @request.params[:action] == 'overview')
     end
 
-    def milestone_actual
-      actual_or_not(@request.params[:controller] == 'milestones')
+    def milestone_current
+      current_or_not(@request.params[:controller] == 'milestones')
     end
 
-    def tickets_actual
-      actual_or_not((@request.params[:controller] == 'tickets' && @request.params[:action] != 'new') ||
+    def tickets_current
+      current_or_not((@request.params[:controller] == 'tickets' && @request.params[:action] != 'new') ||
                      @request.params[:controller] == 'ticket_updates')
     end
 
-    def projects_actual
-      actual_or_not(@request.params[:controller] == 'projects' &&
+    def projects_current
+      current_or_not(@request.params[:controller] == 'projects' &&
                     @request.params[:action] != 'overview' &&
                     @request.params[:action] != 'edit')
     end
 
-    def tickets_new_actual
-      actual_or_not(@request.params[:controller] == 'tickets' &&
+    def tickets_new_current
+      current_or_not(@request.params[:controller] == 'tickets' &&
                     @request.params[:action] == 'new')
     end
 
-    def settings_actual
-      actual_or_not( @request.params[:controller] =~ /settings\/\S+/ ||
+    def settings_current
+      current_or_not( @request.params[:controller] =~ /settings\/\S+/ ||
                     (@request.params[:controller] == 'projects' && @request.params[:action] == 'edit'))
     end
 

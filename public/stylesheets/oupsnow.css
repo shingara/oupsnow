@@ -60,7 +60,7 @@ body {
       color: white;
       text-decoration: none;
       padding: 0.2em 20px; }
-  #menu li.actual {
+  #menu li.current {
     background: #FF7868 none repeat scroll 0 0; }
   #menu #sub_menu {
     background: #8fff64;

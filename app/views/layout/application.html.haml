@@ -20,15 +20,15 @@
 
     #menu.nav
       %ul
-        %li{:class => projects_actual}= link_to 'Projects', resource(:projects)
+        %li{:class => projects_current}= link_to 'Projects', resource(:projects)
         - unless @project.nil? || @project.id.nil?
-          %li{:class => overview_actual}=link_to 'Overview', resource(@project, :overview)
-          %li{:class => milestone_actual}=link_to 'Milestone', resource(@project, :milestones)
-          %li{:class => tickets_actual}= link_to 'Tickets', resource(@project, :tickets)
+          %li{:class => overview_current}=link_to 'Overview', resource(@project, :overview)
+          %li{:class => milestone_current}=link_to 'Milestone', resource(@project, :milestones)
+          %li{:class => tickets_current}= link_to 'Tickets', resource(@project, :tickets)
           - if authenticated?
-            %li{:class => tickets_new_actual}= link_to 'Add new ticket', resource(@project, :tickets, :new)
+            %li{:class => tickets_new_current}= link_to 'Add new ticket', resource(@project, :tickets, :new)
           - if admin? @project
-            %li{:class => settings_actual}= link_to 'Settings', url(:project_settings_members, @project)
+            %li{:class => settings_current}= link_to 'Settings', url(:project_settings_members, @project)
       = sub_menu
     %div#content
       = catch_content :for_layout
