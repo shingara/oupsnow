@@ -1,5 +1,6 @@
 class State
   include DataMapper::Resource
+  include DataMapper::Constraints
   
   property :id, Serial
   property :name, String, :nullable => false, :unique => true

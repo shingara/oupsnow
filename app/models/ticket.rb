@@ -1,5 +1,6 @@
 class Ticket
   include DataMapper::Resource
+  include DataMapper::Constraints
   
   property :id, Serial
   property :title, String, :nullable => false, :length => 255

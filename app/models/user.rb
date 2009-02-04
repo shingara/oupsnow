@@ -11,6 +11,7 @@
 class User
 
   include DataMapper::Resource
+  include DataMapper::Constraints
   
   property :id,     Serial
   property :login,  String, :nullable => false, :unique => true

@@ -1,5 +1,6 @@
 class TicketUpdate
   include DataMapper::Resource
+  include DataMapper::Constraints
   
   property :id, Serial
   property :properties_update, Yaml, :default => []

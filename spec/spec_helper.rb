@@ -8,6 +8,7 @@ end
 
 require "merb-core"
 require "spec" # Satisfies Autotest and anyone else not using the Rake tasks
+require "merb-core/test/matchers"
 
 # this loads all plugins required in your init file so don't add them
 # here again, Merb will do it for you
@@ -17,6 +18,9 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::ViewHelper)
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
+  config.before(:all) do
+    DataMapper.auto_migrate! if Merb.orm == :datamapper
+  end
 end
 
 def list_mock_project
@@ -43,10 +47,7 @@ Merb::Test.add_helpers do
   end
 
   def delete_project_and_user
-    Project.all.each {|p| p.destroy}
-    User.all.each {|u| u.destroy}
-    Function.all.destroy!
-    State.all.destroy!
+    DataMapper.auto_migrate!
   end
 
   def create_default_user

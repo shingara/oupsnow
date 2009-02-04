@@ -6,9 +6,11 @@ describe TicketUpdate do
     it 'should generate an event' do
       create_default_admin
       lambda do
-        TicketUpdate.create(:member_create_id => Project.first.members.first.user_id,
-                            :ticket_id => Project.first.tickets.first,
+        t = TicketUpdate.new(:member_create_id => Project.first.members.first.user_id,
                             :description => 'An update')
+        t.ticket = Project.first.tickets.first
+        t.save
+        t.write_event
       end.should change(Event, :count)
     end
   end

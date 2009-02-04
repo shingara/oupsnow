@@ -1,5 +1,6 @@
 class Event
   include DataMapper::Resource
+  include DataMapper::Constraints
   
   property :id, Serial
   property :eventable_class, String, :nullable => false
