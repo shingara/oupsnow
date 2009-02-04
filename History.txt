@@ -1,5 +1,6 @@
 == HEAD
 
+ * A user can be chane his own password in his profile
  * Add Redcloth formating in project/ticket/milestone description
  * Add a closed option in state. This option define if a state define a ticket
    closed or not it's use in milestone
