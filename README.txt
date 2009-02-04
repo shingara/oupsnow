@@ -53,7 +53,7 @@ After a clone you need update the submodule :
 
 <kbd>git submodule init && git submodule update</kbd>
 
-A "redmine development platform":http://dev.shingara.fr/projects/show/4 is
+A "redmine development platform":http://dev.shingara.fr/projects/show/oupsnow is
 used. Feel free to post your feature requests and defects report. I use
 Oupsnow soon as possible after create a converter Redmine -> Oupsnow
 
