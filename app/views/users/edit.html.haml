@@ -3,8 +3,10 @@
 = error_messages_for @user
 
 = form_for(@user, :action => url(:user, @user)) do
-  %p=text_field :email, :label => 'Email'
+  %p= text_field :email, :label => 'Email'
   %p= text_field :firstname, :label => 'Firstname'
   %p= text_field :lastname, :label => 'Lastname'
+  %p= password_field :password, :label => 'Password'
+  %p= password_field :password_confirmation, :label => 'Password confirmation'
   %p
     = submit "Update"
