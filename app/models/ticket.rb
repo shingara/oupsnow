@@ -17,9 +17,12 @@ class Ticket
   belongs_to :state
   belongs_to :priority
   belongs_to :milestone
+
   has n, :ticket_updates
+  before :destroy, :delete_ticket_updates
 
   has_tags
+  before :destroy, :destroy_taggings
   property :frozen_tag_list, String, :length => 255
 
   validates_with_method :users_in_members
@@ -27,7 +30,6 @@ class Ticket
   before :valid?, :define_num_ticket
   before :valid?, :define_state_new
 
-  before :destroy, :delete_ticket_updates
 
   def open
     all(:state_id => State.first(:name.not => 'closed').id)
@@ -42,7 +44,11 @@ class Ticket
   end
 
   def delete_ticket_updates
-    ticket_updates.each {|tu| tu.destroy}
+    ticket_updates.all.each {|tu| tu.destroy}
+  end
+
+  def destroy_taggings
+    tag_taggings.all.each {|t| t.destroy}
   end
 
   def users_in_members
@@ -70,7 +76,7 @@ class Ticket
       end
     end
 
-    ticket[:tag_list].downcase!
+    ticket[:tag_list].downcase! if ticket[:tag_list]
     if frozen_tag_list != list_tag(ticket[:tag_list]).join(',')
       t.properties_update << [:tag_list, frozen_tag_list, list_tag(ticket[:tag_list]).join(',')]
     end

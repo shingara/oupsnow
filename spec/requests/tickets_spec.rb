@@ -4,6 +4,7 @@ describe "resource(Project.first, :tickets)" do
   describe "GET" do
     
     before(:each) do
+      login
       @response = request(resource(Project.first, :tickets))
     end
     
@@ -104,6 +105,8 @@ end
 
 describe "resource(Project.first, :tickets, :new)" do
   before(:each) do
+    logout
+    create_default_admin unless Project.first
     @response = request(resource(Project.first, :tickets, :new))
   end
   

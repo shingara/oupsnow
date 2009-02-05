@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 given "a state exists" do
-  State.all.destroy!
+  State.all.each{|s| s.destroy}
   request(resource(:states), :method => "POST", 
     :params => { :state => { :id => nil }})
 end
@@ -37,7 +37,7 @@ describe "resource(:states)" do
   
   describe "a successful POST" do
     before(:each) do
-      State.all.destroy!
+      State.all.each{|s| s.destroy}
       @response = request(resource(:states), :method => "POST", 
         :params => { :state => { :id => nil }})
     end

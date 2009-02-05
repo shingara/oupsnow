@@ -36,7 +36,7 @@ class User
   before :destroy, :delete_events
 
   def delete_member
-    members.destroy!
+    members.all.each{|m| m.destroy}
   end
 
   def delete_created_tickets
@@ -52,7 +52,7 @@ class User
   end
 
   def delete_events
-    events.destroy!
+    events.all.each{|e| e.destroy}
   end
 
   def admin?(project)

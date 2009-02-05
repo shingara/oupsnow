@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 given "a milestone exists" do
-  Milestone.all.destroy!
+  Milestone.all.each{|m| m.destroy}
   request(resource(:milestones), :method => "POST", 
     :params => { :milestone => { :id => nil }})
 end
@@ -37,7 +37,7 @@ describe "resource(:milestones)" do
   
   describe "a successful POST" do
     before(:each) do
-      Milestone.all.destroy!
+      Milestone.all.each{|m| m.destroy}
       @response = request(resource(:milestones), :method => "POST", 
         :params => { :milestone => { :id => nil }})
     end

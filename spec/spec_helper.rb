@@ -8,7 +8,6 @@ end
 
 require "merb-core"
 require "spec" # Satisfies Autotest and anyone else not using the Rake tasks
-require "merb-core/test/matchers"
 
 # this loads all plugins required in your init file so don't add them
 # here again, Merb will do it for you
@@ -42,7 +41,7 @@ Merb::Test.add_helpers do
   end
 
   def delete_default_member_from_project(project)
-    project.members(:user_id => User.first(:login => 'shingara').id).destroy!
+    project.members(:user_id => User.first(:login => 'shingara').id).each {|m| m.destroy}
     project.save
   end
 
