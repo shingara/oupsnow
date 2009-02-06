@@ -1,16 +1,11 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
-given "a milestone exists" do
-  Milestone.all.each{|m| m.destroy}
-  request(resource(:milestones), :method => "POST", 
-    :params => { :milestone => { :id => nil }})
-end
-
 describe "resource(:milestones)" do
   describe "GET" do
     
     before(:each) do
-      @response = request(resource(:milestones))
+      login
+      @response = request(resource(Project.first, :milestones))
     end
     
     it "responds successfully" do
@@ -24,9 +19,11 @@ describe "resource(:milestones)" do
     
   end
   
-  describe "GET", :given => "a milestone exists" do
+  describe "GET" do
     before(:each) do
-      @response = request(resource(:milestones))
+      login
+      need_a_milestone
+      @response = request(resource(Project.first, :milestones))
     end
     
     it "has a list of milestones" do
@@ -37,26 +34,27 @@ describe "resource(:milestones)" do
   
   describe "a successful POST" do
     before(:each) do
-      Milestone.all.each{|m| m.destroy}
-      @response = request(resource(:milestones), :method => "POST", 
-        :params => { :milestone => { :id => nil }})
+      login_admin
+      @response = request(resource(Project.first, :milestones), :method => "POST", 
+        :params => { :milestone => { :name => 'New Milestone' }})
     end
     
     it "redirects to resource(:milestones)" do
-      @response.should redirect_to(resource(Milestone.first), :message => {:notice => "milestone was successfully created"})
+      @response.should redirect_to(resource(Project.first, Milestone.first(:name => 'New Milestone')), :message => {:notice => "milestone was successfully created"})
     end
     
   end
 end
 
 describe "resource(@milestone)" do 
-  describe "a successful DELETE", :given => "a milestone exists" do
+  describe "a successful DELETE" do
      before(:each) do
-       @response = request(resource(Milestone.first), :method => "DELETE")
+       login_admin
+       @response = request(resource(Project.first, Project.first.milestones.first), :method => "DELETE")
      end
 
      it "should redirect to the index action" do
-       @response.should redirect_to(resource(:milestones))
+       @response.should redirect_to(resource(Project.first, :milestones))
      end
 
    end
@@ -64,7 +62,8 @@ end
 
 describe "resource(:milestones, :new)" do
   before(:each) do
-    @response = request(resource(:milestones, :new))
+    login_admin
+    @response = request(resource(Project.first, :milestones, :new))
   end
   
   it "responds successfully" do
@@ -72,9 +71,10 @@ describe "resource(:milestones, :new)" do
   end
 end
 
-describe "resource(@milestone, :edit)", :given => "a milestone exists" do
+describe "resource(@milestone, :edit)" do
   before(:each) do
-    @response = request(resource(Milestone.first, :edit))
+    login_admin
+    @response = request(resource(Project.first, Project.first.milestones.first, :edit))
   end
   
   it "responds successfully" do
@@ -82,11 +82,11 @@ describe "resource(@milestone, :edit)", :given => "a milestone exists" do
   end
 end
 
-describe "resource(@milestone)", :given => "a milestone exists" do
+describe "resource(@milestone)" do
   
   describe "GET" do
     before(:each) do
-      @response = request(resource(Milestone.first))
+      @response = request(resource(Project.first, Project.first.milestones.first))
     end
   
     it "responds successfully" do
@@ -96,13 +96,20 @@ describe "resource(@milestone)", :given => "a milestone exists" do
   
   describe "PUT" do
     before(:each) do
-      @milestone = Milestone.first
-      @response = request(resource(@milestone), :method => "PUT", 
-        :params => { :milestone => {:id => @milestone.id} })
+      login_admin
+      @project = Project.first
+      @milestone = @project.milestones.first
+      @response = request(resource(@project, @milestone), :method => "PUT", 
+        :params => { :milestone => {:id => @milestone.id, :name => 'HELLO'} })
     end
   
     it "redirect to the article show action" do
-      @response.should redirect_to(resource(@milestone))
+      @response.should redirect_to(resource(@project, @milestone))
+    end
+
+
+    it "change name of milestone" do
+      @milestone.reload.name.should == 'HELLO'
     end
   end
   

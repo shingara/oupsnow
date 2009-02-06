@@ -8,6 +8,14 @@ User.fixture {{
   :global_admin => false,
 }}
 
+User.fixture(:admin) {{
+  :login => 'admin',
+  :email => "#{/\w+/.gen}.#{/\w+/.gen}@gmail.com",
+  :password => "tintinpouet",
+  :password_confirmation => 'tintinpouet',
+  :global_admin => true,
+}}
+
 Function.fixture {{
   :name => /\w+/.gen,
   :project_admin => false,
@@ -18,21 +26,18 @@ Function.fixture(:admin) {{
   :project_admin => true,
 }}
 
-admin = User.gen(:login => 'admin', :global_admin => true)
-admin_function = Function.gen(:admin)
-
 Project.fixture {{
   :name => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
-  :members => [:function => Function.admin, :user => User.first(:login => 'admin')]
+  :members => [:function => (Function.admin ? Function.admin : Function.gen(:admin)), 
+    :user => (User.first(:login => 'admin') ? User.first(:login => 'admin') : User.gen(:admin))]
 }}
 
 Member.fixture {{
   :user_id => User.first.id,
-  :project_id => Project.first.id,
-  :function_id => Function.first.id,
+  :project_id => (Project.first ? Project.gen.id : Project.first.id),
+  :function_id => (Function.first ? Function.gen.id : Function.first.id),
 }}
-Member.gen
 
 Ticket.fixture {{
   :title => /\w+/.gen,
@@ -48,6 +53,15 @@ Priority.fixture {{
   :name => /\w+/.gen,
 }}
 
+Milestone.fixture {{
+  :name => /\w+/.gen,
+  :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
+  :expected_at => Time.now
+}}
 
+User.gen(:login => 'admin', :global_admin => true)
+Function.gen(:admin)
+Project.gen
+Member.gen
 State.gen(:name => 'new')
 
