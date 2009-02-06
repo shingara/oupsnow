@@ -1,16 +1,11 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
-given "a state exists" do
-  State.all.each{|s| s.destroy}
-  request(resource(:states), :method => "POST", 
-    :params => { :state => { :id => nil }})
-end
-
-describe "resource(:states)" do
+describe "resource(:admin,:states)" do
   describe "GET" do
     
     before(:each) do
-      @response = request(resource(:states))
+      login_admin
+      @response = request(resource(:admin,:states))
     end
     
     it "responds successfully" do
@@ -24,9 +19,10 @@ describe "resource(:states)" do
     
   end
   
-  describe "GET", :given => "a state exists" do
+  describe "GET" do
     before(:each) do
-      @response = request(resource(:states))
+      login_admin
+      @response = request(resource(:admin,:states))
     end
     
     it "has a list of states" do
@@ -37,34 +33,36 @@ describe "resource(:states)" do
   
   describe "a successful POST" do
     before(:each) do
-      State.all.each{|s| s.destroy}
-      @response = request(resource(:states), :method => "POST", 
-        :params => { :state => { :id => nil }})
+      login_admin
+      @response = request(resource(:admin,:states), :method => "POST", 
+        :params => { :state => { :name => 'FOO' }})
     end
     
-    it "redirects to resource(:states)" do
-      @response.should redirect_to(resource(State.first), :message => {:notice => "state was successfully created"})
+    it "redirects to resource(:admin,:states)" do
+      @response.should redirect_to(resource(:admin, :states), :message => {:notice => "State was successfully created"})
     end
     
   end
 end
 
-describe "resource(@state)" do 
-  describe "a successful DELETE", :given => "a state exists" do
+describe "resource(:admin,@state)" do 
+  describe "a successful DELETE" do
      before(:each) do
-       @response = request(resource(State.first), :method => "DELETE")
+       login_admin
+       @response = request(resource(:admin, State.first), :method => "DELETE")
      end
 
      it "should redirect to the index action" do
-       @response.should redirect_to(resource(:states))
+       @response.should redirect_to(resource(:admin,:states))
      end
 
    end
 end
 
-describe "resource(:states, :new)" do
+describe "resource(:admin,:states, :new)" do
   before(:each) do
-    @response = request(resource(:states, :new))
+    login_admin
+    @response = request(resource(:admin,:states, :new))
   end
   
   it "responds successfully" do
@@ -72,9 +70,10 @@ describe "resource(:states, :new)" do
   end
 end
 
-describe "resource(@state, :edit)", :given => "a state exists" do
+describe "resource(:admin,@state, :edit)" do
   before(:each) do
-    @response = request(resource(State.first, :edit))
+    login_admin
+    @response = request(resource(:admin,State.first, :edit))
   end
   
   it "responds successfully" do
@@ -82,11 +81,12 @@ describe "resource(@state, :edit)", :given => "a state exists" do
   end
 end
 
-describe "resource(@state)", :given => "a state exists" do
+describe "resource(:admin,@state)" do
   
   describe "GET" do
     before(:each) do
-      @response = request(resource(State.first))
+      login_admin
+      @response = request(resource(:admin,State.first))
     end
   
     it "responds successfully" do
@@ -96,13 +96,18 @@ describe "resource(@state)", :given => "a state exists" do
   
   describe "PUT" do
     before(:each) do
+      login_admin
       @state = State.first
-      @response = request(resource(@state), :method => "PUT", 
-        :params => { :state => {:id => @state.id} })
+      @response = request(resource(:admin,@state), :method => "PUT", 
+        :params => { :state => {:id => @state.id, :name => 'FOO'} })
     end
   
     it "redirect to the article show action" do
-      @response.should redirect_to(resource(@state))
+      @response.should redirect_to(resource(:admin,@state))
+    end
+
+    it 'should change the name of state' do
+      @state.reload.name.should == 'FOO'
     end
   end
   

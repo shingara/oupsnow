@@ -6,10 +6,10 @@
     app/views/states/edit.html.erb
 = error_messages_for @state
 
-= form_for(@state, :action => url(:state, @state)) do
+= form_for(@state, :action => resource(:admin, @state)) do
   %p
     = submit "Update"
 
-= link_to 'Show', url(:state, @state)
+= link_to 'Show', resource(:admin, @state)
 |
-= link_to 'Back', url(:states)
+= link_to 'Back', resource(:admin, :states)

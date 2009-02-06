@@ -10,17 +10,18 @@ describe Ticket do
 
   def valid_ticket
     Ticket.gen(:project_id => Project.first.id,
-              :member_create_id => Project.first.members.first.user_id).should be_valid
+              :member_create_id => Project.first.members.first.user_id)
   end
 
   it "should be valid" do
-    valid_ticket
+    valid_ticket.should be_valid
   end
 
   describe '#create' do
     it 'should generate Event of ticket creation' do
       lambda do
-        valid_ticket
+        t = valid_ticket
+        t.write_create_event
       end.should change(Event, :count)
     end
   end
