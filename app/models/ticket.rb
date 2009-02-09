@@ -10,6 +10,7 @@ class Ticket
   property :state_id, Integer, :nullable => false
   property :member_create_id, Integer, :nullable => false
   property :priority_id, Integer
+  property :project_id, Integer
 
   belongs_to :project
   belongs_to :created_by, :class_name => "User", :child_key => [:member_create_id]
@@ -26,6 +27,7 @@ class Ticket
   property :frozen_tag_list, String, :length => 255
 
   validates_with_method :users_in_members
+  validates_with_method :milestone_in_same_project
 
   before :valid?, :define_num_ticket
   before :valid?, :define_state_new
@@ -115,6 +117,15 @@ class Ticket
 
   def define_state_new
     self.state_id ||= State.first(:name => 'new').id
+  end
+
+  def milestone_in_same_project
+    return true if milestone.nil?
+    if project_id != milestone.project_id
+      [false, "The milestone need to be in same project of this ticket"]
+    else
+      true
+    end
   end
 
 end
