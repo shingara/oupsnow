@@ -3,7 +3,7 @@ require 'rake/contrib/rubyforgepublisher'
 
 namespace :release do
   PKG_NAME = "oupsnow"
-  PKG_VERSION = "0.1.0"
+  PKG_VERSION = "0.2.0"
   PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
   RUBY_FORGE_PROJECT = 'oupsnow'
   RUBY_FORGE_USER = 'shingara'
@@ -17,9 +17,10 @@ namespace :release do
     /^public\/(files|xml|articles|pages|index.html)/, 
     /^public\/(stylesheets|javascripts|images)\/theme/, /\~$/, 
     /\/\._/, /\/#/, /^Capfile/, /config\/deploy.rb/, 
-    /tasks\/converter/, /log\//, /^doc\//, /^lib\/tasks\/release.rake/ ]
+    /tasks\/converter/, /log\//, /^doc\//, /^lib\/tasks\/release.rake/, /\.sql/ ]
   RELEASE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
+  desc 'generate the manifest'
   task :manifest do
     files = Dir.glob('**/*', File::FNM_DOTMATCH).reject do |f| 
       EXCLUDE.any? {|regex| f =~ regex }

@@ -1,4 +1,4 @@
-== HEAD
+== 0.2.0 / 2009-02-10
 
  * A user can be chane his own password in his profile
  * Add Redcloth formating in project/ticket/milestone description
@@ -13,6 +13,6 @@
  * Define a project admin by function. A user with this function can be update
    settting about project. Not other project and administration of Oupsnow
 
-== 2009-01-21
+== 0.1.0 / 2009-01-21
 
  * Initial release

@@ -1,3 +1,4 @@
+History.txt
 MIT-LICENSE
 Manifest.txt
 README.txt
@@ -7,8 +8,11 @@ app/controllers
 app/controllers/admin
 app/controllers/admin/functions.rb
 app/controllers/admin/priorities.rb
+app/controllers/admin/states.rb
+app/controllers/admin/users.rb
 app/controllers/application.rb
 app/controllers/exceptions.rb
+app/controllers/milestones.rb
 app/controllers/projects.rb
 app/controllers/settings
 app/controllers/settings/members.rb
@@ -20,7 +24,10 @@ app/helpers/admin
 app/helpers/admin/functions_helper.rb
 app/helpers/admin/global_helper.rb
 app/helpers/admin/priorities_helper.rb
+app/helpers/admin/states_helper.rb
+app/helpers/admin/users_helper.rb
 app/helpers/global_helpers.rb
+app/helpers/milestones_helper.rb
 app/helpers/projects_helper.rb
 app/helpers/settings
 app/helpers/settings/global_helper.rb
@@ -32,6 +39,7 @@ app/models
 app/models/event.rb
 app/models/function.rb
 app/models/member.rb
+app/models/milestone.rb
 app/models/priority.rb
 app/models/project.rb
 app/models/state.rb
@@ -47,6 +55,14 @@ app/views/admin/functions/new.html.haml
 app/views/admin/priorities
 app/views/admin/priorities/index.html.haml
 app/views/admin/priorities/new.html.haml
+app/views/admin/states
+app/views/admin/states/edit.html.haml
+app/views/admin/states/index.html.haml
+app/views/admin/states/new.html.haml
+app/views/admin/states/show.html.haml
+app/views/admin/users
+app/views/admin/users/index.html.haml
+app/views/admin/users/show.html.haml
 app/views/exceptions
 app/views/exceptions/not_acceptable.html.erb
 app/views/exceptions/not_found.html.erb
@@ -54,6 +70,13 @@ app/views/exceptions/unauthenticated.html.erb
 app/views/layout
 app/views/layout/application.html.haml
 app/views/layout/login.html.haml
+app/views/milestones
+app/views/milestones/_form.html.haml
+app/views/milestones/_pbar.html.haml
+app/views/milestones/edit.html.haml
+app/views/milestones/index.html.haml
+app/views/milestones/new.html.haml
+app/views/milestones/show.html.haml
 app/views/projects
 app/views/projects/_form.html.haml
 app/views/projects/edit.html.haml
@@ -84,8 +107,8 @@ autotest
 autotest/discover.rb
 autotest/merb.rb
 autotest/merb_rspec.rb
-bin
 config
+config/database.yml.sample
 config/dependencies.rb
 config/environments
 config/environments/development.rb
@@ -97,8 +120,6 @@ config/init.rb
 config/rack.rb
 config/router.rb
 doc
-features
-features/register.features
 lib
 lib/tasks
 log
@@ -128,6 +149,7 @@ spec/models
 spec/models/event_spec.rb
 spec/models/function_spec.rb
 spec/models/member_spec.rb
+spec/models/milestone_spec.rb
 spec/models/priority_spec.rb
 spec/models/project_spec.rb
 spec/models/state_spec.rb
@@ -137,6 +159,9 @@ spec/requests
 spec/requests/admin
 spec/requests/admin/functions_spec.rb
 spec/requests/admin/priorities_spec.rb
+spec/requests/admin/states_spec.rb
+spec/requests/admin/users_spec.rb
+spec/requests/milestones_spec.rb
 spec/requests/projects_spec.rb
 spec/requests/settings
 spec/requests/settings/members_spec.rb
@@ -179,7 +204,6 @@ src/will_paginate/lib/will_paginate/view_helpers/base.rb
 src/will_paginate/lib/will_paginate/view_helpers/link_renderer.rb
 src/will_paginate/lib/will_paginate/view_helpers/link_renderer_base.rb
 src/will_paginate/lib/will_paginate/view_helpers/merb.rb
-src/will_paginate/pkg
 src/will_paginate/spec
 src/will_paginate/spec/collection_spec.rb
 src/will_paginate/spec/console
@@ -222,3 +246,10 @@ tasks
 tasks/doc.thor
 tasks/merb.thor
 tasks/ouspnow.thor
+tmp
+website
+website/index.html
+website/javascripts
+website/javascripts/rounded_corners_lite.inc.js
+website/stylesheets
+website/stylesheets/screen.css
