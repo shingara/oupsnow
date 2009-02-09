@@ -18,6 +18,9 @@ class Project
   before :destroy, :destroy_events
   before :destroy, :destroy_milestones
 
+  validates_with_method :have_one_admin
+  validates_with_method :have_member
+
   def new_num_ticket
     max_num_ticket = tickets.max(:num)
     (max_num_ticket || 0).succ
@@ -39,6 +42,22 @@ class Project
 
   def destroy_milestones
     milestones.each{|m| m.destroy}
+  end
+
+  def have_one_admin
+    unless members.any? {|m| m.function.project_admin}
+      return [false, 'The project need a admin']
+    else
+      return true
+    end
+  end
+
+  def have_member
+    if members.empty?
+      return [false, 'The project need a member']
+    else
+      return true
+    end
   end
 
 end

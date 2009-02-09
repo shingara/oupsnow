@@ -212,7 +212,7 @@ describe "resource(Project.first, @ticket)" do
   
   describe "GET" do
     before(:each) do
-      p = Project.gen
+      p = Project.gen!
       t = Ticket.gen(:project_id => p.id,
                     :member_create_id => p.members.first.user_id)
       @response = request(resource(p,t))

@@ -20,7 +20,7 @@ describe "resource(:projects)" do
   
   describe "GET" do
     before(:each) do
-      2.of{Project.gen}
+      2.of{Project.gen!}
       @response = request(resource(:projects))
     end
     
@@ -52,7 +52,7 @@ describe "resource(@project)" do
     describe "a successful DELETE" do
        before(:each) do
          login_admin
-         @project = Project.gen
+         @project = Project.gen!
          @response = request(resource(@project))
        end
 
@@ -92,7 +92,7 @@ describe "resource(@project, :edit)" do
   describe 'with user logged' do
     before(:each) do
       login
-      @response = request(resource(Project.gen, :edit))
+      @response = request(resource(Project.gen!, :edit))
     end
     
     it "responds successfully" do
@@ -103,7 +103,7 @@ describe "resource(@project, :edit)" do
   describe 'with admin logged' do
     before(:each) do
       login_admin
-      @response = request(resource(Project.gen, :edit))
+      @response = request(resource(Project.gen!, :edit))
     end
     
     it "responds successfully" do
@@ -116,7 +116,7 @@ describe "resource(@project)" do
   
   describe "GET" do
     before(:each) do
-      @project = Project.gen
+      @project = Project.gen!
       @response = request(resource(@project))
     end
   
@@ -156,7 +156,7 @@ describe 'resource(@project, :overview)' do
   describe 'anonymous user' do
     before :each do
       logout
-      Project.gen unless Project.first
+      Project.gen! unless Project.first
       @project = Project.first
       test_request
     end
@@ -167,7 +167,7 @@ describe 'resource(@project, :overview)' do
   describe 'login user' do
     before :each do
       login
-      Project.gen unless Project.first
+      Project.gen! unless Project.first
       @project = Project.first
       test_request
     end
@@ -178,7 +178,7 @@ describe 'resource(@project, :overview)' do
   describe 'admin user' do
     before :each do
       login_admin
-      Project.gen unless Project.first
+      Project.gen! unless Project.first
       @project = Project.first
       test_request
     end

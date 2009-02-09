@@ -103,10 +103,11 @@ Merb::Test.add_helpers do
   def create_default_admin
     delete_project_and_user
     User.gen(:admin) unless User.first(:login => 'admin')
-    Project.gen unless Project.first
+    Function.gen!(:admin) unless Function.first(:name => 'Admin')
+    Project.gen! unless Project.first
     State.gen(:name => 'new') unless State.first(:name => 'new')
     State.gen(:name => 'check') unless State.first(:name => 'check')
-    unless Project.first.members(:function_id => Function.first(:name => 'Admin').id)
+    unless Project.first.members('function.name' => 'Admin')
       Project.first.members.create(:function_id => Function.gen(:admin).id,
                                   :user_id => User.first(:login => 'admin').id)
     end

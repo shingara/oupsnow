@@ -58,10 +58,3 @@ Milestone.fixture {{
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
   :expected_at => Time.now
 }}
-
-User.gen(:login => 'admin', :global_admin => true)
-Function.gen(:admin)
-Project.gen
-Member.gen
-State.gen(:name => 'new')
-
