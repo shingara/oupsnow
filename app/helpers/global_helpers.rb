@@ -57,6 +57,7 @@ module Merb
     end
 
     def textilized(text)
+      text = "" if text.nil?
       RedCloth.new(text).to_html
     end
 
