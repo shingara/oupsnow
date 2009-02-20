@@ -70,6 +70,8 @@ class Ticket
       t.description = ticket[:description]
       ticket.delete(:description)
     end
+    ticket[:member_assigned_id] = nil unless ticket[:member_assigned_id] # nil if not define
+    ticket[:milestone_id] = nil unless ticket[:milestone_id] # nil if not define
     [:title, :state_id, :member_assigned_id, :priority_id, :milestone_id].each do |type_change|
       if send(type_change).to_s != ticket[type_change].to_s
         t.properties_update << [type_change, send(type_change), ticket[type_change]]
