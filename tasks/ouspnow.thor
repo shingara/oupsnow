@@ -42,10 +42,19 @@ module OupsNow
       ::Merb.start_environment(
         :environment => ENV['MERB_ENV'] || 'development')
       require 'spec/fixtures'
+      (4..10).of {
+        User.gen
+      }
       3.of{
         p = Project.gen!
         (1..3).of {
           Milestone.gen!(:project_id => p.id)
+        }
+        (4..10).of {
+          Member.gen(
+            :project_id => p.id,
+            :user_id => User.all[rand(User.count)].id,
+            :function_id => Function.all[rand(Function.count)].id)
         }
         (20..40).of {
           Ticket.gen(
@@ -55,12 +64,13 @@ module OupsNow
         (20..40).of {
           t = p.tickets[rand(p.tickets.size)]
           t.reload
+          t.project.reload
           t.generate_update({
             :title => rand(2) == 0 ? t.title : /\w+/.gen,
-            :state_id => rand(2) == 0 ? t.state_id : State.all[rand(State.count)],
+            :state_id => rand(2) == 0 ? t.state_id : State.all[rand(State.count)].id,
             :tag_list => rand(2) == 0 ? t.frozen_tag_list : (0..3).of { /\w+/.gen }.join(','),
-            :member_assigned_id => rand(2) == 0 ? t.member_assigned_id : p.members[p.members.size],
-            :milestone_id => rand(2) == 0 ? t.milestone_id : p.milestones[p.milestones.size],
+            :member_assigned_id => rand(2) == 0 ? t.member_assigned_id : p.members[rand(p.members.size)].id,
+            :milestone_id => rand(2) == 0 ? t.milestone_id : t.project.milestones[rand(p.milestones.size)].id,
             :description =>rand(2) == 0 ? "" : (0..3).of { /[:paragraph:]/.generate }.join("\n"),
           }, p.users[rand(p.users.size)])
         }
