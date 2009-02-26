@@ -5,6 +5,14 @@ module Merb
       "#{property_update(prop)} is change from '#{old_field(prop)}' to '#{new_field(prop)}'"
     end
 
+    def sort_by(property)
+      if params[:sort_by] == property
+        {:sort_by => property, :order => (params[:order] == 'asc' ? 'desc' : 'asc')}
+      else
+        {:sort_by => property, :order => 'asc'}
+      end
+    end
+
     def property_update(prop)
       case prop[0]
       when :state_id

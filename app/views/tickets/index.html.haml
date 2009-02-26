@@ -1,8 +1,8 @@
 %table
   %thead
     %tr
-      %th id
-      %th name
+      %th= link_to 'id', resource(@project, :tickets, sort_by('id'))
+      %th= link_to 'name', resource(@project, :tickets, sort_by('title'))
       %th responsabile
       %th status
       %th priority
