@@ -63,15 +63,16 @@ class RedmineConverter < BaseConverter
 
     #TODO: integrate event (WARNING event create in after hook)
     tickets = convert.import_tickets do |rd_ticket|
+      project_ticket = Project.first(:name => rd_ticket.project.name)
       Ticket.new(:title => rd_ticket.subject,
                  :description => rd_ticket.description,
                  :created_at => rd_ticket.created_on,
                  :state_id => State.first(:name => rd_ticket.status.name).id,
                  :member_create_id => User.first(:login => rd_ticket.created_by.login).id,
                  :priority_id => Priority.first(:name => rd_ticket.priority.name).id,
-                 :project_id => Project.first(:name => rd_ticket.project.name).id,
+                 :project_id => project_ticket.id,
                  :member_assigned_id => rd_ticket.assigned_to ? User.first(:login => rd_ticket.assigned_to.login).id : nil,
-                 :milestone_id => rd_ticket.version ? Milestone.first(:name => rd_ticket.version.name).id : nil,
+                 :milestone_id => rd_ticket.version ? project_ticket.milestones.first(:name => rd_ticket.version.name).id : nil,
                  :tag_list => [rd_ticket.tracker.name, 
                    (rd_ticket.category ? rd_ticket.category.name : "")].join(','))
     end
