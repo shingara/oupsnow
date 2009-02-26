@@ -4,6 +4,11 @@ require 'rdoc/rdoc'
 require 'fileutils'
 require 'erb'
 
+# load all thor task from plugins
+tasks_path = File.join(File.dirname(__FILE__), "..", "app", "plugins")
+thor_files = Dir["#{tasks_path}/*/tasks/*.thor"]
+thor_files.each{|thor_file| load thor_file }
+
 module OupsNow
 
   class Bootstrap < Thor
@@ -75,19 +80,6 @@ module OupsNow
           }, p.users[rand(p.users.size)])
         }
       }
-    end
-  end
-
-  class Converter < Thor
-
-    desc 'convert_from_redmine', 'convert from Redmine'
-    def convert_from_redmine
-      require 'merb-core'
-      ::Merb.start_environment(
-        :environment => ENV['MERB_ENV'] || 'development')
-      ::Merb::Orms::DataMapper.setup_connections
-      require 'tasks/converter/redmine.rb'
-      RedmineConverter.convert
     end
   end
 end
