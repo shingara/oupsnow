@@ -1,110 +1,13 @@
-body {
-  background: #092E20 none repeat scroll 0 0;
-  color: white;
-  margin: 10px;
-  padding: 0; }
-
-.nav {
-  font-family: verdana,'Bitstream Vera Sans',helvetica,arial,sans-seriF;
-  font-size: 10px; }
-  .nav ul {
-    list-style-image: none;
-    list-style-position: outside;
-    list-style-type: none;
-    margin: 0; }
-  .nav li {
-    white-space: no-wrap;
-    display: inline; }
-  .nav .last {
-    border-right: 0px none; }
-
-.btns {
-  margin: 18px 0 0;
-  padding: 9px;
-  text-align: right; }
-
 .pbar-container {
   border: 2px solid #FFFFFF;
   background: #DDDDDD none repeat scroll 0 0;
   height: 33px;
-  width: 100%; }
+  width: 90%;
+  margin: auto; }
 
 .pbar {
   height: 33px;
   background: #227700 none repeat scroll 0 0; }
-
-#banner {
-  background: #94DA3A none repeat scroll 0 0; }
-  #banner #header {
-    padding: 10px;
-    padding-left: 30px;
-    margin-left: -10px;
-    margin-right: -10px;
-    margin-bottom: 10px;
-    margin-top: 30px; }
-  #banner #login_nav {
-    color: black;
-    margin-right: 10px; }
-    #banner #login_nav ul {
-      text-align: right; }
-    #banner #login_nav li {
-      padding-right: 0.5em;
-      padding-left: 0.5em; }
-
-#menu {
-  padding-top: 10px;
-  background: #94DA3F; }
-  #menu li {
-    background: #487858 none repeat scroll 0 0; }
-    #menu li a:link, #menu li a:visited {
-      color: white;
-      text-decoration: none;
-      padding: 0.2em 20px; }
-  #menu li.current {
-    background: #FF7868 none repeat scroll 0 0; }
-  #menu #sub_menu {
-    background: #8fff64;
-    padding-top: 5px; }
-    #menu #sub_menu li {
-      background: #f87858 none repeat scroll 0 0; }
-
-#content {
-  padding: 2em;
-  position: relative;
-  background: white;
-  color: black; }
-  #content table {
-    border-bottom: 1px solid #D7D7D7;
-    border-collapse: collapse;
-    border-spacing: 0;
-    clear: both;
-    margin-top: 1em;
-    width: 100%; }
-    #content table th, #content table td, #content table tr {
-      font-family: Verdana,sans-serif;
-      font-size: 12px;
-      line-height: 1.4em;
-      border: 1px solid #DDDDDD; }
-    #content table thead {
-      background: #F7F7F0 none repeat scroll 0 0; }
-      #content table thead tr {
-        border-bottom: 1.5px solid black; }
-      #content table thead th {
-        border-color: #D7D7D7 #D7D7D7 #999999;
-        border-style: solid;
-        border-width: 1px; }
-    #content table tbody td {
-      border: 1px dotted #DDDDDD;
-      vertical-align: top;
-      padding: 0.1em 0.5em; }
-  #content #login {
-    margin: auto;
-    width: 25%; }
-  #content #register {
-    margin: auto;
-    width: 50%; }
-    #content #register input.field {
-      width: 100%; }
 
 #ticket {
   background: #FFFFDD none repeat scroll 0 0;
@@ -130,14 +33,6 @@ body {
   display: block; }
   #ticket_update_form select,   #ticket_form select {
     width: 100%; }
-  #ticket_update_form .group_main,   #ticket_form .group_main {
-    float: left;
-    display: block;
-    width: 60%; }
-  #ticket_update_form .group_more,   #ticket_form .group_more {
-    display: block;
-    margin-left: 62%;
-    margin-top: 10px; }
   #ticket_update_form .taggings,   #ticket_form .taggings {
     clear: both; }
     #ticket_update_form .taggings input,     #ticket_form .taggings input {
@@ -155,15 +50,11 @@ body {
     text-align: center; }
     #milestones li .milestone-information li {
       border-right: 1px solid;
+      border-bottom: none;
       padding-right: 10px;
       padding-left: 10px; }
     #milestones li .milestone-information .last {
       border-right: 0px none; }
-
-form label {
-  display: block; }
-form textarea {
-  width: 100%; }
 
 #footer {
   text-align: center;
@@ -172,3 +63,15 @@ form textarea {
   #footer a, #footer a:link, #footer a:visited {
     text-decoration: none;
     color: white; }
+
+.pagination em {
+  padding: 2px 5px;
+  margin-right: 5px;
+  display: block;
+  float: left;
+  border-style: solid;
+  border-width: 1px;
+  font-weight: bold;
+  background: #262626;
+  color: #FFF;
+  border-color: #262626; }

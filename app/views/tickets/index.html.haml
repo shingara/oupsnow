@@ -1,22 +1,26 @@
-%table
-  %thead
-    %tr
-      %th= link_to 'id', resource(@project, :tickets, sort_by('id'))
-      %th= link_to 'name', resource(@project, :tickets, sort_by('title'))
-      %th responsabile
-      %th status
-      %th priority
-      %th milestone
-  %tbody
-    - for ticket in @tickets
-      %tr
-        %th= link_to "##{ticket.num}", resource(@project, ticket)
-        %td= ticket.title
-        %td= ticket.assigned_to ? ticket.assigned_to.login : ""
-        %td= ticket.state.name
-        %td= ticket.priority ? ticket.priority.name : ""
-        %td= ticket.milestone ? ticket.milestone.name : ""
+#block-tables.block
+  .content
+    .inner
+      %table.table
+        %thead
+          %tr
+            %th.first= link_to 'id', resource(@project, :tickets, sort_by('id'))
+            %th= link_to 'name', resource(@project, :tickets, sort_by('title'))
+            %th responsabile
+            %th status
+            %th priority
+            %th.last milestone
+        %tbody
+          - for ticket in @tickets
+            %tr{:class => cycle("odd","even")}
+              %td= link_to "##{ticket.num}", resource(@project, ticket)
+              %td= ticket.title
+              %td= ticket.assigned_to ? ticket.assigned_to.login : ""
+              %td= ticket.state.name
+              %td= ticket.priority ? ticket.priority.name : ""
+              %td= ticket.milestone ? ticket.milestone.name : ""
 
-= will_paginate @tickets
-
-= link_to 'New', resource(@project, :tickets, :new) if session.authenticated?
+      .actions-bar
+        = will_paginate @tickets
+        .actions
+          = link_to 'New', resource(@project, :tickets, :new) if session.authenticated?

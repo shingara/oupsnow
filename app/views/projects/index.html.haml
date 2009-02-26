@@ -1,10 +1,13 @@
-%h1
-  Projects
+#block-text.block
+  .content
+    .inner
+      %h1
+        Projects
 
-- @projects.each do |project|
-  %h2
-    %span= link_to project.name, resource(project, :overview)
+      - @projects.each do |project|
+        %h2
+          %span= link_to project.name, resource(project, :overview)
 
-  %p= textilized project.description
+        %p= textilized project.description
 
-= link_to 'New', url(:new_project) if global_admin?
+      = link_to 'New', url(:new_project) if global_admin?

@@ -1,11 +1,16 @@
-%ul
-  - @events.each do |event|
-    %li
-      %span= time_overview(event.created_at)
-      =link_to event.short_description, resource(@project, event.ticket)
-      was
-      =event.event_type
-      by
-      =event.user.login
+#block-lists.block
+  .content
+    .inner
+      %ul.list
+        - @events.each do |event|
+          %li
+            .left
+              %span= time_overview(event.created_at)
+            .item
+              =link_to event.short_description, resource(@project, event.ticket)
+              was
+              =event.event_type
+              by
+              =event.user.login
 
-= will_paginate @events
+      = will_paginate @events

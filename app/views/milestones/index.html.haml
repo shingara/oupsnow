@@ -1,20 +1,24 @@
-%ul#milestones
-  - @milestones.each do |milestone|
-    %li
-      %h3= link_to milestone.name, resource(@project, milestone)
-      %span= textilized milestone.description
-      %ul.milestone-information
-        %li
-          %span= milestone.percent_complete.to_i
-          %span % completed
-        %li
-          %span= milestone.ticket_open_count
-          %span open issues
-        - if milestone.expected_at
-          %li.last
-            %span= milestone.expected_at
-      =partial :pbar, :milestone => milestone
+#block-lists.block
+  .content
+    .inner
+      %ul#milestones.list
+        - @milestones.each do |milestone|
+          %li.milestone
+            %h3= link_to milestone.name, resource(@project, milestone)
+            %span= textilized milestone.description
+            %ul.milestone-information
+              %li
+                %span= milestone.percent_complete.to_i
+                %span % completed
+              %li
+                %span= milestone.ticket_open_count
+                %span open issues
+              - if milestone.expected_at
+                %li.last
+                  %span= milestone.expected_at
+            =partial :pbar, :milestone => milestone
+            .clear
 
-- if admin? @project
-  %p
-    = link_to 'New milestone', resource(@project, :milestones, :new)
+      - if admin? @project
+        %p
+          = link_to 'New milestone', resource(@project, :milestones, :new)

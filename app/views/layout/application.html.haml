@@ -2,36 +2,43 @@
 %html
   %head
     %title= @title || "Oupsnow"
+    = css_include_tag 'base'
+    = css_include_tag 'default'
     = css_include_tag 'oupsnow'
   %body
-    #banner
+    #container
       #header
-        %h1= title_project
-      #login_nav.nav
-        %ul
-          - unless authenticated?
-            %li= link_to('Login', url(:login))
-            %li.last= link_to('Register', url(:new_user))
-          - else
-            %li= link_to('My profile', url(:edit_user, session.user))
-            %li.last= link_to 'Logout', url(:logout)
-            - if global_admin?
-              %li.last= link_to 'Administration', url(:admin_root)
+        %h1= link_to title_project, '/'
+        #user-navigation
+          %ul
+            - unless authenticated?
+              %li= link_to('Login', url(:login))
+              %li= link_to('Register', url(:new_user))
+            - else
+              %li= link_to('My profile', url(:edit_user, session.user))
+              %li= link_to 'Logout', url(:logout)
+              - if global_admin?
+                %li= link_to 'Administration', url(:admin_root)
+          .clear
 
-    #menu.nav
-      %ul
-        %li{:class => projects_current}= link_to 'Projects', resource(:projects)
-        - unless @project.nil? || @project.id.nil?
-          %li{:class => overview_current}=link_to 'Overview', resource(@project, :overview)
-          %li{:class => milestone_current}=link_to 'Milestone', resource(@project, :milestones)
-          %li{:class => tickets_current}= link_to 'Tickets', resource(@project, :tickets)
-          - if authenticated?
-            %li{:class => tickets_new_current}= link_to 'Add new ticket', resource(@project, :tickets, :new)
-          - if admin? @project
-            %li{:class => settings_current}= link_to 'Settings', url(:project_settings_members, @project)
-      = sub_menu
-    %div#content
-      = catch_content :for_layout
+        #main-navigation
+          %ul
+            %li.first{:class => projects_current}= link_to 'Projects', resource(:projects)
+            - unless @project.nil? || @project.id.nil?
+              %li{:class => overview_current}=link_to 'Overview', resource(@project, :overview)
+              %li{:class => milestone_current}=link_to 'Milestone', resource(@project, :milestones)
+              %li{:class => tickets_current}= link_to 'Tickets', resource(@project, :tickets)
+              - if authenticated?
+                %li{:class => tickets_new_current}= link_to 'Add new ticket', resource(@project, :tickets, :new)
+              - if admin? @project
+                %li{:class => settings_current}= link_to 'Settings', url(:project_settings_members, @project)
+          = sub_menu
+          .clear
+    #wrapper
+      #main
+        = catch_content :for_layout
+      #sidebar
+      .clear
     #footer
       Powered by
       %a{:href => 'http://oupsnow.rubyforge.org'} Oupsnow

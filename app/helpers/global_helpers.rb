@@ -23,7 +23,7 @@ module Merb
     end
 
     def current_or_not(bool)
-      bool ? "current" : ""
+      bool ? "active" : ""
     end
 
     def overview_current
