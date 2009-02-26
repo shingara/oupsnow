@@ -1,11 +1,15 @@
-%h1 Create a new ticket
+#block-forms.block
+  .content
+    %h1 Create a new ticket
 
-= message[:error]
-= error_messages_for @ticket
+    .inner
+      .flash
+        = message[:error]
+        = error_messages_for @ticket
 
-= form_for(@ticket, :action => url(:project_tickets), :id => 'ticket_form' ) do
-  = partial :form
-  %p.btns
-    = submit "Create"
-    or
-    = link_to 'Cancel', resource(@project, :tickets)
+      = form_for(@ticket, :action => url(:project_tickets), :id => 'ticket_form' , :class => 'form') do
+        = partial :form
+        %div{:class => 'group navform'}
+          = submit "Create", :class => 'button'
+          or
+          = link_to 'Cancel', resource(@project, :tickets)

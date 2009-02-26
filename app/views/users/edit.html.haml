@@ -1,12 +1,26 @@
-%h1 Edit your profile
+#block-forms.block
+  .content
+    %h1 Edit your profile
 
-= error_messages_for @user
+    .inner
+      .flash
+        = error_messages_for @user
 
-= form_for(@user, :action => url(:user, @user)) do
-  %p= text_field :email, :label => 'Email'
-  %p= text_field :firstname, :label => 'Firstname'
-  %p= text_field :lastname, :label => 'Lastname'
-  %p= password_field :password, :label => 'Password'
-  %p= password_field :password_confirmation, :label => 'Password confirmation'
-  %p
-    = submit "Update"
+      = form_for(@user, :action => url(:user, @user), :class => 'form') do
+        .group
+          %label.label{:for => 'user[email]'} Email
+          = text_field :email, :class => 'text_field'
+        .group
+          %label.label{:for => 'user[firstname]'} Firstname
+          = text_field :firstname, :class => 'text_field'
+        .group
+          %label.label{:for => 'user[lastname]'} Lastname
+          = text_field :lastname, :class => 'text_field'
+        .group
+          %label.label{:for => 'user[password]'} Password
+          = password_field :password, :class => 'text_field'
+        .group
+          %label.label{:for => 'user[password_confirmation]'} Password confirmation
+          = password_field :password_confirmation, :class => 'text_field'
+        %div{:class => 'group navform'}
+          = submit "Update", :class => 'button'

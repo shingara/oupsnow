@@ -1,10 +1,17 @@
-%h1 Edit this ticket comments
+#block-forms.block
+  .content
+    %h1 Edit this ticket comments
+    .inner
 
-= error_messages_for @ticket
+      .flash
+        = error_messages_for @ticket
 
-= form_for(@ticket, :action => resource(@project, @ticket, :update_main_description)) do
-  %p= text_area  @ticket.description, :name => 'ticket[description]', :label => 'Description', :cols => 40, :rows => 15
-  %p
-    = submit "Update"
-    or
-    = link_to 'Cancel', resource(@project, @ticket)
+      = form_for(@ticket, :action => resource(@project, @ticket, :update_main_description), :class => 'form') do
+        .group
+          %label.label{:for => 'ticket[description]'} Description
+          = text_area  @ticket.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area'
+        .clear
+        %div{:class => 'group navform'}
+          = submit "Update", :class => 'button'
+          or
+          = link_to 'Cancel', resource(@project, @ticket)

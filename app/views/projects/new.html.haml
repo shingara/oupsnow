@@ -1,8 +1,15 @@
-%h1 Create project
+#block-forms.block
+  .content
+    %h1 Create project
 
-= message[:error]
-= error_messages_for @project
+    .inner
+      .flash
+        = message[:error]
+        = error_messages_for @project
 
-= form_for(@project, :action => url(:projects) ) do
-  = partial :form
-  %p= submit "Create"
+      = form_for(@project, :action => url(:projects), :class => 'form') do
+
+        = partial :form
+
+        %div{:class => 'group navform'}
+          = submit "Create", :class => 'button'
