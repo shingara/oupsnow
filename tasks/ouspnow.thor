@@ -83,7 +83,6 @@ module OupsNow
     desc 'convert_from_redmine', 'convert from Redmine'
     def convert_from_redmine
       require 'merb-core'
-      require 'merb_datamapper'
       ::Merb.start_environment(
         :environment => ENV['MERB_ENV'] || 'development')
       ::Merb::Orms::DataMapper.setup_connections
