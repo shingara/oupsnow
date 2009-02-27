@@ -1,15 +1,17 @@
-%h1 
-  Member on project :
-  = @project.name
+.content
+  %h2
+    Member on project :
+    = @project.name
 
-%table
-  %thead
-    %tr
-      %th User
-      %th Role
-  %tbody
-    - for member in @members
-      %tr
-        %td=link_to(member.user.login, url(:project_settings_member, @project, member))
-        %td=member.function.name
-%p=link_to 'Add member', url(:new_project_settings_member, @project)
+  .inner
+    %table.table
+      %thead
+        %tr
+          %th.first User
+          %th.last Role
+      %tbody
+        - for member in @members
+          %tr{:class => cycle('odd', 'even')}
+            %td=link_to(member.user.login, url(:project_settings_member, @project, member))
+            %td=member.function.name
+    %p=link_to 'Add member', url(:new_project_settings_member, @project)

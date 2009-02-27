@@ -1,10 +1,12 @@
-%h1
-  Member 
-  = "#{@member.user.login} "
-  of project 
-  = @project.name
+.content
+  %h2
+    Member 
+    = "#{@member.user.login} "
+    of project 
+    = @project.name
 
-%ul
-  %li
-    Role : 
-    = @member.function.name
+  .inner
+    %ul.list
+      %li
+        Role : 
+        = @member.function.name

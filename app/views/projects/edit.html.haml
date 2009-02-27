@@ -1,7 +1,11 @@
-%h1 Edit your project
+.content
+  %h2 Edit your project
 
-= error_messages_for :project
+  .inner
+    .flash
+      = error_messages_for :project
 
-= form_for(@project, :action => url(:project, @project)) do
-  = partial :form
-  %p= submit "Update"
+    = form_for(@project, :action => url(:project, @project), :class => 'form') do
+      = partial :form
+      %div{:class => 'group navform'}
+        = submit "Update", :class => 'button'
