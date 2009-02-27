@@ -14,6 +14,7 @@ class Tickets < Application
                                :page => params[:page],
                                :per_page => 20)
     milestone_part(@project.id)
+    tag_cloud_part(@project.id)
     display @tickets
   end
 
