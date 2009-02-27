@@ -1,19 +1,24 @@
-%h1
-  States
+.content
+  %h2
+    States
 
-= message
+  .inner
+    .flash
+      = message
 
-= form :action => resource(:admin, :states, :update_all), :method => 'PUT' do
-  %table
-    %thead
-      %tr
-        %th Name
-        %th Closed?
-    %tbody
-      - for state in @states
-        %tr
-          %td= state.name
-          %td=check_box :name => "closed[#{state.id}]", :boolean => true, :checked => state.closed
-  %p
-    =link_to 'Add states', resource(:admin, :states, :new)
-    =submit "Update all states"
+    = form :action => resource(:admin, :states, :update_all), :method => 'PUT', :class => 'form' do
+      %table.table
+        %thead
+          %tr
+            %th.first Name
+            %th.last Closed?
+        %tbody
+          - for state in @states
+            %tr{:class => cycle('even', 'odd')}
+              %td= state.name
+              %td=check_box :name => "closed[#{state.id}]", :boolean => true, :checked => state.closed, :class => 'checkbox'
+      .actions-bar
+        .actions
+          =link_to 'Add states', resource(:admin, :states, :new)
+          =submit "Update all states", :class => 'button'
+        .clear
