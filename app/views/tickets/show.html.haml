@@ -1,6 +1,6 @@
 #block-lists.block
   .content
-    %h1= "Ticket ##{@ticket.num}"
+    %h2= "Ticket ##{@ticket.num}"
     .inner
       #ticket_status
         %span=@ticket.state.name
@@ -22,6 +22,9 @@
         - @ticket.tags.each do |tag|
           %span= tag.name
 
+      - unless @ticket.ticket_updates.empty?
+        %h3 Comments and changes to this ticket
+
       %ul#ticket_update
         - @ticket.ticket_updates.each do |up|
           %li{:id => "ticket_update-#{@ticket.num}-#{up.id}", :class => 'top-ticket-update'}
@@ -29,7 +32,7 @@
               =up.created_by.login
               |
               =up.created_at
-            %ul{:id => "properties_change-#{@ticket.num}-#{up.id}"}
+            %ul.list_properties{:id => "properties_change-#{@ticket.num}-#{up.id}"}
               - up.properties_update.each do |prop|
                 %li= update_field(prop)
             %p= textilized up.description

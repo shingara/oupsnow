@@ -1,15 +1,39 @@
-#register
-  %h1 Create an account
+#box
+  #block-signup.block
+    %h2 Create an account
 
-  = message[:error]
-  = error_messages_for @user
+    .content
+      = message[:error]
+      = error_messages_for @user
 
-  = form_for(@user, :action => url(:users) ) do
+      = form_for(@user, :action => url(:users), :class=> 'form') do
 
-    %p= text_field :login, :label => 'Login', :class => 'field'
-    %p= text_field  :email, :label => 'Email', :class => 'field'
-    %p= password_field  :password, :label => 'Password', :class => 'field'
-    %p= password_field  :password_confirmation, :label => 'Password confirmation', :class => 'field'
+        .group
+          .left
+            %label.label{:for => 'user[login]'} Login
+          .right
+            = text_field :login, :class => 'text_field'
+          .clear
+        .group
+          .left
+            %label.label{:for => 'user[email]'} Email
+          .right
+            = text_field  :email, :class => 'text_field'
+          .clear
+        .group
+          .left
+            %label.label{:for => 'user[password]'} Password
+          .right
+            = password_field  :password, :class => 'text_field'
+          .clear
+        .group
+          .left
+            %label.label{:for => 'user[password_confirmation]'} Password confirmation
+          .right
+            = password_field  :password_confirmation, :class => 'text_field'
+          .clear
 
-    %p
-      = submit "Create"
+        %div{:class => 'group navform'}
+          .right
+            = submit "Create", :class => 'button'
+          .clear

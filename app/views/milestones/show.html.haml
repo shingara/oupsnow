@@ -1,6 +1,6 @@
 #block-text.block
   .content
-    %h1 
+    %h2 
       = @milestone.name
     .inner
       %p.first
@@ -14,7 +14,7 @@
       %p
         = textilized @milestone.description
 
-      %ul
+      %ul.list
         - @milestone.ticket_open.each do |ticket|
           %li
             %span="##{ticket.num}"

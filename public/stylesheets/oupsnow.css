@@ -27,7 +27,10 @@
     position: relative;
     list-style-image: none;
     list-style-type: none;
-    border-top: 1px solid; }
+    border-bottom: 1px solid; }
+  #ticket_update .list_properties li {
+    margin-left: 20px;
+    font-weight: bold; }
 
 #ticket_update_form, #ticket_form {
   display: block; }
@@ -55,14 +58,6 @@
       padding-left: 10px; }
     #milestones li .milestone-information .last {
       border-right: 0px none; }
-
-#footer {
-  text-align: center;
-  clear: both;
-  font-size: 0.9em; }
-  #footer a, #footer a:link, #footer a:visited {
-    text-decoration: none;
-    color: white; }
 
 .pagination em {
   padding: 2px 5px;

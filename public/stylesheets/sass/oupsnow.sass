@@ -28,7 +28,12 @@
     position: relative
     list-style-image: none
     list-style-type: none
-    border-top: 1px solid
+    border-bottom: 1px solid
+
+  .list_properties li
+    margin-left: 20px
+    font-weight: bold
+
 
 #ticket_update_form, #ticket_form
   display: block
@@ -41,6 +46,8 @@
     
     input
       width: 98%
+
+
 
 #milestones
 
@@ -64,15 +71,7 @@
       .last
         border-right: 0px none
 
-#footer
-  text-align: center
-  clear: both
-  font-size: 0.9em
-
-  a, a:link, a:visited
-    text-decoration: none
-    color: white
-
+// Override the pagination from style, because will paginate use em like tag
 .pagination em
   padding: 2px 5px
   margin-right: 5px
