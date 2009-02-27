@@ -34,4 +34,4 @@ dependency "dm-tags", dm_gems_version
 dependency "dm-constraints", dm_gems_version
 
 dependency "RedCloth", "3.0.4",  :require_as => 'redcloth'
-
+dependency "activesupport", "2.2.2"

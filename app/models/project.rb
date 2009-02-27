@@ -72,4 +72,11 @@ class Project
     milestones.all(:expected_at.gt => Time.now, :order => [:expected_at])
   end
 
+  # Return a Hash of tagging object
+  # The key is the id number of tag and the value is an Array of Tagging
+  # object. count the number of object and you know how Tag used is on a Tag
+  def ticket_tag_counts
+    Tagging.all(:taggable_id => tickets.map(&:id), :taggable_type => 'Ticket').group_by(&:tag_id)
+  end
+
 end
