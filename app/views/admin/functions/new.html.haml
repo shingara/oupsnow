@@ -1,13 +1,19 @@
-%h1 Add a function
+.content
+  %h2 Add a function
 
-= error_messages_for @function
+  .inner
+    .flash
+      = error_messages_for @function
 
-= form_for(@function, :action => resource(:admin, :functions) ) do
-  %p= text_field :name, :label => 'Name'
-  %p
-    %span Project admin?
-    = check_box :name => "function[project_admin]", :value => true, :checked => @function.project_admin
-  %p
-    = submit "Create"
 
-= link_to 'Back', resource(:admin, :functions)
+    = form_for(@function, :action => resource(:admin, :functions), :class => 'form') do
+      .group
+        %label.label{:for => 'function[name]'} Name
+        = text_field :name, :class => 'text_field'
+      .group
+        %label.checkbox{:for => 'function[project_admin]'} Project admin?
+        = check_box :name => "function[project_admin]", :value => true, :checked => @function.project_admin, :class => 'checkbox'
+      %div{:class => 'group navform'}
+        = submit "Create", :class => 'button'
+        or
+        = link_to 'Back', resource(:admin, :functions)

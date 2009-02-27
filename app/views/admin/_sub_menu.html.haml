@@ -1,5 +1,7 @@
-%ul#sub_menu.nav
-  %li= link_to('Functions', resource(:admin, :functions))
-  %li= link_to('Priorities', resource(:admin, :priorities))
-  %li= link_to('States', resource(:admin, :states))
-  %li= link_to('Users', resource(:admin, :users))
+.secondary-navigation
+  %ul
+    %li.first= link_to('Functions', resource(:admin, :functions))
+    %li= link_to('Priorities', resource(:admin, :priorities))
+    %li= link_to('States', resource(:admin, :states))
+    %li= link_to('Users', resource(:admin, :users))
+  .clear

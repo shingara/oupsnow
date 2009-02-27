@@ -1,20 +1,25 @@
-%h1 
-  Functions
+.content
+  %h2
+    Functions
 
-= message
+  .inner
+    .flash
+      = message
 
-= form :action => resource(:admin, :functions, :update_all), :method => 'PUT' do
-  %table
-    %thead
-      %tr
-        %th Name
-        %th Project admin
-    %tbody
-      - for function in @functions
-        %tr
-          %td= function.name
-          %td=check_box :name => "project_admin[#{function.id}]", :boolean => true, :checked => function.project_admin
-  %p
-    =link_to 'Add function', resource(:admin, :functions, :new)
-    =submit "Update all functions"
+    = form :action => resource(:admin, :functions, :update_all), :method => 'PUT', :class => 'form' do
+      %table.table
+        %thead
+          %tr
+            %th.first Name
+            %th.last Project admin
+        %tbody
+          - for function in @functions
+            %tr
+              %td= function.name
+              %td=check_box :name => "project_admin[#{function.id}]", :boolean => true, :checked => function.project_admin
+      .actions-bar
+        .actions
+          =link_to 'Add function', resource(:admin, :functions, :new)
+          =submit "Update all functions", :class=> 'button'
+        .clear
 
