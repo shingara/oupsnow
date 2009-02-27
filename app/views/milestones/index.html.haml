@@ -7,9 +7,10 @@
 #block-lists.block
   .content
     .inner
-      %ul#milestones.list
-        %li.milestone
-          =partial :milestone, :milestone => @project.current_milestone
+      - if @project.current_milestone
+        %ul#milestones.list
+          %li.milestone
+            =partial :milestone, :milestone => @project.current_milestone
 
       - if @project.upcoming_milestones.size > 1 # there are one milestone in current. So min count 1
         %h3 Upcomming Milestones

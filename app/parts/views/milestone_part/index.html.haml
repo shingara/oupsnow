@@ -1,17 +1,18 @@
-.block
-  %h3 Current milestone
-  .content
-    %p 
-      = link_to @milestone.name, resource(@project, @milestone)
-      = " - "
-      = "#{@milestone.percent_complete.to_i} % complete"
+-if @milestone
+  .block
+    %h3 Current milestone
+    .content
+      %p 
+        = link_to @milestone.name, resource(@project, @milestone)
+        = " - "
+        = "#{@milestone.percent_complete.to_i} % complete"
 
-    %div.pbar-container
-      %div.pbar{:style => "width: #{@milestone.percent_complete.to_i}%;"}
+      %div.pbar-container
+        %div.pbar{:style => "width: #{@milestone.percent_complete.to_i}%;"}
 
-    %p
-      Completed
-      = @milestone.ticket_closed_count
-      of
-      = @milestone.tickets.count
-      tickets
+      %p
+        Completed
+        = @milestone.ticket_closed_count
+        of
+        = @milestone.tickets.count
+        tickets
