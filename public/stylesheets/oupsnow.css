@@ -9,6 +9,11 @@
   height: 33px;
   background: #227700 none repeat scroll 0 0; }
 
+.flash .error li {
+  list-style-type: none;
+  margin-top: 5px;
+  margin-left: 20px; }
+
 #ticket {
   background: #FFFFDD none repeat scroll 0 0;
   border: 1px outset #999966;
