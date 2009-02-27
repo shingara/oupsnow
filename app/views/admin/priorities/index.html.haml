@@ -1,12 +1,17 @@
-%h1
-  Priorities
+.content
+  %h2
+    Priorities
 
-%table
-  %thead
-    %tr
-      %th Name
-  %tbody
-    - for priority in @priorities
-      %tr
-        %td= priority.name
-%p=link_to 'Add priorities', resource(:admin, :priorities, :new)
+  .inner
+    %table.table
+      %thead
+        %tr
+          %th.first Name
+      %tbody
+        - for priority in @priorities
+          %tr
+            %td= priority.name
+    .actions-bar
+      .action
+        %p=link_to 'Add priorities', resource(:admin, :priorities, :new)
+      .clear

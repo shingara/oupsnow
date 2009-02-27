@@ -1,10 +1,16 @@
-%h1 Add a priority
+.content
+  %h2 Add a priority
 
-= error_messages_for @priority
+  .inner
+    .flash
 
-= form_for(@priority, :action => resource(:admin, :priorities) ) do
-  %p= text_field :name, :label => 'Name'
-  %p
-    = submit "Create"
+      = error_messages_for @priority
 
-= link_to 'Back', resource(:admin, :priorities)
+    = form_for(@priority, :action => resource(:admin, :priorities), :class => 'form') do
+      .group
+        %label.label{:for => 'priority[name]'} Name
+        = text_field :name, :class => 'text_field'
+      %div{:class => 'group navform'}
+        = submit "Create", :class => 'button'
+        or
+        = link_to 'Back', resource(:admin, :priorities)
