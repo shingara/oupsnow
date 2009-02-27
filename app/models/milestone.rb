@@ -39,7 +39,6 @@ class Milestone
   end
 
   def ticket_closed_count
-    #TODO: define a closed state to all state
     tickets.count(:state_id => State.closed.map{|s| s.id})
   end
 

@@ -21,6 +21,7 @@ class Projects < Application
                                        :page => params[:page],
                                        :per_page => 20)
     raise NotFound unless @project
+    milestone_part(@project.id)
     display @events
   end
 

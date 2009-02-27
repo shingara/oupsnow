@@ -13,6 +13,7 @@ class Tickets < Application
                                :order => [sort_by.to_sym.send(order)],
                                :page => params[:page],
                                :per_page => 20)
+    milestone_part(@project.id)
     display @tickets
   end
 
