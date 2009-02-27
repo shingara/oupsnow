@@ -6,7 +6,8 @@ class Milestones < Application
   before :admin_project, :exclude => [:index, :show]
 
   def index
-    @milestones = Milestone.all(:project_id => @project.id)
+    @milestones = Milestone.all(:project_id => @project.id, 
+                                :order => [:expected_at])
     display @milestones
   end
 

@@ -60,4 +60,16 @@ class Project
     end
   end
 
+  def current_milestone
+    milestones.first(:expected_at.gt => Time.now, :order => [:expected_at])
+  end
+
+  def outdated_milestones
+    milestones.all(:expected_at.lt => Time.now, :order => [:expected_at.desc])
+  end
+
+  def upcoming_milestones
+    milestones.all(:expected_at.gt => Time.now, :order => [:expected_at])
+  end
+
 end

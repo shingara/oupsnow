@@ -1,0 +1,14 @@
+%h3= link_to milestone.name, resource(@project, milestone)
+%span= textilized milestone.description
+%ul.milestone-information
+  %li
+    %span= milestone.percent_complete.to_i
+    %span % completed
+  %li
+    %span= milestone.ticket_open_count
+    %span open issues
+  - if milestone.expected_at
+    %li.last
+      %span= milestone.expected_at
+=partial :pbar, :milestone => milestone
+.clear

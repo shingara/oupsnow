@@ -1,24 +1,41 @@
+- if admin? @project
+  .secondary-navigation
+    %ul
+      %li.first= link_to('New milestone',resource(@project, :milestones, :new))
+    .clear
+
 #block-lists.block
   .content
     .inner
       %ul#milestones.list
-        - @milestones.each do |milestone|
-          %li.milestone
-            %h3= link_to milestone.name, resource(@project, milestone)
-            %span= textilized milestone.description
-            %ul.milestone-information
-              %li
-                %span= milestone.percent_complete.to_i
-                %span % completed
-              %li
-                %span= milestone.ticket_open_count
-                %span open issues
-              - if milestone.expected_at
-                %li.last
-                  %span= milestone.expected_at
-            =partial :pbar, :milestone => milestone
-            .clear
+        %li.milestone
+          =partial :milestone, :milestone => @project.current_milestone
 
-      - if admin? @project
-        %p
-          = link_to 'New milestone', resource(@project, :milestones, :new)
+      - if @project.upcoming_milestones.size > 1 # there are one milestone in current. So min count 1
+        %h3 Upcomming Milestones
+        
+        %ul#milestones.list
+          - @project.upcoming_milestones.each do |milestone|
+            - next if milestone == @project.current_milestone
+            %li.milestone
+              = partial :milestone, :milestone => milestone
+
+      - unless @project.outdated_milestones.empty?
+        %h3 Outdated Milestones
+
+        %table.table
+          %thead
+            %tr
+              %th Name
+              %th Due
+              %th Report
+          %tbody
+            - @project.outdated_milestones.each do |milestone|
+              %tr{:class => cycle('odd','even')}
+                %td= link_to milestone.name, resource(@project, milestone)
+                %td= milestone.expected_at
+                %td
+                  = milestone.percent_complete.to_i
+                  = "% done"
+                  %br
+                  = "( #{milestone.ticket_open_count} ticket still open )"
