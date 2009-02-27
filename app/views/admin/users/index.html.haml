@@ -1,17 +1,20 @@
-%h1
-  Users
+.content
+  %h2
+    Users
 
-%table
-  %thead
-    %tr
-      %th Login
-      %th Firstname
-      %th Lastname
-      %th Email
-  %tbody
-    - for user in @users
-      %tr
-        %td= link_to user.login, resource(:admin, user)
-        %td= user.firstname
-        %td= user.lastname
-        %td= user.email
+  .inner
+
+    %table.table
+      %thead
+        %tr
+          %th.first Login
+          %th Firstname
+          %th Lastname
+          %th.last Email
+      %tbody
+        - for user in @users
+          %tr{:class => cycle('odd', 'even')}
+            %td= link_to user.login, resource(:admin, user)
+            %td= user.firstname
+            %td= user.lastname
+            %td= user.email
