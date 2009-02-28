@@ -6,18 +6,21 @@ module Settings
   
     def index(project_id)
       @members = Member.all(:project_id => project_id)
+      @title = "Members"
       display @members
     end
   
     def show(id)
       @member = Member.get(id)
       raise NotFound unless @member
+      @title = "member #{@member.user.login}"
       display @member
     end
   
     def new
       only_provides :html
       @member = Member.new
+      @title = "new member"
       display @member
     end
   

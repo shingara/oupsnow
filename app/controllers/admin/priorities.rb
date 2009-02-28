@@ -7,12 +7,14 @@ module Admin
   
     def index
       @priorities = Priority.all
+      @title = "Administration : Priorities"
       display @priorities
     end
   
     def new
       only_provides :html
       @priority = Priority.new
+      @title = "Administration : new priority"
       display @priority
     end
   

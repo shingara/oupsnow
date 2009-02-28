@@ -9,6 +9,7 @@ class TicketUpdates < Application
     only_provides :html
     @ticket_update = TicketUpdate.get(id)
     raise NotFound unless @ticket_update
+    @title = "edit update ticket #{@ticket.title}"
     display @ticket_update
   end
 

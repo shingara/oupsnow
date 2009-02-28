@@ -15,18 +15,21 @@ class Tickets < Application
                                :per_page => 20)
     milestone_part(@project.id)
     tag_cloud_part(@project.id)
+    @title = "Tickets"
     display @tickets
   end
 
   def show(project_id, ticket_permalink)
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
+    @title = "ticket #{@ticket.title}"
     display @ticket
   end
 
   def new(project_id)
     only_provides :html
     @ticket = Ticket.new(:project_id => project_id)
+    @title = "new ticket"
     display @ticket
   end
 
@@ -34,6 +37,7 @@ class Tickets < Application
     only_provides :html
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
+    @title = "Edit ticket description #{@ticket.title}"
     display @ticket
   end
 

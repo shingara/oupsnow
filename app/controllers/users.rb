@@ -9,12 +9,14 @@ class Users < Application
   def new
     only_provides :html
     @user = User.new
+    @title = "New user"
     display @user
   end
 
   def edit(id)
     only_provides :html
     @user = session.user
+    @title = "edit my profile"
     display @user
   end
 

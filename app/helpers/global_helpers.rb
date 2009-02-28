@@ -3,7 +3,14 @@ module Merb
 
     def title_project
       ret = "Oupsnow" 
-      ret += " : #{@project.name}" if @project && @project.name == ""
+      ret += " : #{@project.name}" if @project && !@project.name.blank?
+      ret
+    end
+
+    def title_header
+      ret = "Oupsnow"
+      ret += " - #{@project.name}" if @project && !@project.name.blank?
+      ret += " : #{@title}" if @title
       ret
     end
 

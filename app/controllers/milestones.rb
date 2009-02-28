@@ -8,18 +8,21 @@ class Milestones < Application
   def index
     @milestones = Milestone.all(:project_id => @project.id, 
                                 :order => [:expected_at])
+    @title = "Milestones"
     display @milestones
   end
 
   def show(id)
     @milestone = Milestone.get(id)
     raise NotFound unless @milestone
+    @title = "Milestone #{@milestone.name}"
     display @milestone
   end
 
   def new
     only_provides :html
     @milestone = Milestone.new(:project => @project)
+    @title = "new milestone"
     display @milestone
   end
 
@@ -27,6 +30,7 @@ class Milestones < Application
     only_provides :html
     @milestone = Milestone.get(id)
     raise NotFound unless @milestone
+    @title = "edit milestone #{@milestone.name}"
     display @milestone
   end
 

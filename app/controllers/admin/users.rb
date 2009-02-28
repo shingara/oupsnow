@@ -7,12 +7,14 @@ module Admin
   
     def index
       @users = User.all
+      @title = "Administration : Users"
       display @users
     end
   
     def show(id)
       @user = User.get(id)
       raise NotFound unless @user
+      @title = "Administration : user #{@user.login}"
       display @user
     end
   

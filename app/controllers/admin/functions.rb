@@ -7,25 +7,21 @@ module Admin
   
     def index
       @functions = Function.all
+      @title = "Administration : Functions"
       display @functions
     end
   
     def show(id)
       @function = Function.get(id)
       raise NotFound unless @function
+      @title = "Administration : Function #{@function.name}"
       display @function
     end
   
     def new
       only_provides :html
       @function = Function.new
-      display @function
-    end
-  
-    def edit(id)
-      only_provides :html
-      @function = Function.get(id)
-      raise NotFound unless @function
+      @title = "Administration : new function"
       display @function
     end
   
@@ -39,16 +35,6 @@ module Admin
       end
     end
   
-    def update(id, function)
-      @function = Function.get(id)
-      raise NotFound unless @function
-      if @function.update_attributes(function)
-         redirect resource(:admin, @function)
-      else
-        display @function, :edit
-      end
-    end
-
     def update_all(project_admin)
       project_admin.each do |k, v|
         f = Function.get(k)

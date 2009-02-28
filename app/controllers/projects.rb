@@ -23,12 +23,14 @@ class Projects < Application
     raise NotFound unless @project
     milestone_part(@project.id)
     tag_cloud_part(@project.id)
+    @title = "overview"
     display @events
   end
 
   def new
     only_provides :html
     @project = Project.new
+    @title = "New Project"
     display @project
   end
 
@@ -36,6 +38,7 @@ class Projects < Application
     only_provides :html
     @project = Project.get(id)
     raise NotFound unless @project
+    @title = "edit #{@project.name}"
     display @project
   end
 
