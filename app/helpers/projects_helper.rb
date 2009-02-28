@@ -1,6 +1,8 @@
 module Merb
   module ProjectsHelper
 
+    include Settings::GlobalHelper
+
     def sub_menu
       partial 'settings/sub_menu' if @request.params[:action] == "edit"
     end
