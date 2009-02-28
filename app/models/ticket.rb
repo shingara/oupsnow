@@ -96,6 +96,22 @@ class Ticket
     end
   end
 
+  def self.paginate_by_search(q,  conditions)
+    unless q.empty?
+      search_list = q.split(' ')
+      search_list.each {|search_pattern|
+        if search_pattern.include?(':')
+          what, how = search_pattern.split(':')
+          conditions[what] ||= []
+          conditions[what] << how
+        else
+          conditions[:conditions] = ["(title LIKE ? OR description LIKE ?)", "%#{search_pattern}%", "%#{search_pattern}%"]
+        end
+      }
+    end
+    Ticket.paginate(conditions)
+  end
+
   def list_tag(string)
     string.to_s.split(',').map { |name| 
       name.gsub(/[^\w_-]/i, '').strip 

@@ -8,8 +8,8 @@ class Tickets < Application
 
   params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id, :priority_id, :milestone_id]
 
-  def index(sort_by='id', order='asc')
-    @tickets = Ticket.paginate(:project_id => @project.id,
+  def index(sort_by='id', order='asc', q='')
+    @tickets = Ticket.paginate_by_search(q, :project_id => @project.id,
                                :order => [sort_by.to_sym.send(order)],
                                :page => params[:page],
                                :per_page => 20)
