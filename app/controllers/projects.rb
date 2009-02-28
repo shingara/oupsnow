@@ -22,7 +22,7 @@ class Projects < Application
                                        :per_page => 20)
     raise NotFound unless @project
     milestone_part(@project.id)
-    tag_cloud_part(@project.id)
+    tag_cloud_part('Projects', @project.id)
     @title = "overview"
     display @events
   end

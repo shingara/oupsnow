@@ -14,7 +14,7 @@ class Tickets < Application
                                :page => params[:page],
                                :per_page => 20)
     milestone_part(@project.id)
-    tag_cloud_part(@project.id)
+    tag_cloud_part('Projects', @project.id)
     @title = "Tickets"
     display @tickets
   end
@@ -23,6 +23,7 @@ class Tickets < Application
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     @title = "ticket #{@ticket.title}"
+    tag_cloud_part('Tickets', @ticket.id)
     display @ticket
   end
 

@@ -110,6 +110,13 @@ class Ticket
     Ticket.first(:num => permalink, :project_id => project_id)
   end
 
+  # Return a Hash of tagging object
+  # The key is the id number of tag and the value is an Array of Tagging
+  # object. count the number of object and you know how Tag used is on a Tag
+  def tag_counts
+    Tagging.all(:taggable_id => id, :taggable_type => 'Ticket').group_by(&:tag_id)
+  end
+
   private
 
   def define_num_ticket
@@ -129,5 +136,6 @@ class Ticket
       true
     end
   end
+
 
 end

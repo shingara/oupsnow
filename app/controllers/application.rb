@@ -22,9 +22,12 @@ class Application < Merb::Controller
     throw_content :sidebar, part(MilestonePart => :index, :project_id => project_id)
   end
 
-  # Attach to sidebar the part Tags with project id define in argument
-  def tag_cloud_part(project_id)
-    throw_content :sidebar, catch_content(:sidebar) + part(TagsPart => :index, :project_id => @project.id)
+  # Attach to sidebar the part Tags
+  # There are several type to content tags. You need define it
+  # Type available :
+  #  * Projects
+  def tag_cloud_part(type, type_id)
+    throw_content :sidebar, catch_content(:sidebar) + part(TagsPart => :index, :taggable => {:type => type, :type_id => type_id})
   end
 
 end

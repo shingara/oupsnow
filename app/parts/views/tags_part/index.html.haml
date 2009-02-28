@@ -1,7 +1,7 @@
 .block
   %h3 Tags
-  - unless @project.ticket_tag_counts.empty?
+  - unless @tags.empty?
     .content
-      - tag_cloud @project.ticket_tag_counts, %w(css1 css2 css3 css4) do |tag, css_class|
+      - tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class|
         %span{:class => css_class}= tag.name
 

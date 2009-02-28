@@ -17,11 +17,6 @@
 
         .edit= link_to 'Edit',  resource(@project, @ticket, :edit_main_description) if admin?(@project)
 
-      #ticket_side
-        %h3 Tags
-        - @ticket.tags.each do |tag|
-          %span= tag.name
-
       - unless @ticket.ticket_updates.empty?
         %h3 Comments and changes to this ticket
 
