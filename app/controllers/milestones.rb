@@ -11,6 +11,7 @@ class Milestones < Application
     @no_date_milestones = @project.no_date_milestones
     @outdated_milestones = @project.outdated_milestones
     @title = "Milestones"
+    tag_cloud_part('Projects', @project.id)
     display @milestones
   end
 
