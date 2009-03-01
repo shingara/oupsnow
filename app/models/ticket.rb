@@ -121,18 +121,18 @@ class Ticket
       else
         conditions[:conditions][0] = conditions[:conditions][0].join(' AND ')
       end
+
+      new_tag.each {|t|
+        conditions[:id] ||= []
+        tickets_with_tag = Ticket.all('tag_taggings.tag.name' => t).map(&:id)
+        if tickets_with_tag.empty?
+          return WillPaginate::Collection.new(1,10, 0) # Emulate a empty result because no result with a tag
+        else
+          conditions[:id] += tickets_with_tag
+        end
+      }
+
     end
-
-    new_tag.each {|t|
-      conditions[:id] ||= []
-      tickets_with_tag = Ticket.all('tag_taggings.tag.name' => t).map(&:id)
-      if tickets_with_tag.empty?
-        return WillPaginate::Collection.new(1,10, 0) # Emulate a empty result because no result with a tag
-      else
-        conditions[:id] += tickets_with_tag
-      end
-    }
-
     Ticket.paginate(conditions)
   end
 
