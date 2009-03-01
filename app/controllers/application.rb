@@ -26,8 +26,8 @@ class Application < Merb::Controller
   # There are several type to content tags. You need define it
   # Type available :
   #  * Projects
-  def tag_cloud_part(type, type_id)
-    throw_content :sidebar, catch_content(:sidebar) + part(TagsPart => :index, :taggable => {:type => type, :type_id => type_id})
+  def tag_cloud_part(type, type_id, project_id = nil)
+    throw_content :sidebar, catch_content(:sidebar) + part(TagsPart => :index, :taggable => {:type => type, :type_id => type_id, :project_id => project_id})
   end
 
 end

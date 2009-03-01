@@ -23,7 +23,7 @@ class Tickets < Application
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     @title = "ticket #{@ticket.title}"
-    tag_cloud_part('Tickets', @ticket.id)
+    tag_cloud_part('Tickets', @ticket.id, @project.id)
     display @ticket
   end
 
