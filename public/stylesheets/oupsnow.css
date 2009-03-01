@@ -14,6 +14,16 @@
   margin-top: 5px;
   margin-left: 20px; }
 
+#ticket_search.block {
+  background: #81B953;
+  padding-top: 0;
+  margin-bottom: 0px; }
+  #ticket_search.block form {
+    text-align: right;
+    padding: 10px; }
+    #ticket_search.block form label {
+      padding-right: 5px; }
+
 #ticket {
   background: #FFFFDD none repeat scroll 0 0;
   border: 1px outset #999966;

@@ -1,6 +1,10 @@
 #block-tables.block
+
+  #ticket_search.block
+    = form :action => resource(@project, :tickets), :id => 'ticket_search', :method => 'GET' do
+      = text_field :q, :label => 'Find tickets :' 
+
   .content
-    %h2
     .inner
       %table.table
         %thead
