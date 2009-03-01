@@ -99,15 +99,24 @@ class Ticket
   def self.paginate_by_search(q,  conditions)
     unless q.empty?
       search_list = q.split(' ')
+      conditions[:conditions] ||= [[]]
       search_list.each {|search_pattern|
         if search_pattern.include?(':')
           what, how = search_pattern.split(':')
-          conditions[what] ||= []
-          conditions[what] << how
+          if what = 'tag'
+            conditions['tag_taggings.tag.name'] ||= []
+            conditions['tag_taggings.tag.name'] << how
+          end
         else
-          conditions[:conditions] = ["(title LIKE ? OR description LIKE ?)", "%#{search_pattern}%", "%#{search_pattern}%"]
+          conditions[:conditions][0] = conditions[:conditions][0] + [" (title LIKE ? OR description LIKE ?) "]
+          conditions[:conditions] += ["%#{search_pattern}%", "%#{search_pattern}%"]
         end
       }
+      if conditions[:conditions].size <= 1
+        conditions.delete(:conditions)
+      else
+        conditions[:conditions][0] = conditions[:conditions][0].join(' AND ')
+      end
     end
     Ticket.paginate(conditions)
   end
