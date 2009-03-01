@@ -71,6 +71,10 @@ class Project
   def upcoming_milestones
     milestones.all(:expected_at.gt => Time.now, :order => [:expected_at])
   end
+  
+  def no_date_milestones
+    milestones.all(:expected_at => nil)
+  end
 
   # Return a Hash of tagging object
   # The key is the id number of tag and the value is an Array of Tagging

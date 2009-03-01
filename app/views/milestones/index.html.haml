@@ -7,21 +7,25 @@
 #block-lists.block
   .content
     .inner
-      - if @project.current_milestone
+      - if @current_milestone
         %ul#milestones.list
           %li.milestone
-            =partial :milestone, :milestone => @project.current_milestone
+            =partial :milestone, :milestone => @current_milestone
 
-      - if @project.upcoming_milestones.size > 1 # there are one milestone in current. So min count 1
+      - if @upcoming_milestones.size > 1 || @no_date_milestones.size > 1 # there are one milestone in current. So min count 1
         %h3 Upcomming Milestones
         
         %ul#milestones.list
-          - @project.upcoming_milestones.each do |milestone|
-            - next if milestone == @project.current_milestone
+          - @upcoming_milestones.each do |milestone|
+            - next if milestone == @current_milestone
+            %li.milestone
+              = partial :milestone, :milestone => milestone
+          - @no_date_milestones.each do |milestone|
+            - next if milestone == @current_milestone
             %li.milestone
               = partial :milestone, :milestone => milestone
 
-      - unless @project.outdated_milestones.empty?
+      - unless @outdated_milestones.empty?
         %h3 Outdated Milestones
 
         %table.table
@@ -31,7 +35,7 @@
               %th Due
               %th Report
           %tbody
-            - @project.outdated_milestones.each do |milestone|
+            - @outdated_milestones.each do |milestone|
               %tr{:class => cycle('odd','even')}
                 %td= link_to milestone.name, resource(@project, milestone)
                 %td= milestone.expected_at

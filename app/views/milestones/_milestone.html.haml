@@ -4,7 +4,7 @@
   %li
     %span= milestone.percent_complete.to_i
     %span % completed
-  %li
+  %li{:class => ('last' unless milestone.expected_at)}
     %span= milestone.ticket_open_count
     %span open issues
   - if milestone.expected_at

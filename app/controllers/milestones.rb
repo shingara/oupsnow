@@ -6,8 +6,10 @@ class Milestones < Application
   before :admin_project, :exclude => [:index, :show]
 
   def index
-    @milestones = Milestone.all(:project_id => @project.id, 
-                                :order => [:expected_at])
+    @current_milestone = @project.current_milestone
+    @upcoming_milestones = @project.upcoming_milestones
+    @no_date_milestones = @project.no_date_milestones
+    @outdated_milestones = @project.outdated_milestones
     @title = "Milestones"
     display @milestones
   end
@@ -35,6 +37,9 @@ class Milestones < Application
   end
 
   def create(milestone)
+    if milestone[:expected_at].empty?
+      milestone.delete(:expected_at)
+    end
     @milestone = Milestone.new(milestone)
     @milestone.project = @project
     if @milestone.save
