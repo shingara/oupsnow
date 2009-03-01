@@ -19,6 +19,7 @@ class Milestones < Application
     @milestone = Milestone.get(id)
     raise NotFound unless @milestone
     @title = "Milestone #{@milestone.name}"
+    tag_cloud_part('Milestones', @milestone.id, @project.id)
     display @milestone
   end
 

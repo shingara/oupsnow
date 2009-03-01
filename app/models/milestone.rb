@@ -42,5 +42,9 @@ class Milestone
     tickets.count(:state_id => State.closed.map{|s| s.id})
   end
 
+  def tag_counts
+    Tagging.all(:taggable_id => tickets.map(&:id), :taggable_type => 'Ticket').group_by(&:tag_id)
+  end
+
 
 end
