@@ -100,12 +100,16 @@ class Ticket
     unless q.empty?
       search_list = q.split(' ')
       conditions[:conditions] ||= [[]]
+      new_tag ||= []
       search_list.each {|search_pattern|
         if search_pattern.include?(':')
           what, how = search_pattern.split(':')
-          if what = 'tag'
-            conditions['tag_taggings.tag.name'] ||= []
-            conditions['tag_taggings.tag.name'] << how
+          if what == 'tagged'
+            if conditions['tag_taggings.tag.name']
+              new_tag << how
+            else
+              conditions['tag_taggings.tag.name'] = how
+            end
           end
         else
           conditions[:conditions][0] = conditions[:conditions][0] + [" (title LIKE ? OR description LIKE ?) "]
@@ -118,6 +122,17 @@ class Ticket
         conditions[:conditions][0] = conditions[:conditions][0].join(' AND ')
       end
     end
+
+    new_tag.each {|t|
+      conditions[:id] ||= []
+      tickets_with_tag = Ticket.all('tag_taggings.tag.name' => t).map(&:id)
+      if tickets_with_tag.empty?
+        return WillPaginate::Collection.new(1,10, 0) # Emulate a empty result because no result with a tag
+      else
+        conditions[:id] += tickets_with_tag
+      end
+    }
+
     Ticket.paginate(conditions)
   end
 
