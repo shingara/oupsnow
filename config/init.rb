@@ -31,3 +31,5 @@ def load_from_source(src)
   $:.unshift File.join(Merb.root, "src/#{src}/lib")
   require "src/#{src}/init.rb"
 end
+
+require 'lib/oupsnow/version'
