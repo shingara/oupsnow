@@ -1,8 +1,14 @@
-%h1 Create a new milestone
+#block-forms.block
+  .content
+    %h2 Create a new milestone
 
-= error_messages_for @milestone
+    .inner
+      .flash
+        = error_messages_for @milestone
 
-= form_for(@milestone, :action => resource(@project, :milestones) ) do
-  = partial :form
-  %p
-    = submit "Create"
+      = form_for(@milestone, :action => resource(@project, :milestones), :class => 'form') do
+        = partial :form
+        %div{:class => 'group navform'}
+          = submit "Create", :class => 'button'
+          or
+          = link_to 'Cancel', resource(@project, :milestones)

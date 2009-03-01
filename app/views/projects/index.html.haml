@@ -1,3 +1,9 @@
+- if global_admin?
+  .secondary-navigation
+    %ul
+      %li.first= link_to('New project',resource(:projects, :new))
+    .clear
+
 #block-text.block
   .content
     .inner
@@ -9,5 +15,3 @@
           %span= link_to project.name, resource(project, :overview)
 
         %p= textilized project.description
-
-      = link_to 'New', url(:new_project) if global_admin?

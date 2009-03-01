@@ -1,3 +1,11 @@
-%p= text_field :name, :label => 'Name'
-%p= text_field :expected_at, :label => 'Excepted at ?'
-%p= text_area :description, :lable => 'Description'
+.group
+  %label.label{:for => 'milestone[name]'} Name
+  = text_field :name, :class => 'text_field'
+
+.group
+  %label.label{:for => 'milestone[expected_at]'} Excepted at ?
+  = text_field :expected_at, :class => 'text_field'
+
+.group
+  %label.label{:for => 'milestone[description]'} Description
+  = text_area :description, :class => 'text_area'
