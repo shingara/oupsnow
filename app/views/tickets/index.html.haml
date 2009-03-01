@@ -9,8 +9,8 @@
       %table.table
         %thead
           %tr
-            %th.first= link_to 'id', resource(@project, :tickets, sort_by('id'))
-            %th= link_to 'name', resource(@project, :tickets, sort_by('title'))
+            %th.first= link_to 'id', resource(@project, :tickets, sort_by('id').merge(:q => params[:q]))
+            %th= link_to 'name', resource(@project, :tickets, sort_by('title').merge(:q => params[:q]))
             %th responsabile
             %th status
             %th priority
