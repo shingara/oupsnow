@@ -17,6 +17,16 @@ module Admin
       @title = "Administration : new state"
       display @state
     end
+
+    def create(state)
+      @state = State.new(state)
+      if @state.save
+        redirect resource(:admin, :states), :message => {:notice => 'State was successfully created'}
+      else
+        message[:error] = "State failed to be created"
+        render :new
+      end
+    end
   
     def update_all(closed)
       closed.each do |k, v|

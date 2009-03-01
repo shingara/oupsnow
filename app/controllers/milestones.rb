@@ -39,7 +39,7 @@ class Milestones < Application
   end
 
   def create(milestone)
-    if milestone[:expected_at].empty?
+    if milestone[:expected_at] && milestone[:expected_at].empty?
       milestone.delete(:expected_at)
     end
     @milestone = Milestone.new(milestone)
