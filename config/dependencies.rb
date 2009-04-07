@@ -1,6 +1,6 @@
 # dependencies are generated using a strict version, don't forget to edit the dependency versions when upgrading.
-merb_gems_version = "1.0.8.1"
-dm_gems_version   = "0.9.9"
+merb_gems_version = "1.0.11"
+dm_gems_version   = "0.9.11"
 do_gems_version   = "0.9.11"
 
 # For more information about each component, please read http://wiki.merbivore.com/faqs/merb_components
@@ -34,4 +34,4 @@ dependency "dm-tags", dm_gems_version
 dependency "dm-constraints", dm_gems_version
 
 dependency "RedCloth", "3.0.4",  :require_as => 'redcloth'
-dependency "activesupport", "2.2.2"
+dependency "activesupport", "2.3.2"

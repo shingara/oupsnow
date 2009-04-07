@@ -17,11 +17,16 @@ describe Ticket do
     valid_ticket.should be_valid
   end
 
+  it 'should have good dm-sweatshop' do
+    Ticket.gen.should be_valid
+  end
+
   it 'should not be valid if no same project between ticket and milestone' do
     project = Project.gen!
     project_2 = Project.gen!
-    milestone = Milestone.gen(:project => project_2)
-    Ticket.gen(:project => project).should_not be_valid
+    milestone = Milestone.gen(:project_id => project_2.id)
+    Ticket.make(:project_id => project.id,
+                  :milestone_id => milestone.id).should_not be_valid
   end
 
   describe '#create' do

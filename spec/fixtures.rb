@@ -34,7 +34,7 @@ Project.fixture {{
 }}
 
 Member.fixture {{
-  :user_id => User.first.id,
+  :user_id => User.first ? User.gen.id : User.first.id,
   :project_id => (Project.first ? Project.gen.id : Project.first.id),
   :function_id => (Function.first ? Function.gen.id : Function.first.id),
 }}
@@ -43,6 +43,8 @@ Ticket.fixture {{
   :title => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
   :tag_list => (1..2).of { /\w+/.generate }.join(','),
+  :project_id => (Project.first ? Project.gen.id : Project.first.id),
+  :member_create_id => User.first ? User.gen.id : User.first.id,
 }}
 
 State.fixture {{
@@ -57,4 +59,12 @@ Milestone.fixture {{
   :name => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
   :expected_at => Time.now
+}}
+
+Event.fixture {{
+  :eventable_class => 'Ticket',
+  :eventable_id => (Ticket.first ? Ticket.gen.id : Ticket.first.id),
+  :event_type => :created,
+  :user_id => User.first ? User.gen.id : User.first.id,
+  :project_id => (Project.first ? Project.gen.id : Project.first.id)
 }}

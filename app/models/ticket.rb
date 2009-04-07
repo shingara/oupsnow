@@ -19,10 +19,11 @@ class Ticket
   belongs_to :priority
   belongs_to :milestone
 
-  has n, :ticket_updates
+  has n, :ticket_updates, :constraint => :destroy
   before :destroy, :delete_ticket_updates
 
   has_tags
+  has n, :tag_taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :tag_context => "tags", :constraint => :destroy
   before :destroy, :destroy_taggings
   property :frozen_tag_list, String, :length => 255
 

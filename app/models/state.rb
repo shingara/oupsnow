@@ -6,7 +6,7 @@ class State
   property :name, String, :nullable => false, :unique => true
   property :closed, Boolean, :default => false
 
-  has n, :tickets
+  has n, :tickets, :constraint => :destroy
 
   before :destroy, :delete_tickets
 

@@ -6,12 +6,12 @@ class Project
   property :name, String, :nullable => false, :unique => true
   property :description, Text
 
-  has n, :tickets
+  has n, :tickets, :constraint => :destroy
   has n, :members 
-  has n, :users, :through => :members
-  has n, :functions, :through => :members
-  has n, :events
-  has n, :milestones
+  has n, :users, :through => :members, :constraint => :destroy
+  has n, :functions, :through => :members, :constraint => :destroy
+  has n, :events, :constraint => :destroy
+  has n, :milestones, :constraint => :destroy
 
   before :destroy, :destroy_tickets
   before :destroy, :destroy_members

@@ -13,7 +13,6 @@ describe "resource(:milestones)" do
     end
 
     it "contains a list of milestones" do
-      pending
       @response.should have_xpath("//ul")
     end
     
@@ -27,7 +26,6 @@ describe "resource(:milestones)" do
     end
     
     it "has a list of milestones" do
-      pending
       @response.should have_xpath("//ul/li")
     end
   end

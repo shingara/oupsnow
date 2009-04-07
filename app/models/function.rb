@@ -6,8 +6,8 @@ class Function
   property :project_admin, Boolean
 
   has n, :members
-  has n, :users, :through => :members
-  has n, :projects, :through => :members
+  has n, :users, :through => :members, :constraint => :destroy
+  has n, :projects, :through => :members, :constraint => :destroy
 
   before :destroy, :delete_all_members
 

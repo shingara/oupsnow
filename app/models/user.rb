@@ -21,13 +21,13 @@ class User
   property :global_admin, Boolean
 
   has n, :members
-  has n, :functions, :through => :members
-  has n, :projects, :through => :members
+  has n, :functions, :through => :members, :constraint => :destroy
+  has n, :projects, :through => :members, :constraint => :destroy
 
-  has n, :created_tickets, :class_name => "Ticket", :child_key => [:member_create_id]
-  has n, :assigned_tickets, :class_name => "Ticket", :child_key => [:member_assigned_id]
-  has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id]
-  has n, :events
+  has n, :created_tickets, :class_name => "Ticket", :child_key => [:member_create_id], :constraint => :destroy
+  has n, :assigned_tickets, :class_name => "Ticket", :child_key => [:member_assigned_id], :constraint => :destroy
+  has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id], :constraint => :destroy
+  has n, :events, :constraint => :destroy
 
   before :destroy, :delete_member
   before :destroy, :delete_created_tickets

@@ -13,7 +13,6 @@ describe "resource(:admin,:states)" do
     end
 
     it "contains a list of states" do
-      pending
       @response.should have_xpath("//ul")
     end
     
@@ -26,7 +25,6 @@ describe "resource(:admin,:states)" do
     end
     
     it "has a list of states" do
-      pending
       @response.should have_xpath("//ul/li")
     end
   end
