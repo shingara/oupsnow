@@ -11,7 +11,7 @@
           %tr
             %th.first= link_to 'id', resource(@project, :tickets, sort_by('id').merge(:q => params[:q]))
             %th= link_to 'name', resource(@project, :tickets, sort_by('title').merge(:q => params[:q]))
-            %th responsabile
+            %th responsible
             %th status
             %th priority
             %th.last milestone

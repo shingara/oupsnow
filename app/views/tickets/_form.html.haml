@@ -9,7 +9,7 @@
 
   %div{:class => 'column right'}
     .group
-      %label.label{:for => 'ticket[member_assigned_to]'} Who's is responsabile ?
+      %label.label{:for => 'ticket[member_assigned_to]'} Who's is responsible ?
       = select :member_assigned_id, :collection => Member.all(:project_id => @project.id).map{|m| m.user},:text_method => 'login', :value_method => 'id', :selected => @ticket.member_assigned_id.to_s, :prompt => '-- None --'
 
     .group
