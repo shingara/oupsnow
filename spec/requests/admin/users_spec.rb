@@ -27,6 +27,7 @@ describe "resource(@user)" do
     it "should not delete user" do
       lambda do
         @response = request(resource(:admin, User.first), :method => "DELETE")
+        User.first.deleted_at.should_not nil
       end.should_not change(User, :count)
     end
   end
