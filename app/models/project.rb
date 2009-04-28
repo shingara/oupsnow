@@ -66,19 +66,19 @@ class Project
 
   def outdated_milestones
     milestones.all(:expected_at.lt => Time.now,
-                   :id.not => current_milestone.id,
+                   :id.not => current_milestone ? current_milestone.id : 0,
                    :order => [:expected_at.desc])
   end
 
   def upcoming_milestones
     milestones.all(:expected_at.gt => Time.now, 
-                   :id.not => current_milestone.id,
+                   :id.not => current_milestone ? current_milestone.id : 0,
                    :order => [:expected_at])
   end
   
   def no_date_milestones
     milestones.all(:expected_at => nil,
-                   :id.not => current_milestone.id)
+                   :id.not => current_milestone ? current_milestone.id : 0)
   end
 
   # Return a Hash of tagging object
