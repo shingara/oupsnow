@@ -12,14 +12,17 @@
           %li.milestone
             =partial :milestone, :milestone => @current_milestone
 
-      - if @upcoming_milestones.size > 1 || @no_date_milestones.size > 1 # there are one milestone in current. So min count 1
+      - unless @upcoming_milestones.empty?
         %h3 Upcomming Milestones
-        
         %ul#milestones.list
           - @upcoming_milestones.each do |milestone|
-            - next if milestone == @current_milestone
             %li.milestone
               = partial :milestone, :milestone => milestone
+        
+
+      - unless @no_date_milestones.empty?
+        %h3 No date milestones
+        %ul#milestones.list
           - @no_date_milestones.each do |milestone|
             - next if milestone == @current_milestone
             %li.milestone
