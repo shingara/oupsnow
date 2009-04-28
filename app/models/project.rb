@@ -13,35 +13,12 @@ class Project
   has n, :events, :constraint => :destroy
   has n, :milestones, :constraint => :destroy
 
-  before :destroy, :destroy_tickets
-  before :destroy, :destroy_members
-  before :destroy, :destroy_events
-  before :destroy, :destroy_milestones
-
   validates_with_method :have_one_admin
   validates_with_method :have_member
 
   def new_num_ticket
     max_num_ticket = tickets.max(:num)
     (max_num_ticket || 0).succ
-  end
-
-  # Destroy all ticket depend on this project
-  # non needing when cascading come
-  def destroy_tickets
-    tickets.each{|t| t.destroy}
-  end
-
-  def destroy_events
-    events.each{|e| e.destroy}
-  end
-
-  def destroy_members
-    members.each{|m| m.destroy}
-  end
-
-  def destroy_milestones
-    milestones.each{|m| m.destroy}
   end
 
   def have_one_admin

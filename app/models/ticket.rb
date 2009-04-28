@@ -20,11 +20,10 @@ class Ticket
   belongs_to :milestone
 
   has n, :ticket_updates, :constraint => :destroy
-  before :destroy, :delete_ticket_updates
 
   has_tags
   has n, :tag_taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :tag_context => "tags", :constraint => :destroy
-  before :destroy, :destroy_taggings
+  has n, :taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :constraint => :destroy
   property :frozen_tag_list, String, :length => 255
 
   validates_with_method :users_in_members
@@ -44,14 +43,6 @@ class Ticket
                  :user_id => member_create_id,
                  :event_type => :created,
                  :project_id => project_id)
-  end
-
-  def delete_ticket_updates
-    ticket_updates.all.each {|tu| tu.destroy}
-  end
-
-  def destroy_taggings
-    tag_taggings.all.each {|t| t.destroy}
   end
 
   def users_in_members

@@ -16,7 +16,7 @@ describe "resource(:users)" do
 
   describe "a successful POST" do
     before(:each) do
-      User.all.each {|u| u.destroy}
+      User.all.destroy!
       @response = create_user_by_request
     end
     

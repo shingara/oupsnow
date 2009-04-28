@@ -8,12 +8,6 @@ class State
 
   has n, :tickets, :constraint => :destroy
 
-  before :destroy, :delete_tickets
-
-  def delete_tickets
-    tickets.each {|t| t.destroy}
-  end
-
   def self.closed
     all(:closed => true)
   end

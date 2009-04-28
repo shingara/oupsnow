@@ -19,6 +19,7 @@ class User
   property :firstname, String
   property :lastname, String
   property :global_admin, Boolean
+  property :deleted_at, DateTime
 
   has n, :members
   has n, :functions, :through => :members, :constraint => :destroy
@@ -29,32 +30,6 @@ class User
   has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id], :constraint => :destroy
   has n, :events, :constraint => :destroy
 
-  before :destroy, :delete_member
-  before :destroy, :delete_created_tickets
-  before :destroy, :delete_assigned_tickets
-  before :destroy, :delete_ticket_updates
-  before :destroy, :delete_events
-
-  def delete_member
-    members.all.each{|m| m.destroy}
-  end
-
-  def delete_created_tickets
-    created_tickets.all.each {|t| t.destroy}
-  end
-
-  def delete_assigned_tickets
-    assigned_tickets.all.each {|t| t.destroy}
-  end
-
-  def delete_ticket_updates
-    ticket_updates.all.each {|t| t.destroy}
-  end
-
-  def delete_events
-    events.all.each{|e| e.destroy}
-  end
-
   def admin?(project)
     m = members.first(:project_id => project.id)
     m && m.project_admin?
@@ -62,6 +37,11 @@ class User
 
   def self.not_in_project(project)
     all(:id.not => project.users.map{|u| u.id})
+  end
+
+  def destroy
+    deleted_at = Time.now
+    save
   end
 
 end
