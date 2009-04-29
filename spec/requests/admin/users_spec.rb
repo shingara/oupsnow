@@ -47,3 +47,14 @@ describe "resource(@user)" do
   end
   
 end
+
+describe "update_all" do
+  before(:each) do
+    login_admin
+    @response = request(url(:update_all_admin_users), :method => 'PUT', :params => {:user_admin => {User.first.id => 1}})
+  end
+
+  it 'should redirect' do
+    @response.should redirect_to(resource(:admin, :users))
+  end
+end

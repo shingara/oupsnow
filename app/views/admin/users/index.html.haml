@@ -3,18 +3,28 @@
     Users
 
   .inner
+    .flash
+      =message
 
-    %table.table
-      %thead
-        %tr
-          %th.first Login
-          %th Firstname
-          %th Lastname
-          %th.last Email
-      %tbody
-        - for user in @users
-          %tr{:class => cycle('odd', 'even')}
-            %td= link_to user.login, resource(:admin, user)
-            %td= user.firstname
-            %td= user.lastname
-            %td= user.email
+    
+    = form :action => resource(:admin, :users, :update_all), :method => 'PUT', :class => 'form' do
+      %table.table
+        %thead
+          %tr
+            %th.first Login
+            %th Firstname
+            %th Lastname
+            %th Email
+            %th.last Admin
+        %tbody
+          - for user in @users
+            %tr{:class => cycle('odd', 'even')}
+              %td= link_to user.login, resource(:admin, user)
+              %td= user.firstname
+              %td= user.lastname
+              %td= user.email
+              %td= check_box :name => "user_admin[#{user.id}]", :boolean => true, :checked => user.global_admin
+      .actions-bar
+        .actions
+          =submit "Update all users", :class=> 'button'
+        .clear

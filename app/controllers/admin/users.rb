@@ -27,6 +27,15 @@ module Admin
         raise InternalServerError
       end
     end
+
+    def update_all(user_admin)
+      user_admin.each do |k, v|
+        f = User.get(k)
+        f.global_admin = (v == "1".to_s)
+        f.save
+      end
+      redirect resource(:admin, :users), :message => 'All users updated'
+    end
   
   end # Users
 end # Admin

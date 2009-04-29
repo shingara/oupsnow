@@ -30,6 +30,8 @@ class User
   has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id], :constraint => :destroy
   has n, :events, :constraint => :destroy
 
+  validates_with_method :allways_one_global_admin
+
   def admin?(project)
     m = members.first(:project_id => project.id)
     m && m.project_admin?
@@ -42,6 +44,17 @@ class User
   def destroy
     deleted_at = Time.now
     save
+  end
+
+  private
+
+  def allways_one_global_admin
+    unless self.global_admin
+      if User.first(:id.not => self.id, :global_admin => true) == nil
+        return [false, 'You need one global admin']
+      end
+    end
+    return true
   end
 
 end
