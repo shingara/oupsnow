@@ -17,3 +17,5 @@ src/*
 .hg/*
 .svn/*
 config/database.yml
+bin
+gems
