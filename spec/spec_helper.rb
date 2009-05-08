@@ -18,9 +18,6 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::ViewHelper)
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
-  config.before(:all) do
-    create_default_data
-  end
 
   config.after(:each) do
     repository(:default) do
