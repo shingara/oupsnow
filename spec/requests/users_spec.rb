@@ -17,11 +17,12 @@ describe "resource(:users)" do
   describe "a successful POST" do
     before(:each) do
       User.all.destroy!
+      User.gen(:admin) # a admin user is needed in bootstrap
       @response = create_user_by_request
     end
     
     it "redirects to resource(:users)" do
-      @response.should redirect_to(resource(User.first, :edit), :message => {:notice => "user was successfully created"})
+      @response.should redirect_to(resource(User.first(:login => 'shingara'), :edit), :message => {:notice => "user was successfully created"})
     end
     
   end
