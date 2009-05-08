@@ -35,3 +35,5 @@ dependency "dm-constraints", dm_gems_version
 
 dependency "RedCloth", "3.0.4",  :require_as => 'redcloth'
 dependency "activesupport", "2.3.2"
+
+# if you want run spec you need install webrat gem
