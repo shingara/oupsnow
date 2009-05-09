@@ -136,6 +136,7 @@ Merb::Test.add_helpers do
 
   def login_admin
     create_default_admin
+    need_a_milestone
     request('/logout')
     request('/login', {:method => 'PUT',
             :params => {:login => 'admin', :password => 'tintinpouet'}})

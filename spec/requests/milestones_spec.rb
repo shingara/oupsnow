@@ -84,6 +84,7 @@ describe "resource(@milestone)" do
   
   describe "GET" do
     before(:each) do
+      need_a_milestone
       @response = request(resource(Project.first, Project.first.milestones.first))
     end
   
