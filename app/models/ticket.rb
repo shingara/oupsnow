@@ -32,6 +32,7 @@ class Ticket
   before :valid?, :define_num_ticket
   before :valid?, :define_state_new
 
+  after :destroy, :delete_event_related
 
   def open
     all(:state_id => State.first(:name.not => 'closed').id)
@@ -43,6 +44,13 @@ class Ticket
                  :user_id => member_create_id,
                  :event_type => :created,
                  :project_id => project_id)
+  end
+
+  def delete_event_related
+    Event.all(:eventable_class => self.class,
+              :eventable_id => self.id).each do |event|
+      event.destroy
+    end
   end
 
   def users_in_members
@@ -168,6 +176,5 @@ class Ticket
       true
     end
   end
-
 
 end

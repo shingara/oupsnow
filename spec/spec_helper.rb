@@ -110,7 +110,7 @@ Merb::Test.add_helpers do
     end
 
     if Project.first.tickets.empty?
-      Ticket.gen(:project_id => Project.first.id,
+      create_ticket(:project_id => Project.first.id,
                  :member_create_id => User.first.id)
     end
 
@@ -118,6 +118,11 @@ Merb::Test.add_helpers do
       Ticket.first.ticket_updates.create(:member_create_id => User.first.id,
                                         :description => 'a good update')
     end
+  end
+
+  def create_ticket(opts={})
+    ticket = Ticket.gen(opts)
+    ticket.write_create_event
   end
 
   def login

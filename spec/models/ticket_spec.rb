@@ -178,6 +178,38 @@ describe Ticket do
         @t.ticket_updates.should be_empty
       end
     end
+
+    describe 'destroy' do
+      before :each do
+        @ticket = Ticket.gen
+        @ticket.write_create_event
+        @ticket.generate_update({:title => 'new titlre'}, User.first)
+      end
+
+      it 'should destroy ticket' do
+        lambda do
+          @ticket.destroy
+        end.should change(Ticket, :count).by(-1)
+      end
+
+      it 'should destroy all Event about this ticket' do
+        lambda do
+          @ticket.destroy
+        end.should change(Event, :count).by(-1)
+      end
+
+      it 'should destroy all TicketUpdate about this ticket' do
+        lambda do
+          @ticket.destroy
+        end.should change(TicketUpdate, :count)
+      end
+
+      it 'should destroy all tagging about this ticket' do
+        lambda do
+          @ticket.destroy
+        end.should change(Tagging, :count)
+      end
+    end
     
   end
 
