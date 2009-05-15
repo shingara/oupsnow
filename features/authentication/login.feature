@@ -10,7 +10,8 @@ Feature: Login
     And I fill in "password" with "<password>"
     And I press "Log In"
     Then the login request should success
-    Then I should see an notice message
+    And I should see an notice message
+    And I should not see "Administration" 
 
     Examples:
       | mail           | password       |
