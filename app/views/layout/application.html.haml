@@ -32,6 +32,8 @@
                 %li{:class => tickets_new_current}= link_to 'Add new ticket', resource(@project, :tickets, :new)
               - if admin? @project
                 %li{:class => settings_current}= link_to 'Settings', url(:project_settings_members, @project)
+          - if message[:notice]
+            %p.notice= message[:notice]
           .clear
     #wrapper
       #main

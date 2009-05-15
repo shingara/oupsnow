@@ -2,37 +2,37 @@
 # http://github.com/brynary/webrat
 
 When /^I go to (.*)$/ do |path|
-  visit path
+  @response = visit path
 end
 
 When /^I press "(.*)"$/ do |button|
-  click_button(button)
+  @response = click_button(button)
 end
 
 When /^I follow "(.*)"$/ do |link|
-  click_link(link)
+  @response = click_link(link)
 end
 
 When /^I fill in "(.*)" with "(.*)"$/ do |field, value|
-  fill_in(field, :with => value) 
+  @response = fill_in(field, :with => value) 
 end
 
 When /^I select "(.*)" from "(.*)"$/ do |value, field|
-  select(value, :from => field) 
+  @response = select(value, :from => field) 
 end
 
 When /^I check "(.*)"$/ do |field|
-  check(field) 
+  @response = check(field) 
 end
 
 When /^I uncheck "(.*)"$/ do |field|
-  uncheck(field) 
+  @response = uncheck(field) 
 end
 
 When /^I choose "(.*)"$/ do |field|
-  choose(field)
+  @response = choose(field)
 end
 
 When /^I attach the file at "(.*)" to "(.*)" $/ do |path, field|
-  attach_file(field, path)
+  @response = attach_file(field, path)
 end

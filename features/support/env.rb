@@ -21,3 +21,4 @@ def Spec.run? ; true; end
 
 Merb.start_environment(:testing => true, :adapter => 'runner', :environment => ENV['MERB_ENV'] || 'test')
   
+require File.join(File.dirname(__FILE__), '../../spec/fixtures.rb')
