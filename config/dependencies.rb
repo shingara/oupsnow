@@ -38,4 +38,5 @@ dependency "activesupport", "2.3.2"
 
 # if you want run spec you need install webrat gem
 dependency "webrat", :require_as => nil
+dependency "cucumber", :require_as => nil 
 dependency "roman-merb_cucumber", :require_as => nil 
