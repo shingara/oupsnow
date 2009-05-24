@@ -18,6 +18,11 @@ module Merb
         active_or_not(@request.params[:controller] == 'projects' &&
                      @request.params[:action] == 'edit')
       end
+
+      def project_delete_active
+        active_or_not(@request.params[:controller] == 'projects' &&
+                     @request.params[:action] == 'delete')
+      end
   
     end
   end # Settings

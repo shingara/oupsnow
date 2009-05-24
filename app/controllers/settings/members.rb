@@ -41,6 +41,7 @@ module Settings
     def project_admin_authenticated
       @project = Project.get(params[:project_id])
       raise Unauthenticated unless session.user
+      return true if session.user.global_admin?
       member = @project.members.first(:user_id => session.user.id)
       raise Unauthenticated if member.nil?
       raise Unauthenticated unless member.project_admin?

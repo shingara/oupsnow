@@ -9,7 +9,7 @@ Feature: Login
     And I fill in "login" with "<mail>"
     And I fill in "password" with "<password>"
     And I press "Log In"
-    Then the login request should success
+    Then the request should be success
     And I should see an notice message
     And I should not see "Administration" 
 

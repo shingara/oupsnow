@@ -9,7 +9,7 @@ Feature: Login admin
     And I fill in "login" with "shingara"
     And I fill in "password" with "tintinpouet"
     And I press "Log In"
-    Then the login request should success
+    Then the request should be success
     And I should see an notice message
     And I should see "Administration" 
 

@@ -4,7 +4,7 @@ module Merb
     include Settings::GlobalHelper
 
     def sub_menu
-      partial 'settings/sub_menu' if @request.params[:action] == "edit"
+      partial 'settings/sub_menu' if @request.params[:action] == "edit" || @request.params[:action] == "delete"
     end
 
     def time_overview(date)

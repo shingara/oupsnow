@@ -63,11 +63,17 @@ class Projects < Application
     end
   end
 
+  def delete(id)
+    only_provides :html
+    @project = Project.get(id)
+    display @project
+  end
+
   def destroy(id)
     @project = Project.get(id)
     raise NotFound unless @project
     if @project.destroy
-      redirect resource(:projects)
+      redirect resource(:projects), :message => {:notice => "Project #{@project.name} is delete"}
     else
       raise InternalServerError
     end

@@ -50,7 +50,8 @@ module Merb
     def projects_current
       current_or_not(@request.params[:controller] == 'projects' &&
                     @request.params[:action] != 'overview' &&
-                    @request.params[:action] != 'edit')
+                    @request.params[:action] != 'edit' &&
+                    @request.params[:action] != 'delete')
     end
 
     def tickets_new_current
@@ -60,7 +61,7 @@ module Merb
 
     def settings_current
       current_or_not( @request.params[:controller] =~ /settings\/\S+/ ||
-                    (@request.params[:controller] == 'projects' && @request.params[:action] == 'edit'))
+                    (@request.params[:controller] == 'projects' && (@request.params[:action] == 'edit' || @request.params[:action] == 'delete')))
     end
 
     def textilized(text)
