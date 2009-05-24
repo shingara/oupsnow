@@ -46,21 +46,95 @@ describe "resource(:projects)" do
   end
 end
 
-describe "resource(@project)" do 
+describe "resource(@project) DELETE" do 
 
   describe 'with admin user' do
-    describe "a successful DELETE" do
-       before(:each) do
-         login_admin
-         @project = Project.gen!
-         @response = request(resource(@project))
-       end
-
-       it "should redirect to the index action" do
-         @response.should redirect_to(resource(@project, :overview))
-       end
-
+    before(:each) do
+      login_admin
+      @project = Project.gen!
+      @response = request(resource(@project, :delete))
     end
+
+    it "should redirect to the index action" do
+      @response.should be_successful
+    end
+
+  end
+
+  describe 'with user project admin' do
+    before(:each) do
+      user = login
+      @project = Project.gen!
+      @project.add_member(user, Function.admin)
+      @response = request(resource(@project, :delete))
+    end
+
+    it "should define like not authorized" do
+      @response.status.should == 401
+    end
+
+  end
+
+  describe 'with base user' do
+    before(:each) do
+      user = login
+      @project = Project.gen!
+      @project.add_member(user, function_not_admin)
+      @response = request(resource(@project, :delete))
+    end
+
+    it "should define like not authorized" do
+      @response.status.should == 401
+    end
+
+  end
+end
+
+describe "resource(@project) DESTROY" do 
+
+  describe 'with admin user' do
+    before(:each) do
+      login_admin
+      @project = Project.gen!
+      @response = request(resource(@project), :method => "DELETE")
+    end
+
+    it "should redirect to the index action" do
+      @response.should redirect_to(resource(:projects))
+    end
+
+    it 'should delete project' do
+      Project.get(@project.id).should be_nil
+    end
+
+  end
+
+  describe 'with user project admin' do
+    before(:each) do
+      user = login
+      @project = Project.gen!
+      @project.add_member(user, Function.admin)
+      @response = request(resource(@project), :method => "DELETE")
+    end
+
+    it "should define like not authorized" do
+      @response.status.should == 401
+    end
+
+  end
+
+  describe 'with base user' do
+    before(:each) do
+      user = login
+      @project = Project.gen!
+      @project.add_member(user, function_not_admin)
+      @response = request(resource(@project), :method => "DELETE")
+    end
+
+    it "should define like not authorized" do
+      @response.status.should == 401
+    end
+
   end
 end
 

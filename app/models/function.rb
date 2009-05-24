@@ -1,6 +1,8 @@
 class Function
   include DataMapper::Resource
 
+  ADMIN = 'Admin'
+
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
   property :project_admin, Boolean

@@ -132,11 +132,16 @@ Merb::Test.add_helpers do
             :params => { :login => 'shingara',
               :password => 'tintinpouet'}})
     u = User.first(:login => 'shingara')
+    # if user is admin of this project. He becomes not admin
     u.members(:function_id => Function.admin.id).each do |m|
-      m.function = Function.first(:name.not => Function::ADMIN)
+      m.function = function_not_admin
       m.save
     end
     u
+  end
+
+  def function_not_admin
+    Function.first(:name.not => Function::ADMIN)
   end
 
   def login_admin

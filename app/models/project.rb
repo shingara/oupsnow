@@ -37,6 +37,12 @@ class Project
     end
   end
 
+  #TODO: need spec about this function
+  def add_member(user, function)
+    members.build(:function_id => function.id,
+                 :user_id => user.id)
+  end
+
   def current_milestone
     milestones.first(:expected_at.gt => Time.now, :order => [:expected_at])
   end

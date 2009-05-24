@@ -21,5 +21,5 @@ Given /^I have a project "([^\"]*)"$/ do |name|
 end
 
 Then /^"([^\"]*)" "([^\"]*)" "([^\"]*)" doesn't exist$/ do |klass, attribute, value|
-    eval(klass).send(:first, {attribute.to_sym => value}).should be_nil
+    Object.const_get(klass).send(:first, {attribute.to_sym => value}).should be_nil
 end
