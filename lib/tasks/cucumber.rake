@@ -5,6 +5,14 @@ cucumber_options = lambda do |t|
   if File.exist? Merb.root / 'bin' / 'cucumber'
     t.binary = Merb.root / 'bin' / 'cucumber'
   end
+  t.fork = true
+
+  t.cucumber_opts = ''
+  require_list = Array(FileList[File.join(File.dirname(__FILE__),"../../features/**/*.rb")])
+  require_list.each do |step_file|
+    t.cucumber_opts << '--require'
+    t.cucumber_opts << step_file
+  end
 end
 
 Cucumber::Rake::Task.new(:features, &cucumber_options)
