@@ -23,3 +23,12 @@ end
 Then /^"([^\"]*)" "([^\"]*)" "([^\"]*)" doesn't exist$/ do |klass, attribute, value|
     Object.const_get(klass).send(:first, {attribute.to_sym => value}).should be_nil
 end
+
+Given /^"([^\"]*)" not admin on project "([^\"]*)"$/ do |login, project_name|
+    project = Project.first(:name => project_name)
+    member = project.members('user.login' => login)
+    if !member.empty? && member.project_admin?
+      member.function = Function.not_admin
+      member.save
+    end
+end

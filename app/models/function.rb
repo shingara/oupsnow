@@ -21,4 +21,8 @@ class Function
     Function.first(:project_admin => true)
   end
 
+  def self.not_admin
+    Function.first(:project_admin => false)
+  end
+
 end

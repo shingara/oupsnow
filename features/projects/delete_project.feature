@@ -6,8 +6,10 @@ Feature: Deleting project
   Scenario:
     Given I have one admin user "shingara" with password "tintinpouet"
     And I have a project "yahoo"
+    And "shingara" not admin on project "yahoo"
     When logged with "shingara" with password "tintinpouet"
-    And I go to /projects/1/settings
+    And I follow "yahoo"
+    And I follow "Settings"
     Then I should see "Delete project"
     When I follow "Delete project"
     Then the request should be success

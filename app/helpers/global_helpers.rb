@@ -19,7 +19,7 @@ module Merb
     end
 
     def admin?(project)
-      authenticated? && session.user.admin?(project)
+      authenticated? && (session.user.global_admin? || session.user.admin?(project))
     end
 
     def global_admin?
