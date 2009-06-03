@@ -17,7 +17,7 @@
             %th.last milestone
         %tbody
           - for ticket in @tickets
-            %tr{:class => cycle("odd","even")}
+            %tr{:class => "#{cycle('odd','even')} ticket" }
               %td= link_to "##{ticket.num}", resource(@project, ticket)
               %td= ticket.title
               %td= ticket.assigned_to ? ticket.assigned_to.login : ""

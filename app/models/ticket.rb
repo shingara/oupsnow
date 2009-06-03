@@ -110,6 +110,8 @@ class Ticket
             else
               conditions['tag_taggings.tag.name'] = how
             end
+          elsif what == "state"
+            conditions['state.name'] = how
           end
         else
           conditions[:conditions][0] = conditions[:conditions][0] + [" (title LIKE ? OR description LIKE ?) "]

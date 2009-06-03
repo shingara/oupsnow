@@ -1,3 +1,11 @@
+== EDGE
+ 
+ * Add filter by state in search ticket
+
+== 0.3.0 /
+
+ *
+
 == 0.2.0 / 2009-02-10
 
  * A user can be chane his own password in his profile

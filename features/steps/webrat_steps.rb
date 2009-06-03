@@ -36,3 +36,7 @@ end
 When /^I attach the file at "(.*)" to "(.*)" $/ do |path, field|
   @response = attach_file(field, path)
 end
+
+When /^I submit "(.*)"$/ do |form_id|
+  @response = submit_form(form_id)
+end
