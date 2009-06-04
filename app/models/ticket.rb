@@ -96,7 +96,7 @@ class Ticket
     end
   end
 
-  def self.paginate_by_search(q,  conditions)
+  def self.paginate_by_search(q,  conditions={})
     unless q.empty?
       search_list = q.split(' ')
       conditions[:conditions] ||= [[]]

@@ -38,6 +38,40 @@ describe Ticket do
     end
   end
 
+  describe 'Ticket#paginate_by_search' do
+
+    before :each  do
+      @state = State.gen
+      @state_2 = State.gen
+      @ticket_with_first_state = [Ticket.gen(:state => @state), 
+        Ticket.gen(:state => @state)]
+      @ticket_with_second_state = [Ticket.gen(:state => @state_2), 
+        Ticket.gen(:state => @state_2)]
+    end
+
+    it 'should return all if no q value' do
+      Ticket.paginate_by_search('', :page => 1, :per_page => (Ticket.count + 1)).size.should == Ticket.count
+    end
+
+    it 'should return all ticket with state information' do
+      Ticket.paginate_by_search("state:#{@state.name}", 
+                                :page => 1, 
+                                  :per_page => 10).should == @ticket_with_first_state
+    end
+
+    it 'should return no ticket if no ticket with state' do
+      Ticket.paginate_by_search("state:a_bad_state", 
+                                :page => 1, 
+                                :per_page => 10).should be_empty
+    end
+
+    it 'should return all ticket with last state define in query if several state' do
+      Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}", 
+                                :page => 1, 
+                                  :per_page => 10).should == @ticket_with_second_state
+    end
+  end
+
   describe '#generate_update' do
 
     def generate_ticket(ticket)
