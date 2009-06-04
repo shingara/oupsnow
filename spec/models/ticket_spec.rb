@@ -43,10 +43,19 @@ describe Ticket do
     before :each  do
       @state = State.gen
       @state_2 = State.gen
-      @ticket_with_first_state = [Ticket.gen(:state => @state), 
-        Ticket.gen(:state => @state)]
-      @ticket_with_second_state = [Ticket.gen(:state => @state_2), 
-        Ticket.gen(:state => @state_2)]
+      @first_tag = /\w+/.generate
+      @second_tag = /\w+/.generate
+      @third_tag = /\w+/.generate
+      @first_ticket = Ticket.gen(:state => @state,
+                                 :tag_list => @first_tag)
+      @second_ticket = Ticket.gen(:state => @state,
+                                 :tag_list => "#{@second_tag},#{@third_tag}")
+      @third_ticket = Ticket.gen(:state => @state_2,
+                                 :tag_list => @first_tag)
+      @four_ticket = Ticket.gen(:state => @state_2,
+                                 :tag_list => @second_tag)
+      @ticket_with_first_state = [@first_ticket,@second_ticket]
+      @ticket_with_second_state = [@third_ticket, @four_ticket]
     end
 
     it 'should return all if no q value' do
@@ -69,6 +78,36 @@ describe Ticket do
       Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}", 
                                 :page => 1, 
                                   :per_page => 10).should == @ticket_with_second_state
+    end
+
+    it 'should return all ticket with tag define by tagged:xxx in query' do
+      Ticket.paginate_by_search("tagged:#{@first_tag}",
+                                :page => 1,
+                                  :per_page => 10).should == [@first_ticket, @third_ticket]
+    end
+
+    it 'should return no ticket with tag define by tagged:xxx in query but no ticket tagged with that' do
+      Ticket.paginate_by_search("tagged:a_very_bad_tag",
+                                :page => 1,
+                                  :per_page => 10).should be_empty
+    end
+
+    it 'should return all ticket with all tags define by tagged:xxx in query' do
+      Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag}",
+                                :page => 1,
+                                  :per_page => 10).should == [@second_ticket]
+    end
+
+    it 'should return all ticket with all tags define by tagged:xxx and state:xxx in query' do
+      Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag} state:#{@state.name}",
+                                :page => 1,
+                                  :per_page => 10).should == [@second_ticket]
+    end
+
+    it 'should return no ticket with all tags define by tagged:xxx and state:xxx in query because no ticket have all tag_name and this state' do
+      Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag} state:a bad_state",
+                                :page => 1,
+                                  :per_page => 10).should be_empty
     end
   end
 
