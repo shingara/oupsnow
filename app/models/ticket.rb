@@ -111,6 +111,7 @@ class Ticket
               conditions['tag_taggings.tag.name'] = how
             end
           elsif what == "state"
+            # We can only search one state. Every time the last
             conditions['state.name'] = how
           end
         else

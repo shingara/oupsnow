@@ -41,7 +41,7 @@ Given /^"([^\"]*)" not admin on project "([^\"]*)"$/ do |login, project_name|
     end
 end
 
-Given /^(\d+) tickets with state "(.*)" on project "(.*)"$/ do |num, state_name, project_name|
+Given /^(\d+) tickets with state "([^\"]*)" on project "(.*)"$/ do |num, state_name, project_name|
   state = State.first(:name => state_name)
   state = State.gen!(:name => state_name) unless state
   project = Project.first(:name => project_name)
@@ -49,5 +49,17 @@ Given /^(\d+) tickets with state "(.*)" on project "(.*)"$/ do |num, state_name,
   num.to_i.times {
     Ticket.gen(:state => state,
                :project_id => project.id)
+  }
+end
+
+Given /^(\d+) tickets with state "([^\"]*)" and tag "([^\"]*)" on project "([^\"]*)"$/ do |num, state_name, tag_name, project_name|
+  state = State.first(:name => state_name)
+  state = State.gen!(:name => state_name) unless state
+  project = Project.first(:name => project_name)
+  project = Project.gen(:name => project_name) unless project
+  num.to_i.times {
+    Ticket.gen(:state => state,
+               :project_id => project.id,
+               :tag_list => tag_name)
   }
 end
