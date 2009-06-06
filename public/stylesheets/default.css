@@ -203,7 +203,6 @@ padding: 8px 12px;
   font-size: .9em;
 }
 
-/* flash-messages */
 .flash .message {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -255,7 +254,7 @@ ul.list li .item .avatar {
   border-bottom: 5px solid #81b953;
 }
 
-#box .block .content { border: 1px solid #81b953; border}
+#box .block .content { border: 1px solid #81b953;}
 
 /* login */
 
