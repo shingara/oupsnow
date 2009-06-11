@@ -29,22 +29,23 @@ Function.fixture(:admin) {{
 Project.fixture {{
   :name => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
-  :members => [:function => (Function.admin ? Function.admin : Function.gen(:admin)), 
-    :user => (User.first(:login => 'admin') ? User.first(:login => 'admin') : User.gen(:admin))]
+  :members => [:function_id => (Function.admin ? Function.admin.id : Function.gen(:admin).id), 
+    :user_id => (User.first(:login => 'admin') ? User.first(:login => 'admin').id : User.gen(:admin).id)]
 }}
 
 Member.fixture {{
-  :user_id => User.first ? User.gen.id : User.first.id,
-  :project_id => (Project.first ? Project.gen.id : Project.first.id),
-  :function_id => (Function.first ? Function.gen.id : Function.first.id),
+  :user_id => (User.first ? User.first.id : User.gen!.id),
+  :project_id => (Project.first ? Project.first.id : Project.gen!.id),
+  :function_id => (Function.first ? Function.first.id : Function.gen.id),
 }}
 
 Ticket.fixture {{
   :title => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
   :tag_list => (1..2).of { /\w+/.generate }.join(','),
-  :project_id => (Project.first ? Project.gen.id : Project.first.id),
-  :member_create_id => User.first ? User.gen.id : User.first.id,
+  :project_id => (Project.first ? Project.first.id : Project.gen.id),
+  :member_create_id => User.first ? User.first.id : User.gen.id,
+  :state_id => State.first ? State.first.id : State.gen.id,
 }}
 
 State.fixture {{
@@ -63,8 +64,8 @@ Milestone.fixture {{
 
 Event.fixture {{
   :eventable_class => 'Ticket',
-  :eventable_id => (Ticket.first ? Ticket.gen.id : Ticket.first.id),
+  :eventable_id => (Ticket.first ? Ticket.first.id : Ticket.gen.id),
   :event_type => :created,
-  :user_id => User.first ? User.gen.id : User.first.id,
-  :project_id => (Project.first ? Project.gen.id : Project.first.id)
+  :user_id => User.first ? User.first.id : User.gen.id,
+  :project_id => (Project.first ? Project.first.id : Project.gen.id)
 }}

@@ -10,6 +10,10 @@ Then /^I should see an? (\w+) message$/ do |message_type|
   webrat_session.response.should have_xpath("//*[@class='#{message_type}']")
 end
 
+Then /^I should see id (\w+)$/ do |id_txt|
+  webrat_session.response.should have_xpath("//*[@id='#{id_txt}']")
+end
+
 Then /^I should see (\d+) "(\w+)" tag with content "(\w+)"$/ do |num, tag_name, content|
   webrat_session.response.should have_selector(tag_name, :content => content, :count => num.to_i)
 end
@@ -47,7 +51,7 @@ Given /^(\d+) tickets with state "([^\"]*)" on project "(.*)"$/ do |num, state_n
   project = Project.first(:name => project_name)
   project = Project.gen(:name => project_name) unless project
   num.to_i.times {
-    Ticket.gen(:state => state,
+     Ticket.gen(:state_id => state.id,
                :project_id => project.id)
   }
 end
@@ -58,8 +62,54 @@ Given /^(\d+) tickets with state "([^\"]*)" and tag "([^\"]*)" on project "([^\"
   project = Project.first(:name => project_name)
   project = Project.gen(:name => project_name) unless project
   num.to_i.times {
-    Ticket.gen(:state => state,
+    Ticket.gen(:state_id => state.id,
                :project_id => project.id,
                :tag_list => tag_name)
   }
 end
+
+def user_with_name(name)
+  user = User.first(:login => name)
+  user = User.gen(:login => name) unless user
+  user
+end
+
+def project_with_name(name)
+  project = Project.first(:name => name)
+  project = Project.gen(:name => name) unless project
+  project
+end
+
+def function_with_name(name)
+  function = Function.first(:name => name)
+  function = Function.gen(:name => name,
+                         :project_admin => (name == 'admin')) unless function
+  function
+end
+
+Given /^I have user "([^\"]*)" with function "([^\"]*)" on project "([^\"]*)"$/ do |user_name, function_name, project_name|
+  user = user_with_name(user_name)
+  project = project_with_name(project_name)
+  function = function_with_name(function_name)
+  member = project.members.build(:user => user, :function => function)
+  member.save
+end
+
+Given /^I have user "([^\"]*)" with function "([^\"]*)" on project "([^\"]*)" and no other user$/ do |user_name, function_name, project_name|
+  Given %{I have user "#{user_name}" with function "#{function_name}" on project "#{project_name}"}
+
+  user = user_with_name(user_name)
+  project = project_with_name(project_name)
+  project.members.all(:user_id.not => user.id).each { |m| m.destroy }
+end
+
+Then /^the member "([^\"]*)" has function "([^\"]*)" in project "([^\"]*)"$/ do |user_name, function_name, project_name|
+  User.first(:login => user_name).members.first(:project_id => Project.first(:name => project_name).id).function.name.should == function_name
+end
+
+When /transaction commit/ do
+  transaction = DataMapper.repository(:default).adapter.pop_transaction
+  transaction.commit
+end
+
+

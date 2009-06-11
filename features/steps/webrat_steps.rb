@@ -17,7 +17,12 @@ When /^I fill in "(.*)" with "(.*)"$/ do |field, value|
   @response = fill_in(field, :with => value) 
 end
 
-When /^I select "(.*)" from "(.*)"$/ do |value, field|
+When /^I select "([^\"]*)" from "([^\"]*)"$/ do |value, field|
+  @response = select(value, :from => field) 
+end
+
+When /^I select "([^\"]*)" from "member_function" of "([^\"]*)" from "([^\"]*)" project$/ do |value, user_name, project_name|
+  field = "member_function[#{User.first(:login => user_name).members.first(:project_id => Project.first(:name => project_name).id).id}]"
   @response = select(value, :from => field) 
 end
 

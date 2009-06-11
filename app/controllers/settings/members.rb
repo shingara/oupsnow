@@ -35,6 +35,15 @@ module Settings
         render :new
       end
     end
+
+    def update_all(member_function={})
+      if Member.change_functions(member_function)
+        notice = "All members was updated"
+      else
+        notice = "You can't have no admin in a project"
+      end
+      redirect url(:project_settings_members, @project), :message => {:notice => notice}
+    end
   
     private
 

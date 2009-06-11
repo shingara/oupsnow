@@ -52,7 +52,9 @@ Merb::Router.prepare do
     end
     namespace(:settings) do
       match('/').to(:controller => 'members', :action => 'index')
-      resources :members
+      resources :members do
+        collection :update_all, :method => :put
+      end
     end
   end
   # RESTful routes

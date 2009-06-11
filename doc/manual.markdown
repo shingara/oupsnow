@@ -22,6 +22,24 @@ projects and tickets but can't update them.
 
 # Project settings
 
+## Member of project
+
+In each project, you can choose all member.
+
+### Add member
+
+You can add several members to your project. A member add to this project, can 
+create and update all tickets. All functions are define by global administration.
+There are only 2 differents roles. An admin role and a basic role. An admin can change
+all settings of this projects and create/update milestone.
+
+### Change function to members
+
+in list of member, you can change all functions to members. If you change the select
+and click on update all, all members are updated. The limitation is only to have
+just one admin in each project. If you change all member's function to have no admin
+the changement is rollback.
+
 ## Delete project
 
 Since Oupsnow-0.4.0, you can delete a project. If you delete a project all

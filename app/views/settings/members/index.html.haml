@@ -4,14 +4,21 @@
     = @project.name
 
   .inner
-    %table.table
-      %thead
-        %tr
-          %th.first User
-          %th.last Role
-      %tbody
-        - for member in @members
-          %tr{:class => cycle('odd', 'even')}
-            %td=link_to(member.user.login, url(:project_settings_member, @project, member))
-            %td=member.function.name
-    %p=link_to 'Add member', url(:new_project_settings_member, @project)
+
+    = form :action => resource(@project, :settings, :members, :update_all), :method => 'PUT', :class => 'form' do
+
+      %table.table
+        %thead
+          %tr
+            %th.first User
+            %th.last Role
+        %tbody
+          - for member in @members
+            %tr{:class => cycle('odd', 'even')}
+              %td=link_to(member.user.login, url(:project_settings_member, @project, member))
+              %td=select :name => "member_function[#{member.id}]", :collection => Function.all, :text_method => 'name', :value_method => 'id', :selected => member.function_id.to_s
+      .actions-bar
+        .actions
+          =link_to 'Add member', url(:new_project_settings_member, @project)
+          =submit "Update all", :class=> 'button'
+        .clear
