@@ -37,9 +37,13 @@ class Project
     end
   end
 
+  def has_member?(user)
+    !members.first(:user_id => user.id).nil?
+  end
+
   #TODO: need spec about this function
   def add_member(user, function)
-    members.build(:function_id => function.id,
+    members.create(:function_id => function.id,
                  :user_id => user.id)
   end
 

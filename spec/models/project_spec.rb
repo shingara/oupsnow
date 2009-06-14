@@ -77,4 +77,19 @@ describe Project do
     end
   end
 
+  describe '#has_member?' do
+    it 'should return true if has member' do
+      user = User.gen
+      project = Project.gen
+      project.add_member(user, Function.first)
+      project.should be_has_member(user)
+    end
+
+    it 'should return false if has not this member' do
+      user = User.gen
+      project = Project.gen
+      project.should_not be_has_member(user)
+    end
+  end
+
 end

@@ -33,11 +33,20 @@ Project.fixture {{
     :user_id => (User.first(:login => 'admin') ? User.first(:login => 'admin').id : User.gen(:admin).id)]
 }}
 
-Member.fixture {{
-  :user_id => (User.first ? User.first.id : User.gen!.id),
-  :project_id => (Project.first ? Project.first.id : Project.gen!.id),
+Member.fixture {
+  user =  User.first(:login.not => 'admin') ? User.first(:login.not => 'admin') : User.gen!
+  project =  Project.first ? Project.first : Project.gen!
+  not_project_id = []
+  while project.has_member?(user)
+    not_project_id << project.id
+    project =  Project.first(:id.not => not_project_id) ? Project.first(:id.not => not_project_id) : Project.gen!
+  end
+  {
+  :user_id => user.id,
+  :project_id => project.id,
   :function_id => (Function.first ? Function.first.id : Function.gen.id),
-}}
+}
+}
 
 Ticket.fixture {{
   :title => /\w+/.gen,
