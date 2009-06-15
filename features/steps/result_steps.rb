@@ -27,9 +27,16 @@ Then /^the (.*) ?request should fail/ do |_|
 end
 
 Given /^I have a project "([^\"]*)"$/ do |name|
-  lambda do
-    Project.gen!(:name => name)
-  end.should change(Project, :count)
+  unless Project.first(:name => name)
+    lambda do
+      Project.gen!(:name => name)
+    end.should change(Project, :count)
+  end
+end
+
+Given /^I have a project "([^\"]*)" without members$/ do |name|
+  Given %{I have a project "#{name}"}
+  Project.first(:name => name).members.each {|m| m.destroy}
 end
 
 Then /^"([^\"]*)" "([^\"]*)" "([^\"]*)" doesn't exist$/ do |klass, attribute, value|
@@ -91,8 +98,7 @@ Given /^I have user "([^\"]*)" with function "([^\"]*)" on project "([^\"]*)"$/ 
   user = user_with_name(user_name)
   project = project_with_name(project_name)
   function = function_with_name(function_name)
-  member = project.members.build(:user => user, :function => function)
-  member.save
+  member = project.members.create(:user => user, :function => function)
 end
 
 Given /^I have user "([^\"]*)" with function "([^\"]*)" on project "([^\"]*)" and no other user$/ do |user_name, function_name, project_name|

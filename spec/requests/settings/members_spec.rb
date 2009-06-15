@@ -81,4 +81,3 @@ describe "resource(@member)", :given => "a member exists" do
   end
   
 end
-

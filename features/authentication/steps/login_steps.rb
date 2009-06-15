@@ -20,7 +20,7 @@ Given /^"([^\"]*)" is project admin of "([^\"]*)" project$/ do |login, project_n
   user = User.first(:login => login)
   project = Project.first(:name => project_name)
   member = Member.new(:user_id => user.id)
-  function = Function.first(:name => 'Admin') ? Function.first(:name => 'Admin') : Function.gen!(:admin)
+  function = Function.first(:project_admin => true) ? Function.first(:project_admin => true) : Function.gen!(:admin)
   member.function_id = function.id
   member.project_id = project.id
   member.save!
