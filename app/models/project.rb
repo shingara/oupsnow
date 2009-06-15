@@ -38,7 +38,7 @@ class Project
   end
 
   def has_member?(user)
-    !members.first(:user_id => user.id).nil?
+    members.count(:user_id => user.id) > 0
   end
 
   #TODO: need spec about this function

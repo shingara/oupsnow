@@ -34,12 +34,12 @@ Project.fixture {{
 }}
 
 Member.fixture {
-  user =  User.first(:login.not => 'admin') ? User.first(:login.not => 'admin') : User.gen!
-  project =  Project.first ? Project.first : Project.gen!
+  user =  User.first(:login.not => 'admin') || User.gen!
+  project =  Project.first || Project.gen!
   not_project_id = []
   while project.has_member?(user)
     not_project_id << project.id
-    project =  Project.first(:id.not => not_project_id) ? Project.first(:id.not => not_project_id) : Project.gen!
+    project = Project.first(:id.not => not_project_id) || Project.gen!
   end
   {
   :user_id => user.id,

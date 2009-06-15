@@ -82,13 +82,13 @@ describe Project do
       user = User.gen
       project = Project.gen
       project.add_member(user, Function.first)
-      project.should be_has_member(user)
+      project.has_member?(user).should be_true
     end
 
     it 'should return false if has not this member' do
       user = User.gen
       project = Project.gen
-      project.should_not be_has_member(user)
+      project.has_member?(user).should_not be_true
     end
   end
 
