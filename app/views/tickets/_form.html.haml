@@ -5,7 +5,7 @@
       = text_field :title, :size => 40, :class => 'text_field'
     .group
       %label.label{:for => 'ticket[description]'} Description
-      = text_area  '', :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area'
+      = text_area  @ticket.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area'
 
   %div{:class => 'column right'}
     .group

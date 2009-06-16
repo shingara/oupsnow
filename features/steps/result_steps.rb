@@ -118,4 +118,16 @@ When /transaction commit/ do
   transaction.commit
 end
 
+Given /^I have state "([^\"]*)"$/ do |name|
+    State.gen(:name => name) if State.first(:name => name).nil?
+end
 
+Then /^I have (\d+) ticket on project "([^\"]+)"$/ do |num_ticket, project_name|
+  Project.all(:name => project_name).count.should == 1
+  Project.first(:name => project_name).tickets.count.should == num_ticket.to_i
+end
+
+Then /^I should see an? ([^\"]*) message with "([^\"]*)"$/ do |class_name, content|
+  Then %{I should see a #{class_name} message}
+  webrat_session.response.should have_selector("div", :class => class_name, :content => content)
+end

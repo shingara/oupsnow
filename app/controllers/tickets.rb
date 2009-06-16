@@ -57,12 +57,18 @@ class Tickets < Application
     @ticket = Ticket.new(ticket)
     @ticket.project_id = @project.id
     @ticket.created_by = session.user
-    if @ticket.save
-      @ticket.write_create_event
-      redirect resource(@project, @ticket), :message => {:notice => "Ticket was successfully created"}
-    else
-      message[:error] = "Ticket failed to be created"
+    if params[:submit] == 'Preview'
+      @preview = true
+      @ticket_new = true
       render :new
+    else
+      if @ticket.save
+        @ticket.write_create_event
+        redirect resource(@project, @ticket), :message => {:notice => "Ticket was successfully created"}
+      else
+        message[:error] = "Ticket failed to be created"
+        render :new
+      end
     end
   end
 

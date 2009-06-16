@@ -43,7 +43,7 @@ module Merb
     end
 
     def tickets_current
-      current_or_not((@request.params[:controller] == 'tickets' && @request.params[:action] != 'new') ||
+      current_or_not((@request.params[:controller] == 'tickets' && @request.params[:action] != 'new' && !@new_ticket) ||
                      @request.params[:controller] == 'ticket_updates')
     end
 
@@ -55,8 +55,8 @@ module Merb
     end
 
     def tickets_new_current
-      current_or_not(@request.params[:controller] == 'tickets' &&
-                    @request.params[:action] == 'new')
+      current_or_not((@request.params[:controller] == 'tickets' &&
+                    @request.params[:action] == 'new') || (@ticket_new))
     end
 
     def settings_current

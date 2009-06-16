@@ -1,5 +1,10 @@
 #block-forms.block
   .content
+
+    - if @preview
+      .preview
+        = textilized @ticket.description
+
     %h2 Create a new ticket
 
     .inner
@@ -11,5 +16,6 @@
         = partial :form
         %div{:class => 'group navform'}
           = submit "Create", :class => 'button'
+          = submit "Preview", :class => 'button'
           or
           = link_to 'Cancel', resource(@project, :tickets)
