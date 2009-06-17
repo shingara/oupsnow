@@ -17,3 +17,7 @@ Feature: ticket preview
     Then I have 0 ticket on project "yahoo"
     And I should see a preview message 
     And I should see a preview message with "A good description"
+    When I press "Create"
+    Then I have 1 ticket on project "yahoo"
+    When I follow "Tickets"
+    Then I should see 1 "td" tag with content "A big new features"

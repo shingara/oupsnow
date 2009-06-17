@@ -14,7 +14,7 @@ Then /^I should see id (\w+)$/ do |id_txt|
   webrat_session.response.should have_xpath("//*[@id='#{id_txt}']")
 end
 
-Then /^I should see (\d+) "(\w+)" tag with content "(\w+)"$/ do |num, tag_name, content|
+Then /^I should see (\d+) "(\w+)" tag with content "([^\"]*)"$/ do |num, tag_name, content|
   webrat_session.response.should have_selector(tag_name, :content => content, :count => num.to_i)
 end
 
