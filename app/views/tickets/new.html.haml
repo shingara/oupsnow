@@ -2,7 +2,9 @@
   .content
 
     - if @preview
-      .preview
+      %fieldset.preview
+        %legend Preview
+        %h2=h @ticket.title
         = textilized @ticket.description
 
     %h2 Create a new ticket
