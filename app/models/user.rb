@@ -25,9 +25,9 @@ class User
   has n, :functions, :through => :members, :constraint => :destroy
   has n, :projects, :through => :members, :constraint => :destroy
 
-  has n, :created_tickets, :class_name => "Ticket", :child_key => [:member_create_id], :constraint => :destroy
-  has n, :assigned_tickets, :class_name => "Ticket", :child_key => [:member_assigned_id], :constraint => :destroy
-  has n, :ticket_updates, :class_name => "TicketUpdate", :child_key => [:member_create_id], :constraint => :destroy
+  has n, :created_tickets, :model => "Ticket", :child_key => [:member_create_id], :constraint => :destroy
+  has n, :assigned_tickets, :model => "Ticket", :child_key => [:member_assigned_id], :constraint => :destroy
+  has n, :ticket_updates, :model => "TicketUpdate", :child_key => [:member_create_id], :constraint => :destroy
   has n, :events, :constraint => :destroy
 
   validates_with_method :allways_one_global_admin

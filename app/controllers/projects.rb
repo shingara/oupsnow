@@ -56,7 +56,7 @@ class Projects < Application
   def update(id, project)
     @project = Project.get(id)
     raise NotFound unless @project
-    if @project.update_attributes(project)
+    if @project.update(project)
        redirect resource(@project, :tickets)
     else
       display @project, :edit

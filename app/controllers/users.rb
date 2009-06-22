@@ -33,7 +33,7 @@ class Users < Application
   def update(id, user)
     @user = User.get(id)
     raise NotFound unless @user
-    if @user.update_attributes(user)
+    if @user.update(user)
        redirect resource(:projects)
     else
       display @user, :edit

@@ -13,8 +13,8 @@ class Ticket
   property :project_id, Integer
 
   belongs_to :project
-  belongs_to :created_by, :class_name => "User", :child_key => [:member_create_id]
-  belongs_to :assigned_to, :class_name => "User", :child_key => [:member_assigned_id]
+  belongs_to :created_by, :model => "User", :child_key => [:member_create_id]
+  belongs_to :assigned_to, :model => "User", :child_key => [:member_assigned_id]
   belongs_to :state
   belongs_to :priority
   belongs_to :milestone
@@ -22,8 +22,8 @@ class Ticket
   has n, :ticket_updates, :constraint => :destroy
 
   has_tags
-  has n, :tag_taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :tag_context => "tags", :constraint => :destroy
-  has n, :taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :constraint => :destroy
+  has n, :tag_taggings, :model => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :tag_context => "tags", :constraint => :destroy
+  has n, :taggings, :model => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :constraint => :destroy
   property :frozen_tag_list, String, :length => 255
 
   validates_with_method :users_in_members
@@ -87,7 +87,7 @@ class Ticket
     tag_list = frozen_tag_list
 
     return true if t.description.nil? && t.properties_update.empty?
-    if update_attributes(ticket)
+    if update(ticket)
       t.created_by = user
       if t.save
         t.write_event

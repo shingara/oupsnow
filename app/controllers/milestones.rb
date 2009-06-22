@@ -56,7 +56,7 @@ class Milestones < Application
   def update(id, milestone)
     @milestone = Milestone.get(id)
     raise NotFound unless @milestone
-    if @milestone.update_attributes(milestone)
+    if @milestone.update(milestone)
        redirect resource(@project, @milestone)
     else
       display @milestone, :edit

@@ -257,6 +257,7 @@ describe Ticket do
         @ticket = Ticket.gen
         @ticket.write_create_event
         @ticket.generate_update({:title => 'new titlre'}, User.first)
+        @ticket.save
       end
 
       it 'should destroy ticket' do
