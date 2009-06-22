@@ -24,25 +24,36 @@ class Member
 
   def self.change_functions(member_function)
     return true if member_function.empty?
-    transaction do |txn|
-      project = nil
-      member_function.keys.each do |member_id|
-        member = Member.get!(member_id.to_i)
-        if project != member.project && !project.nil?
-          txn.rollback
-          return false
-        end
+    project = nil
+    previous_function = {}
+    complete = true
+    member_function.keys.each do |member_id|
+      member = Member.get!(member_id.to_i)
+      previous_function[member.id] = member.function.id
+      if project != member.project && !project.nil?
+        complete = false
+        break
+      else
         project = member.project
+
         member.function = Function.get!(member_function[member_id].to_i)
         member.save
       end
-      project_have_admin = project.have_one_admin
-      if project_have_admin.is_a?(Array) && !project_have_admin.first
-        txn.rollback
-        return false
-      end
     end
-    true
+    project_have_admin = project.have_one_admin
+    if project_have_admin.is_a?(Array) && !project_have_admin.first
+      complete = false
+    end
+    unless complete
+      previous_function.each do |k,v|
+        m = Member.get!(k)
+        m.function_id = v
+        m.save
+      end
+      false
+    else
+      true
+    end
   end
 
 end
