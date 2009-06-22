@@ -14,10 +14,10 @@ class Ticket
 
   belongs_to :project
   belongs_to :created_by, :model => "User", :child_key => [:member_create_id]
-  belongs_to :assigned_to, :model => "User", :child_key => [:member_assigned_id]
+  belongs_to :assigned_to, :model => "User", :child_key => [:member_assigned_id], :nullable => true
   belongs_to :state
   belongs_to :priority
-  belongs_to :milestone
+  belongs_to :milestone, :nullable => true
 
   has n, :ticket_updates, :constraint => :destroy
 
@@ -40,14 +40,14 @@ class Ticket
 
   def write_create_event
     Event.create(:eventable_class => self.class,
-                 :eventable_id => id,
+                 :eventable_id => self.id,
                  :user_id => member_create_id,
                  :event_type => :created,
                  :project_id => project_id)
   end
 
   def delete_event_related
-    Event.all(:eventable_class => self.class,
+    Event.all(:eventable_class => self.class.to_s,
               :eventable_id => self.id).each do |event|
       event.destroy
     end

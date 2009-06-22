@@ -8,12 +8,7 @@ class Milestone
 
   belongs_to :project
 
-  has n, :tickets
-  before :destroy , :destroy_ticket
-
-  def destroy_ticket
-    tickets.each{|t| t.destroy}
-  end
+  has n, :tickets, :constraint => :destroy
 
   def write_event_create(user)
     Event.create(:eventable_class => self.class,

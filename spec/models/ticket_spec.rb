@@ -21,6 +21,12 @@ describe Ticket do
     Ticket.gen.should be_valid
   end
 
+  it 'should create ticket by dm-sweatshop' do
+    lambda do
+      Ticket.gen
+    end.should change(Ticket, :count)
+  end
+
   it 'should not be valid if no same project between ticket and milestone' do
     project = Project.gen!
     project_2 = Project.gen!
