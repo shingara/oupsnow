@@ -14,7 +14,7 @@ class Application < Merb::Controller
   end
 
   def projects
-    @project = Project.get(params[:project_id])
+    @project = Project.get(params[:project_id].to_i)
   end
 
   # attach to sidebar the part Milestone with project id define in argument

@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 given 'a member exists' do
-  Project.all.each {|p| p.destroy}
+  Project.all.destroy
   create_default_admin
   Project.gen
 end
@@ -13,7 +13,7 @@ describe "resource(:members)", :given => 'a member exists' do
     describe 'with user admin' do
       before(:each) do
         login_admin
-        @response = request(url(:project_settings_members, Project.first))
+        @response = request(url(:project_settings_members, Project.gen))
       end
       
       it "responds successfully" do

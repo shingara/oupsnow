@@ -150,7 +150,7 @@ class Ticket
   end
 
   def self.get_by_permalink(project_id, permalink)
-    Ticket.first(:num => permalink, :project_id => project_id)
+    Ticket.first(:num => permalink.to_i, :project_id => project_id.to_i)
   end
 
   # Return a Hash of tagging object

@@ -16,7 +16,7 @@ describe "resource(:users)" do
 
   describe "a successful POST" do
     before(:each) do
-      User.all.destroy!
+      User.all.destroy
       User.gen(:admin) # a admin user is needed in bootstrap
       @response = create_user_by_request
     end

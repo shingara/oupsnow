@@ -26,11 +26,21 @@ class Milestone
   end
 
   def ticket_open_count
-    tickets.count(:state_id.not => State.closed.map{|s| s.id})
+    state_closed = State.closed.map{|s| s.id}
+    if state_closed.empty?
+      tickets.count
+    else
+      tickets.count(:state_id.not => state_closed)
+    end
   end
 
   def ticket_open
-    tickets.all(:state_id.not => State.closed.map{|s| s.id})
+    state_closed = State.closed.map{|s| s.id}
+    if state_closed.empty?
+      tickets.all
+    else
+      tickets.all(:state_id.not => state_closed)
+    end
   end
 
   def ticket_closed_count

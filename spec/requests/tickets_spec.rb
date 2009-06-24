@@ -230,8 +230,8 @@ describe "resource(Project.first, @ticket)" do
   describe "PUT" do
 
     def put_request
-      @project = Project.first
-      @ticket = @project.tickets.first
+      @project = Project.first || Project.gen
+      @ticket = @project.tickets.first || Ticket.gen(:project_id => @project.id)
       @response = request(resource(@project, @ticket), :method => "PUT", 
                           :params => { :ticket => {:id => @ticket.id} })
     end
@@ -263,10 +263,6 @@ describe "resource(Project.first, @ticket)" do
         put_request
       end
 
-      after :each do
-        Ticket.all.each {|t| t.destroy}
-      end
-    
       it "redirect to the article show action" do
         @response.should redirect_to(resource(@project, @ticket))
       end

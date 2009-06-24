@@ -5,7 +5,7 @@ module Settings
     before :project_admin_authenticated
   
     def index(project_id)
-      @members = Member.all(:project_id => project_id)
+      @members = Member.all(:project_id => project_id.to_i)
       @title = "Members"
       display @members
     end

@@ -21,9 +21,9 @@ class User
   property :global_admin, Boolean
   property :deleted_at, DateTime
 
-  has n, :members
-  has n, :functions, :through => :members, :constraint => :destroy
-  has n, :projects, :through => :members, :constraint => :destroy
+  has n, :members, :constraint => :destroy
+  has n, :functions, :through => :members
+  has n, :projects, :through => :members
 
   has n, :created_tickets, :model => "Ticket", :child_key => [:member_create_id], :constraint => :destroy
   has n, :assigned_tickets, :model => "Ticket", :child_key => [:member_assigned_id], :constraint => :destroy
