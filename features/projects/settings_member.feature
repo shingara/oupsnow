@@ -16,7 +16,6 @@ Feature: Changing function of project's member
     And I should see 1 "tr" tag with content "clown" 
     And I should see 1 "tr" tag with content "zapata" 
     When I select "admin" from "member_function" of "zapata" from "yahoo" project
-    And transaction commit
     And I press "Update all"
     Then the member "zapata" has function "admin" in project "yahoo"
     When I select "developper" from "member_function" of "zapata" from "yahoo" project
@@ -40,7 +39,6 @@ Feature: Changing function of project's member
     And "shingara" is project admin of "yahoo" project
     And I have user "clown" with function "admin" on project "yahoo"
     And I have user "zapata" with function "developper" on project "yahoo"
-    And transaction commit
     When logged with "shingara" with password "tintinpouet"
     And I follow "yahoo"
     And I follow "Settings"

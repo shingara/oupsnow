@@ -131,3 +131,10 @@ Then /^I should see an? ([^\"]*) message with "([^\"]*)"$/ do |class_name, conte
   Then %{I should see a #{class_name} message}
   webrat_session.response.should have_selector("div", :class => class_name, :content => content)
 end
+
+Then /^I should see an? ([^\"]*) message with child "([^\"]*)"$/ do |class_name, content|
+  Then %{I should see a #{class_name} message}
+  webrat_session.response.should have_selector("fieldset", :class => class_name) do |n|
+    n.should have_selector("p", :content => content)
+  end
+end

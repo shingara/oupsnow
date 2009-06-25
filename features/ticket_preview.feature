@@ -16,7 +16,7 @@ Feature: ticket preview
     And I press "Preview"
     Then I have 0 ticket on project "yahoo"
     And I should see a preview message 
-    And I should see a preview message with "A good description"
+    And I should see a preview message with child "A good description"
     When I press "Create"
     Then I have 1 ticket on project "yahoo"
     When I follow "Tickets"
