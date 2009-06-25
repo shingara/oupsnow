@@ -48,7 +48,7 @@ class Member
       previous_function.each do |k,v|
         m = Member.get!(k)
         m.function_id = v
-        m.save
+        m.save!
       end
       false
     else

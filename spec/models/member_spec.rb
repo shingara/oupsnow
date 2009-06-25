@@ -23,20 +23,22 @@ describe Member do
       project = Project.gen
       member_admin = project.members.first
       member_admin.function.should be_project_admin
+      function_1 = member_admin.function
       member = Member.gen!(:project_id => project.id, :user_id => User.gen.id)
+      function_2 = member.function
       another_member_admin = Member.gen!(:project_id => project.id, :user_id => User.gen.id)
       another_member_admin.function_id = Function.admin.id
       another_member_admin.save
+      function_3 = another_member_admin.function
       project.reload
       Function.gen! unless Function.not_admin # Need a function not admin
       Member.change_functions({
                                another_member_admin.id => Function.not_admin.id,
                                member_admin.id => Function.not_admin.id,
                                member.id => Function.not_admin.id}).should be_false
-      member_admin.reload.function.should be_project_admin
-      another_member_admin.reload.function.should be_project_admin
-      member.reload.function.should_not be_project_admin
-
+      member_admin.reload.function.should == function_1
+      member.reload.function.should == function_2
+      another_member_admin.reload.function.should == function_3
     end
   end
 
