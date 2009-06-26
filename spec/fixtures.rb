@@ -1,6 +1,8 @@
 include DataMapper::Sweatshop::Unique
 
-User.fixture {{
+User.fixture {
+  User.gen(:admin) unless User.first(:global_admin => true)
+  {
   :login => /\w+/.gen,
   :email => "#{/\w+/.gen}.#{/\w+/.gen}@gmail.com",
   :password => "tintinpouet",

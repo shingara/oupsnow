@@ -8,7 +8,7 @@ describe User do
 
   it 'should not valid if global_admin is false but no user global_admin' do
     User.all.destroy!
-    User.gen(:global_admin => false).should_not be_valid
+    User.gen(:admin, :global_admin => false).should_not be_valid
   end
 
   it 'should valid with global_admin false because already user global_admin' do
