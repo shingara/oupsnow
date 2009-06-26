@@ -50,13 +50,17 @@ Member.fixture {
 }
 }
 
-Ticket.fixture {{
+Ticket.fixture {
+  project = Project.first || Project.gen
+  num_ticket = project.new_num_ticket
+{
   :title => /\w+/.gen,
   :description => (0..3).of { /[:paragraph:]/.generate }.join("\n"),
   :tag_list => (1..2).of { /\w+/.generate }.join(','),
-  :project_id => (Project.first ? Project.first.id : Project.gen.id),
+  :project_id => (project.id),
   :member_create_id => User.first ? User.first.id : User.gen.id,
   :state_id => State.first ? State.first.id : State.gen.id,
+  :num => num_ticket,
 }}
 
 State.fixture {{

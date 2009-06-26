@@ -41,18 +41,18 @@ describe Ticket do
   describe 'Ticket#paginate_by_search' do
 
     before :each  do
-      @state = State.gen
-      @state_2 = State.gen
+      @state = State.gen!
+      @state_2 = State.gen!
       @first_tag = /\w+/.generate
       @second_tag = /\w+/.generate
       @third_tag = /\w+/.generate
-      @first_ticket = Ticket.gen(:state => @state,
+      @first_ticket = Ticket.gen!(:state_id => @state.id,
                                  :tag_list => @first_tag)
-      @second_ticket = Ticket.gen(:state => @state,
+      @second_ticket = Ticket.gen!(:state_id => @state.id,
                                  :tag_list => "#{@second_tag},#{@third_tag}")
-      @third_ticket = Ticket.gen(:state => @state_2,
+      @third_ticket = Ticket.gen!(:state_id => @state_2.id,
                                  :tag_list => @first_tag)
-      @four_ticket = Ticket.gen(:state => @state_2,
+      @four_ticket = Ticket.gen!(:state_id => @state_2.id,
                                  :tag_list => @second_tag)
       @ticket_with_first_state = [@first_ticket,@second_ticket]
       @ticket_with_second_state = [@third_ticket, @four_ticket]
