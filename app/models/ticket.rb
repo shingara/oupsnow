@@ -105,10 +105,10 @@ class Ticket
         if search_pattern.include?(':')
           what, how = search_pattern.split(':')
           if what == 'tagged'
-            if conditions['tag_taggings.tag.name']
+            if conditions[:frozen_tag_list.like]
               new_tag << how
             else
-              conditions['tag_taggings.tag.name'] = how
+              conditions[:frozen_tag_list.like] = "%#{how}%"
             end
           elsif what == "state"
             # We can only search one state. Every time the last
@@ -127,7 +127,7 @@ class Ticket
 
       new_tag.each {|t|
         conditions[:id] ||= []
-        tickets_with_tag = Ticket.all('tag_taggings.tag.name' => t).map(&:id)
+        tickets_with_tag = Ticket.all(:frozen_tag_list.like => "%#{t}%").map(&:id)
         if tickets_with_tag.empty?
           return WillPaginate::Collection.new(1,10, 0) # Emulate a empty result because no result with a tag
         else
