@@ -72,7 +72,7 @@ class Project
   # The key is the id number of tag and the value is an Array of Tagging
   # object. count the number of object and you know how Tag used is on a Tag
   def ticket_tag_counts
-    Tagging.all(:taggable_id => tickets.map(&:id), :taggable_type => 'Ticket').group_by(&:tag_id)
+    tickets.taggings.all.group_by(&:tag_id)
   end
 
 end
