@@ -34,12 +34,43 @@
             .edit=link_to 'edit', resource(@project, @ticket, up, :edit) if admin?(@project)
 
       - if authenticated?
+
+        - if @preview_description
+          %fieldset.preview
+            %legend Preview
+            = textilized @preview_description
+
         = error_messages_for @ticket
 
         #ticket_update_form
           %h3 Update this ticket
           = form_for(@ticket, :action => resource(@project, @ticket), :class => 'form') do 
             .columns
-              = partial :form
+              %div{:class => 'column left'}
+                .group
+                  %label.label{:for => 'ticket[description]'} Description
+                  = text_area(@ticket_update.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area')
+
+              %div{:class => 'column right'}
+                .group
+                  %label.label{:for => 'ticket[member_assigned_to]'} Who's is responsible ?
+                  = select :member_assigned_id, :collection => Member.all(:project_id => @project.id).map{|m| m.user},:text_method => 'login', :value_method => 'id', :selected => @ticket_update.member_assigned_id.to_s, :prompt => '-- None --'
+
+                .group
+                  %label.label{:for => 'ticket[state_id]'} Ticket status
+                  = select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id', :selected => @ticket_update.state_id.to_s
+
+                .group
+                  %label.label{:for => 'ticket[priority_id]'} Ticket Priority
+                  = select :priority_id, :collection => Priority.all, :text_method => :name, :value_method => :id, :selected => @ticket_update.priority_id.to_s, :prompt => '-- None --'
+
+                .group
+                  %label.label{:for => 'ticket[milestone_id]'} Milestone
+                  = select :milestone_id, :collection => @project.milestones, :text_method => :name, :value_method => :id, :selected => @ticket_update.milestone_id.to_s, :prompt => '-- None --'
+            .clear
+            .group
+              %label.label{:for => 'ticket[tag_list]'} Choose some tags
+              = text_field :tag_list, :value => @ticket_update.tag_list.join(', '), :class => 'text_field'
             %div{:class => 'group navform'}
               = submit "Update", :class => 'button'
+              = submit "Preview", :class => 'button'

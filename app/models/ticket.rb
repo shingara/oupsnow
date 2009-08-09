@@ -35,6 +35,8 @@ class Ticket
 
   after :destroy, :delete_event_related
 
+  attr_accessor :comment
+
   def open
     all(:state_id => State.first(:name.not => 'closed').id)
   end

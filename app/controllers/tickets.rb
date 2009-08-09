@@ -21,6 +21,8 @@ class Tickets < Application
 
   def show(project_id, ticket_permalink)
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
+    @ticket_update = @ticket.dup
+    @ticket_update.description = ''
     raise NotFound unless @ticket
     @title = "ticket #{@ticket.title}"
     tag_cloud_part('Tickets', @ticket.id, @project.id)
@@ -75,10 +77,19 @@ class Tickets < Application
   def update(project_id, ticket_permalink, ticket)
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
-    if @ticket.generate_update(ticket, session.user)
-      redirect resource(@project, @ticket)
+    if params[:submit] == 'Preview'
+      @preview_description = ticket[:description]
+      @ticket_update = @ticket.dup
+      [:title, :description, :member_assigned_id, :state_id, :priority_id, :milestone_id, :tag_list].each do |u|
+        @ticket_update.send("#{u}=", ticket[u])
+      end
+      render :show
     else
-      display @ticket, :show
+      if @ticket.generate_update(ticket, session.user)
+        redirect resource(@project, @ticket)
+      else
+        display @ticket, :show
+      end
     end
   end
 

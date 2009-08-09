@@ -138,3 +138,10 @@ Then /^I should see an? ([^\"]*) message with child "([^\"]*)"$/ do |class_name,
     n.should have_selector("p", :content => content)
   end
 end
+
+Given /^I create (\d+) ticket on project "([^\"]*)"$/ do |number, project_name|
+  project = Project.first(:name => project_name)
+  number.to_i.times do
+    Ticket.gen(:project_id => project.id, :num => project.new_num_ticket)
+  end
+end
