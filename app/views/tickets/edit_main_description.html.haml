@@ -8,6 +8,9 @@
 
       = form_for(@ticket, :action => resource(@project, @ticket, :update_main_description), :class => 'form') do
         .group
+          %label.label{:for => 'ticket[title]'} Title
+          = text_field :title, :size => 40, :class => 'text_field'
+        .group
           %label.label{:for => 'ticket[description]'} Description
           = text_area  @ticket.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area'
         .clear

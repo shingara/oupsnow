@@ -176,7 +176,8 @@ describe "resource(Project.first, @ticket, :update_main_description)" do
   def req
     @response = request(resource(Project.first, Ticket.first, :update_main_description), 
                         :method => "PUT", 
-                        :params => {:ticket => {:description => 'yahoo'}})
+                        :params => {:ticket => {:description => 'yahoo',
+                                                :title => Ticket.first.title}})
   end
 
   before :each do

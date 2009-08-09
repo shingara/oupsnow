@@ -48,10 +48,11 @@ class Tickets < Application
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     @ticket.description = ticket[:description]
+    @ticket.title = ticket[:title]
     if @ticket.save
       redirect resource(@project, @ticket)
     else
-      display @ticket
+      render :edit_main_description
     end
   end
 

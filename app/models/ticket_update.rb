@@ -19,4 +19,18 @@ class TicketUpdate
                  :project_id => self.ticket.project_id)
   end
 
+  def add_update(type_change, old, new_value=nil)
+    if old.to_s != new_value.to_s
+      self.properties_update << [type_change, old, new_value]
+    end
+  end
+
+  def add_tag_update(old, new_value)
+    new_value.downcase! if new_value
+    if old != Ticket.list_tag(new_value).join(',')
+      self.add_update(:tag_list, old, Ticket.list_tag(new_value).join(','))
+    end
+    #tag_list = frozen_tag_list
+  end
+
 end

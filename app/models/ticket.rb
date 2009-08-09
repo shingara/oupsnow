@@ -69,28 +69,29 @@ class Ticket
 
   def generate_update(ticket, user)
     t = ticket_updates.new
-    #TODO: see why, by default is not created with default value. Bug ???
     t.properties_update = []
-    unless ticket[:description].blank?
-      t.description = ticket[:description]
-      ticket.delete(:description)
-    end
-    ticket[:member_assigned_id] = nil unless ticket[:member_assigned_id] # nil if not define
-    ticket[:milestone_id] = nil unless ticket[:milestone_id] # nil if not define
-    [:title, :state_id, :member_assigned_id, :priority_id, :milestone_id].each do |type_change|
-      if send(type_change).to_s != ticket[type_change].to_s
-        t.properties_update << [type_change, send(type_change), ticket[type_change]]
+    ticket.each do |k,v|
+      if k.to_sym == :description
+        t.description = v unless v.blank?
+        next
       end
+      send("#{k}=", v)
     end
 
-    ticket[:tag_list].downcase! if ticket[:tag_list]
-    if frozen_tag_list != list_tag(ticket[:tag_list]).join(',')
-      t.properties_update << [:tag_list, frozen_tag_list, list_tag(ticket[:tag_list]).join(',')]
+    changes = self.dirty_attributes
+    return true if changes.empty? && t.description.blank?
+
+    changes.each do |property, new_value|
+      field_sym = property.field.to_sym
+      t.add_update(field_sym,
+                   self.original_values[field_sym],
+                   new_value)
     end
-    tag_list = frozen_tag_list
+    t.add_tag_update(frozen_tag_list, ticket[:tag_list])
+
 
     return true if t.description.nil? && t.properties_update.empty?
-    if update_attributes(ticket)
+    if save
       t.created_by = user
       if t.save
         t.write_event
@@ -142,7 +143,7 @@ class Ticket
     Ticket.paginate(conditions)
   end
 
-  def list_tag(string)
+  def self.list_tag(string)
     string.to_s.split(',').map { |name| 
       name.gsub(/[^\w_-]/i, '').strip 
     }.uniq.sort

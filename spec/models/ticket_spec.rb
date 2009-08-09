@@ -118,6 +118,7 @@ describe Ticket do
                      :tag_list => TAG_LIST,
                      :member_create_id => Project.first.members.first.user_id)
       @old_title = @t.title
+      @old_description = @t.description
       @t.generate_update(@t.attributes.merge(ticket), Project.first.members.first.user)
       @t.reload
     end
@@ -140,6 +141,7 @@ describe Ticket do
 
       it 'should not update ticket' do
         @t.description.should_not == 'new description'
+        @t.description.should == @old_description
       end
 
       it 'should generate ticket update' do
@@ -163,6 +165,10 @@ describe Ticket do
 
       it 'should update title ticket' do
         @t.title.should == 'new title'
+      end
+
+      it 'should not change description of ticket' do
+        @t.description.should == @old_description
       end
 
       it 'should generate ticket update' do
@@ -236,7 +242,8 @@ describe Ticket do
       end
 
       it 'should have properties_update about title' do
-        @t.ticket_updates[0].properties_update.should == [[:title, @old_title, 'new title'],[:state_id, State.first(:name => 'new').id, State.first(:name => 'check').id]]
+        @t.ticket_updates[0].properties_update.should be_include([:title, @old_title, 'new title'])
+         @t.ticket_updates[0].properties_update.should be_include([:state_id, State.first(:name => 'new').id, State.first(:name => 'check').id])
       end
     end
 
@@ -256,7 +263,7 @@ describe Ticket do
       before :each do
         @ticket = Ticket.gen
         @ticket.write_create_event
-        @ticket.generate_update({:title => 'new titlre'}, User.first)
+        @ticket.generate_update({:title => 'new title'}, User.first)
       end
 
       it 'should destroy ticket' do
