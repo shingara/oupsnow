@@ -5,6 +5,7 @@ class Project
   property :id, Serial
   property :name, String, :nullable => false, :unique => true
   property :description, Text
+  property :created_at, DateTime
 
   has n, :tickets, :constraint => :destroy
   has n, :members 

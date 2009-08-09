@@ -1,7 +1,0 @@
-.block
-  %h3 Tags
-  - unless @tags.empty?
-    .content
-      - tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class|
-        %span{:class => css_class}= link_to tag.name, resource(@project, :tickets, :q => "tagged:#{tag.name}")
-

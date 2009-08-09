@@ -51,4 +51,6 @@
         .clear
       #sidebar
         = catch_content :sidebar
+        - if @cloud
+          - fetch_partial('shared/tag_cloud', :key => @cloud[:key])
       .clear

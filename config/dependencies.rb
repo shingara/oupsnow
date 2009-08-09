@@ -7,7 +7,15 @@ do_gems_version   = "0.9.12"
 dependency "merb-core", merb_gems_version 
 dependency "merb-action-args", merb_gems_version
 dependency "merb-assets", merb_gems_version  
-dependency "merb-cache", merb_gems_version 
+dependency "merb-cache", merb_gems_version do
+  Merb::Cache.setup do
+    unless defined?(CACHE_SETUP) # HACK: rake tasks are loading this file twice
+      register(:fragment_store, Merb::Cache::FileStore, :dir => Merb.root / :tmp / :fragments)
+      register(:default, Merb::Cache::AdhocStore[:fragment_store])
+      CACHE_SETUP=true
+    end
+  end
+end
 dependency "merb-helpers", merb_gems_version 
 dependency "merb-mailer", merb_gems_version  
 dependency "merb-slices", merb_gems_version  

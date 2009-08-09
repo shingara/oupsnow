@@ -6,6 +6,7 @@ class Ticket
   property :title, String, :nullable => false, :length => 255
   property :description, Text
   property :created_at, DateTime
+  property :updated_at, DateTime
   property :num, Integer, :nullable => false
   property :state_id, Integer, :nullable => false
   property :member_create_id, Integer, :nullable => false
