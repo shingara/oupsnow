@@ -49,3 +49,7 @@ dependency "activesupport", "2.3.2"
 dependency "webrat", :require_as => nil
 dependency "cucumber", :require_as => nil 
 dependency "roman-merb_cucumber", :require_as => nil 
+
+
+# Define your backend
+dependency "do_postgres", do_gems_version
