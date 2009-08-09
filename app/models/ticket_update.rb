@@ -30,7 +30,6 @@ class TicketUpdate
     if old != Ticket.list_tag(new_value).join(',')
       add_update(:tag_list, old, Ticket.list_tag(new_value).join(','))
     end
-    #tag_list = frozen_tag_list
   end
 
 end
