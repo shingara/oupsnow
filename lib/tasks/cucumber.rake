@@ -7,12 +7,7 @@ cucumber_options = lambda do |t|
   end
   t.fork = true
 
-  t.cucumber_opts = ''
-  require_list = Array(FileList[File.join(File.dirname(__FILE__),"../../features/**/*.rb")])
-  require_list.each do |step_file|
-    t.cucumber_opts << '--require'
-    t.cucumber_opts << step_file
-  end
+  t.cucumber_opts = '--require features'
 end
 
 Cucumber::Rake::Task.new(:features, &cucumber_options)
