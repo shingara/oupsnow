@@ -79,7 +79,7 @@ class Ticket
     end
 
     changes = self.dirty_attributes
-    return true if changes.empty? && t.description.blank?
+    #return true if changes.empty? && t.description.blank?
 
     changes.each do |property, new_value|
       field_sym = property.field.to_sym
@@ -87,7 +87,7 @@ class Ticket
                    self.original_values[field_sym],
                    new_value)
     end
-    t.add_tag_update(frozen_tag_list, ticket[:tag_list])
+    t.add_tag_update(frozen_tag_list, ticket['tag_list'])
 
 
     return true if t.description.nil? && t.properties_update.empty?

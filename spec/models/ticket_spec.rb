@@ -115,7 +115,7 @@ describe Ticket do
 
     def generate_ticket(ticket)
       @t = Ticket.gen(:project_id => Project.first.id,
-                     :tag_list => TAG_LIST,
+                     'tag_list' => TAG_LIST,
                      :member_create_id => Project.first.members.first.user_id)
       @old_title = @t.title
       @old_description = @t.description
@@ -125,7 +125,7 @@ describe Ticket do
 
     describe 'no change' do
       before(:each) do
-        generate_ticket({:description => '', :tag_list => TAG_LIST})
+        generate_ticket({:description => '', 'tag_list' => TAG_LIST})
       end
 
       it 'should not create ticket_update if no change' do
@@ -136,7 +136,7 @@ describe Ticket do
     describe 'change only description' do
       before(:each) do
         generate_ticket({:description => 'new description', 
-                        :tag_list => TAG_LIST})
+                        'tag_list' => TAG_LIST})
       end
 
       it 'should not update ticket' do
@@ -160,7 +160,7 @@ describe Ticket do
     describe 'change only title' do
       before(:each) do
         generate_ticket({:title => 'new title', :description => '', 
-                        :tag_list => TAG_LIST})
+                        'tag_list' => TAG_LIST})
       end
 
       it 'should update title ticket' do
@@ -188,7 +188,7 @@ describe Ticket do
       before(:each) do
         generate_ticket({:title => 'new title', 
                         :description => 'yahoo',
-                        :tag_list => TAG_LIST})
+                        'tag_list' => TAG_LIST})
       end
 
       it 'should update title ticket' do
@@ -218,7 +218,7 @@ describe Ticket do
         generate_ticket({:title => 'new title', 
                         :description => 'yahoo', 
                         :state_id => State.gen(:name => 'check').id,
-                        :tag_list => TAG_LIST})
+                        'tag_list' => TAG_LIST})
       end
 
       it 'should update title ticket' do
@@ -249,12 +249,12 @@ describe Ticket do
 
     describe 'about tag change' do
       it 'should not see change if only space' do
-        generate_ticket({:tag_list => TAG_LIST.split(',').map{|t| t + ' '}.join(','), :description => ''})
+        generate_ticket({'tag_list' => TAG_LIST.split(',').map{|t| t + ' '}.join(','), :description => ''})
         @t.ticket_updates.should be_empty
       end
 
       it 'should no see change if order change' do
-        generate_ticket({:tag_list => TAG_LIST.split(',').map{|t| t + ' '}.reverse.join(','), :description => ''})
+        generate_ticket({'tag_list' => TAG_LIST.split(',').map{|t| t + ' '}.reverse.join(','), :description => ''})
         @t.ticket_updates.should be_empty
       end
     end
