@@ -50,7 +50,7 @@ dependency "activesupport", "2.3.2"
 dependency "webrat", :require_as => nil
 dependency "cucumber", :require_as => nil 
 dependency "roman-merb_cucumber", :require_as => nil 
-dependency "ZenTest"
+dependency "ZenTest", :require_as => nil
 
 
 # Define your backend
