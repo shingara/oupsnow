@@ -1,6 +1,7 @@
 class Ticket
   include DataMapper::Resource
   include DataMapper::Constraints
+
   
   property :id, Serial
   property :title, String, :nullable => false, :length => 255
@@ -21,6 +22,7 @@ class Ticket
   belongs_to :milestone
 
   has n, :ticket_updates, :constraint => :destroy
+  has n, :attachments, :constraint => :destroy
 
   has_tags
   has n, :tag_taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :tag_context => "tags", :constraint => :destroy

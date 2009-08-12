@@ -1,0 +1,6 @@
+.block
+  %h3 Attachments
+  .content
+    %ul
+      - @ticket.attachments.each do |attachment|
+        %li=attachment.content_file_name

@@ -6,7 +6,7 @@ class Tickets < Application
   before :admin_project, :only => [:edit_main_description, 
                                     :update_main_description]
 
-  params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id, :priority_id, :milestone_id]
+  params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id, :priority_id, :milestone_id, :attachments]
 
   def index(sort_by='id', order='desc', q='')
     @tickets = Ticket.paginate_by_search(q, :project_id => @project.id,
@@ -32,6 +32,7 @@ class Tickets < Application
   def new(project_id)
     only_provides :html
     @ticket = Ticket.new(:project_id => project_id)
+    @ticket.attachments.build
     @title = "new ticket"
     display @ticket
   end
