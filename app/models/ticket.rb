@@ -1,41 +1,33 @@
 class Ticket
-  include DataMapper::Resource
-  include DataMapper::Constraints
 
+  include MongoMapper::Document
   
-  property :id, Serial
-  property :title, String, :nullable => false, :length => 255
-  property :description, Text
-  property :created_at, DateTime
-  property :updated_at, DateTime
-  property :num, Integer, :nullable => false
-  property :state_id, Integer, :nullable => false
-  property :member_create_id, Integer, :nullable => false
-  property :priority_id, Integer
-  property :project_id, Integer
+  key :title, String, :required => true, :length => 255
+  key :description, String
+  key :created_at, DateTime, :required => true
+  key :updated_at, DateTime, :required => true
+  key :num, Integer, :required => true
+  key :project_id, String, :required => true
+  key :tags, Array
 
-  belongs_to :project
-  belongs_to :created_by, :class_name => "User", :child_key => [:member_create_id]
-  belongs_to :assigned_to, :class_name => "User", :child_key => [:member_assigned_id]
-  belongs_to :state
-  belongs_to :priority
-  belongs_to :milestone
+  key :state_ticket, Array, :length => 2 #[state_name, state_id]
+  key :created_user_ticket, Array, :length => 2 #[user_name, user_id]
+  key :assigned_user_ticket, Array, :length => 2 #[user_name, user_id]
+  key :priority_ticket, Array, :length => 2 #[priority_name, priority_id]
+  key :milestone_ticket, Array, :length => 2 #[milestone_name, milestone_id]
 
-  has n, :ticket_updates, :constraint => :destroy
-  has n, :attachments, :constraint => :destroy
+  many :ticket_updates
+  many :attachments
 
-  has_tags
-  has n, :tag_taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :tag_context => "tags", :constraint => :destroy
-  has n, :taggings, :class_name => "Tagging", :child_key => [:taggable_id], :taggable_type => self.to_s, :constraint => :destroy
-  property :frozen_tag_list, String, :length => 255
+  validates_true_for :created_user_ticket, :logic => lambda { users_in_members }, 
+    :message => 'The user to assigned ticket need member of project'
+  validates_true_for :milestone_ticket, :logic => lambda { milestone_in_same_project },
+    :message => "The milestone need to be in same project of this ticket"
 
-  validates_with_method :users_in_members
-  validates_with_method :milestone_in_same_project
+  before_validation :define_num_ticket
+  before_validation :define_state_new
 
-  before :valid?, :define_num_ticket
-  before :valid?, :define_state_new
-
-  after :destroy, :delete_event_related
+  after_destroy :delete_event_related
 
   attr_accessor :comment
 
@@ -62,7 +54,6 @@ class Ticket
     unless member_assigned_id.nil?
       if Member.first(:user_id => member_assigned_id,
                       :project_id => project_id).nil?
-        errors.add(:assigned_to, 'The user to assigned ticket need member of project')
         return false
       end
     end
@@ -177,11 +168,7 @@ class Ticket
 
   def milestone_in_same_project
     return true if milestone.nil?
-    if project_id != milestone.project_id
-      [false, "The milestone need to be in same project of this ticket"]
-    else
-      true
-    end
+    not project_id != milestone.project_id
   end
 
 end

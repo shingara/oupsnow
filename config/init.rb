@@ -2,7 +2,7 @@
  
 require 'config/dependencies.rb'
  
-use_orm :datamapper
+#use_orm :mongomapper
 use_test :rspec
 use_template_engine :haml
  

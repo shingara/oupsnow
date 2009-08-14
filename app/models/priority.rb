@@ -1,12 +1,10 @@
 class Priority
-  include DataMapper::Resource
+
+  include MongoMapper::Document
   
-  property :id, Serial
-  property :name, String, :nullable => false, :unique => true
+  key :name, String #, :nullable => false, :unique => true
 
-  has n, :tickets
-
-  before :destroy, :only_without_ticket
+  before_destroy :only_without_ticket
 
   def only_without_ticket
     unless tickets.empty?

@@ -1,21 +1,17 @@
 class Project
-  include DataMapper::Resource
-  include DataMapper::Constraints
+
+  include MongoMapper::Document
   
-  property :id, Serial
-  property :name, String, :nullable => false, :unique => true
-  property :description, Text
-  property :created_at, DateTime
+  key :name, String
+  key :description, String
+  key :created_at, DateTime
+  key :num_ticket, Integer
 
-  has n, :tickets, :constraint => :destroy
-  has n, :members 
-  has n, :users, :through => :members, :constraint => :destroy
-  has n, :functions, :through => :members, :constraint => :destroy
-  has n, :events, :constraint => :destroy
-  has n, :milestones, :constraint => :destroy
+  many :members
 
-  validates_with_method :have_one_admin
-  validates_with_method :have_member
+  validates_true_for :members, :logic => lambda { have_one_admin }, :message => 'need an admin'
+
+  validates_presence_of :members
 
   def new_num_ticket
     max_num_ticket = tickets.max(:num)
@@ -23,19 +19,11 @@ class Project
   end
 
   def have_one_admin
-    unless members.any? {|m| m.function.project_admin}
-      return [false, 'The project need a admin']
-    else
-      return true
-    end
+    members.any? {|m| m.function.project_admin}
   end
 
   def have_member
-    if members.empty?
-      return [false, 'The project need a member']
-    else
-      return true
-    end
+    not members.empty?
   end
 
   def has_member?(user)

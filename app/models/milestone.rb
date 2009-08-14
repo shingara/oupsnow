@@ -1,15 +1,12 @@
 class Milestone
-  include DataMapper::Resource
   
-  property :id, Serial
-  property :name, String
-  property :description, Text
-  property :expected_at, Date
+  include MongoMapper::Document
+  
+  key :name, String
+  key :description, String
+  key :expected_at, Date
 
-  belongs_to :project
-
-  has n, :tickets
-  before :destroy , :destroy_ticket
+  before_destroy :destroy_ticket
 
   def destroy_ticket
     tickets.each{|t| t.destroy}

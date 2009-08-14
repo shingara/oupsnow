@@ -1,18 +1,9 @@
 class Member
-  include DataMapper::Resource
-  
-  property :id, Serial
 
-  belongs_to :function
-  belongs_to :user
-  belongs_to :project
+  include MongoMapper::EmbeddedDocument
 
-  validates_present :function
-  validates_present :user
-  validates_present :project
-
-  validates_is_unique :user_id, :scope => :project_id,
-        :message => "This user is already member of this project"
+  key :user_name, String
+  key :user_id, Integer
 
   def project_admin?
     function.project_admin?

@@ -1,17 +1,13 @@
 class Function
-  include DataMapper::Resource
+
+  include MongoMapper::Document
 
   ADMIN = 'Admin'
 
-  property :id, Serial
-  property :name, String, :nullable => false, :unique => true
-  property :project_admin, Boolean
+  key :name, String #:nullable => false, :unique => true
+  key :project_admin, Boolean
 
-  has n, :members
-  has n, :users, :through => :members, :constraint => :destroy
-  has n, :projects, :through => :members, :constraint => :destroy
-
-  before :destroy, :delete_all_members
+  before_destroy :delete_all_members
 
   def delete_all_members
     members.each {|m| m.destroy}
