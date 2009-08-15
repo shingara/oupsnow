@@ -41,7 +41,10 @@ Merb::Router.prepare do
     end
   end
 
-  resources :users
+  identify User => :login do
+    resources :users, :key => :login
+  end
+
   resources :projects do
     member :overview, :method => :get
     resources :milestones

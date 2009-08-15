@@ -13,7 +13,7 @@ class Users < Application
     display @user
   end
 
-  def edit(id)
+  def edit
     only_provides :html
     @user = session.user
     @title = "edit my profile"
@@ -30,8 +30,8 @@ class Users < Application
     end
   end
 
-  def update(id, user)
-    @user = User.get(id)
+  def update(login, user)
+    @user = User.first(:login => login)
     raise NotFound unless @user
     if @user.update_attributes(user)
        redirect resource(:projects)
@@ -40,8 +40,8 @@ class Users < Application
     end
   end
 
-  def destroy(id)
-    @user = User.get(id)
+  def destroy(login)
+    @user = User.first(:login => login)
     raise NotFound unless @user
     if @user.destroy
       redirect resource(:users)
@@ -53,7 +53,7 @@ class Users < Application
   private
 
   def only_own_account
-    @user = User.get(params[:id])
+    @user = User.first(:login => params[:login])
     unless @user == session.user
       raise Unauthenticated
     end

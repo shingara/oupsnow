@@ -12,14 +12,14 @@ module Admin
     end
   
     def show(id)
-      @user = User.get(id)
+      @user = User.find(:login => k)
       raise NotFound unless @user
       @title = "Administration : user #{@user.login}"
       display @user
     end
   
     def destroy(id)
-      @user = User.get(id)
+      @user = User.find(:login => k)
       raise NotFound unless @user
       if @user.destroy
         redirect resource(:admin, :users)
@@ -30,7 +30,7 @@ module Admin
 
     def update_all(user_admin)
       user_admin.each do |k, v|
-        f = User.get(k)
+        f = User.find(:login => k)
         f.global_admin = (v == "1".to_s)
         f.save
       end
