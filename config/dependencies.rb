@@ -26,8 +26,8 @@ dependency "merb-exceptions", merb_gems_version
 dependency "merb-haml", merb_gems_version
 dependency "merb-parts", "0.9.8"
 
-dependency "jnunemaker-mongomapper", "0.3.2", :require_as => 'mongomapper'
-dependency "merb_mongomapper", "0.1.1", :require_as => 'merb_mongomapper'
+dependency "mongomapper", "~>0.3.3"
+dependency "merb_mongomapper", "0.1.3", :require_as => 'merb_mongomapper'
 
 dependency "RedCloth", "3.0.4",  :require_as => 'redcloth'
 dependency "activesupport", "2.3.3"
@@ -36,3 +36,6 @@ dependency "activesupport", "2.3.3"
 dependency "webrat", :require_as => nil
 dependency "cucumber", :require_as => nil 
 dependency "roman-merb_cucumber", :require_as => nil 
+
+dependency "randexp"
+dependency "yeastymobs-machinist_mongomapper", :source => 'http://gems.github.com', :require_as => 'machinist/mongomapper'

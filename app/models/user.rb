@@ -31,7 +31,7 @@ class User
   end
 
   def self.not_in_project(project)
-    all(:id.not => project.users.map{|u| u.id})
+    all(:_id => {'$ne' => project.users.map{|u| u.id}})
   end
 
   def destroy
@@ -43,8 +43,9 @@ class User
 
   def allways_one_global_admin
     unless self.global_admin
-      if User.first(:id.not => self.id, :global_admin => true) == nil
-        return [false, 'You need one global admin']
+      if User.first(:conditions => {:_id => {'$ne' => self.id}, 
+                                    :global_admin => true}) == nil
+        return false
       end
     end
     return true

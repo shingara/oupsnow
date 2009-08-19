@@ -18,5 +18,4 @@ src/*
 .svn/*
 config/database.yml
 bin
-gems/specifications/
-gems/gems/
+gems

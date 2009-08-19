@@ -8,13 +8,11 @@ class Merb::Authentication
             key :crypted_password, String, :required => true
             key :salt, String, :required => true
             
-            validates_presence_of        :password, :if => proc{|m| m.password_required?}
-            validates_true_for            :password, :logic  => lambda { password == password_confirmation }
-            
-            def save
-              encrypt_password
-              super
-            end
+            validates_presence_of :password, :if => proc{|m| m.password_required?}
+            validates_true_for    :password, :logic  => lambda { password == password_confirmation }
+
+            before_validation :encrypt_password
+
           end # base.class_eval
           
         end # self.extended

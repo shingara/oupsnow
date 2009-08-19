@@ -12,30 +12,15 @@ require "spec" # Satisfies Autotest and anyone else not using the Rake tasks
 # this loads all plugins required in your init file so don't add them
 # here again, Merb will do it for you
 Merb.start_environment(:testing => true, :adapter => 'runner', :environment => ENV['MERB_ENV'] || 'test')
-DataMapper.auto_migrate! if ENV['MIGRATION']
+
+MongoMapper.database.collection_names.each do |c|
+  MongoMapper.database.drop_collection(c)
+end
 
 Spec::Runner.configure do |config|
   config.include(Merb::Test::ViewHelper)
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
-
-  config.after(:each) do
-    repository(:default) do
-      while repository.adapter.current_transaction
-        repository.adapter.current_transaction.rollback
-        repository.adapter.pop_transaction
-      end
-    end
-  end
-
-  config.before(:each) do
-    repository(:default) do
-      transaction = DataMapper::Transaction.new(repository)
-      transaction.begin
-      repository.adapter.push_transaction(transaction)
-    end
-  end
-
 end
 
 def list_mock_project
@@ -47,10 +32,10 @@ def list_mock_project
          :description => 'a gallery in Rails')]
 end
 
-require File.dirname(__FILE__) + '/fixtures.rb'
+require File.dirname(__FILE__) + '/blueprints.rb'
+
 
 Merb::Test.add_helpers do
-
 
   def logout
     request('/logout')
@@ -67,19 +52,12 @@ Merb::Test.add_helpers do
     Milestone.gen(:project => p) if p.milestones.empty?
   end
 
-  def delete_project_and_user
-    #DataMapper.auto_migrate!
-    #Project.all.each{|p| p.destroy}
-    #User.all.each{|u| u.destroy}
-  end
-
   def create_default_data
     create_default_user
     need_a_milestone
   end
 
   def create_default_user
-    delete_project_and_user
     create_default_admin
     u = User.first(:login => 'shingara',             
                    :email => 'cyril.mougel@gmail.com')
@@ -98,7 +76,6 @@ Merb::Test.add_helpers do
   end
 
   def create_default_admin
-    delete_project_and_user
     User.gen(:admin) unless User.first(:login => 'admin')
     Function.gen!(:admin) unless Function.first(:name => 'Admin')
     Project.gen! unless Project.first
