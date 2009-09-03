@@ -1,15 +1,13 @@
 class TicketUpdate
-  #include DataMapper::Resource
-  #include DataMapper::Constraints
-  
-  #property :id, Serial
-  #property :properties_update, Yaml, :default => []
-  #property :description, Text
-  #property :created_at, DateTime
-  #property :member_create_id, Integer, :nullable => false
 
-  #belongs_to :created_by, :class_name => "User", :child_key => [:member_create_id]
-  #belongs_to :ticket
+  include MongoMapper::EmbeddedDocument
+
+  key :properties_update, String, :default => []
+  key :description, String
+  key :created_at, DateTime
+  key :user_name, String
+
+  belongs_to :user
 
   def write_event
     Event.create(:eventable_class => self.class,

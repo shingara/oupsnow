@@ -41,6 +41,29 @@ Merb::Test.add_helpers do
     request('/logout')
   end
 
+  def make_project_member(user=nil)
+    unless user
+      user = User.first ? User.first : User.make(:admin)
+    end
+    ProjectMember.new(:user_name => user.login,
+                      :user_id => user.id,
+                      :project_admin => true)
+  end
+
+  # generate a valid project
+  # if you don't use this method, all validation failed
+  def make_project(params={})
+    project_members = params[:project_members]
+    pr = Project.make_unsaved(params)
+    if project_members
+      pr.project_members = project_members
+    else
+      pr.project_members = [make_project_member]
+    end
+    pr.save
+    pr
+  end
+
   def delete_default_member_from_project(project)
     project.members(:user_id => User.first(:login => 'shingara').id).each {|m| m.destroy}
     project.save
@@ -55,24 +78,6 @@ Merb::Test.add_helpers do
   def create_default_data
     create_default_user
     need_a_milestone
-  end
-
-  def create_default_user
-    create_default_admin
-    u = User.first(:login => 'shingara',             
-                   :email => 'cyril.mougel@gmail.com')
-    unless u
-      u = User.create( :login => 'shingara',
-                      :email => 'cyril.mougel@gmail.com',
-                      :password => 'tintinpouet',
-                      :password_confirmation => 'tintinpouet') or raise "can't create user"
-    end
-
-    
-    if Project.first.members(:user_id => u.id).empty?
-      Project.first.members.create(:function_id => Function.gen.id,
-                                  :user_id => u.id)
-    end
   end
 
   def create_default_admin

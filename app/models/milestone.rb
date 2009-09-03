@@ -8,6 +8,8 @@ class Milestone
 
   before_destroy :destroy_ticket
 
+  belongs_to :project
+
   def destroy_ticket
     tickets.each{|t| t.destroy}
   end

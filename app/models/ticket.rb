@@ -10,14 +10,19 @@ class Ticket
   key :project_id, String, :required => true
   key :tags, Array
 
-  key :state_ticket, Array, :length => 2 #[state_name, state_id]
-  key :created_user_ticket, Array, :length => 2 #[user_name, user_id]
-  key :assigned_user_ticket, Array, :length => 2 #[user_name, user_id]
+  key :created_user_name, String
+
   key :priority_ticket, Array, :length => 2 #[priority_name, priority_id]
   key :milestone_ticket, Array, :length => 2 #[milestone_name, milestone_id]
 
   many :ticket_updates
   many :attachments
+
+  belongs_to :project
+  belongs_to :state
+  belongs_to :member_assigned, :class => User
+  belongs_to :milestone
+  belongs_to :created_user, :class => User
 
   validates_true_for :created_user_ticket, :logic => lambda { users_in_members }, 
     :message => 'The user to assigned ticket need member of project'
@@ -158,12 +163,11 @@ class Ticket
   private
 
   def define_num_ticket
-    project  ||= Project.get(project_id)
     self.num ||= project.new_num_ticket
   end
 
   def define_state_new
-    self.state_id ||= State.first(:name => 'new').id
+    self.state ||= State.first(:name => 'new')
   end
 
   def milestone_in_same_project

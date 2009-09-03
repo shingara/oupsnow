@@ -1,17 +1,11 @@
-class Member
+class ProjectMember
 
   include MongoMapper::EmbeddedDocument
 
   key :user_name, String
-  key :user_id, Integer
+  key :project_admin, Boolean
 
-  def project_admin?
-    function.project_admin?
-  end
-
-  def user_name
-    user.login
-  end
+  belongs_to :user
 
   def self.change_functions(member_function)
     return true if member_function.empty?

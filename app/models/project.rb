@@ -2,24 +2,27 @@ class Project
 
   include MongoMapper::Document
   
-  key :name, String
+  key :name, String, :unique => true
   key :description, String
   key :created_at, DateTime
-  key :num_ticket, Integer
+  key :num_ticket, Integer, :default => 1
 
-  many :members
+  many :project_members
+  many :milestones
 
-  validates_true_for :members, :logic => lambda { have_one_admin }, :message => 'need an admin'
+  validates_true_for :project_members, :logic => lambda { have_one_admin }, :message => 'need an admin'
 
-  validates_presence_of :members
+  validates_presence_of :name
 
   def new_num_ticket
-    max_num_ticket = tickets.max(:num)
-    (max_num_ticket || 0).succ
+    old_num = num_ticket
+    num_ticket.succ
+    save
+    old_num
   end
 
   def have_one_admin
-    members.any? {|m| m.function.project_admin}
+    project_members.any? {|m| m.project_admin?}
   end
 
   def have_member

@@ -24,8 +24,47 @@ Function.blueprint do
   project_admin { true }
 end
 
+# The project generate by blueprint is invalid
+# if you want a valid factory use make_project helper method
 Project.blueprint do
   name { /\w+/.gen }
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
 end
 
+def make_project_member(user=nil)
+  unless user
+    user = User.first ? User.first : User.make(:admin)
+  end
+  ProjectMember.new(:user_name => user.login,
+                    :user_id => user.id,
+                    :project_admin => true)
+end
+
+# generate a valid project
+# if you don't use this method, all validation failed
+def make_project(params={})
+  project_members = params[:project_members]
+  pr = Project.make_unsaved(params)
+  if project_members
+    pr.project_members = project_members
+  else
+    pr.project_members = [make_project_member]
+  end
+  pr.save
+  pr
+end
+
+Ticket.blueprint do
+  title { /\w+/.gen }
+  description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
+  project { make_project }
+end
+
+Milestone.blueprint do
+  name { /\w+/.gen }
+  description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
+end
+
+State.blueprint do
+  name { /\w+/.gen }
+end
