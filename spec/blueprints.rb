@@ -79,3 +79,7 @@ Event.blueprint do
   event_type { :created }
   project { Project.first }
 end
+
+Priority.blueprint do
+  name { /\w+/.gen }
+end
