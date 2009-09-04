@@ -30,6 +30,21 @@ describe Project do
     make_project(:project_members => [project_member]).should_not be_valid
   end
 
+  it 'should create an event about creation when a project is create' do
+    lambda do
+      make_project
+    end.should change(Event, :count).by(1)
+  end
+
+  it 'should add an event about change if project is update' do
+    project = make_project
+    lambda do
+      project.name = 'new_title'
+      project.user_update = project.project_members.first.user
+      project.save
+    end.should change(Event, :count).by(1)
+  end
+
   describe 'destroy project' do
 
     before :each do
@@ -43,14 +58,6 @@ describe Project do
         @project.destroy
       end.should change(Project, :count).by(-1)
     end
-
-    it 'should destroy all Member of this project' do
-      lambda do
-        @project.destroy
-      end.should change(Member, :count)
-      Member.first(:project_id => @project.id).should be_nil
-    end
-
 
     it 'should destroy all Ticket related to this project' do
       @project.tickets.should_not be_empty
@@ -78,17 +85,20 @@ describe Project do
   end
 
   describe '#has_member?' do
+    before do
+      @user = User.make
+      @project = make_project
+      @function = Function.first || Function.make
+      @project.add_member(@user, Function.first)
+    end
+
     it 'should return true if has member' do
-      user = User.gen
-      project = Project.gen
-      project.add_member(user, Function.first)
-      project.has_member?(user).should be_true
+      @project.has_member?(@user).should be_true
     end
 
     it 'should return false if has not this member' do
-      user = User.gen
-      project = Project.gen
-      project.has_member?(user).should_not be_true
+      user = User.make
+      @project.has_member?(user).should_not be_true
     end
   end
 

@@ -41,29 +41,6 @@ Merb::Test.add_helpers do
     request('/logout')
   end
 
-  def make_project_member(user=nil)
-    unless user
-      user = User.first ? User.first : User.make(:admin)
-    end
-    ProjectMember.new(:user_name => user.login,
-                      :user_id => user.id,
-                      :project_admin => true)
-  end
-
-  # generate a valid project
-  # if you don't use this method, all validation failed
-  def make_project(params={})
-    project_members = params[:project_members]
-    pr = Project.make_unsaved(params)
-    if project_members
-      pr.project_members = project_members
-    else
-      pr.project_members = [make_project_member]
-    end
-    pr.save
-    pr
-  end
-
   def delete_default_member_from_project(project)
     project.members(:user_id => User.first(:login => 'shingara').id).each {|m| m.destroy}
     project.save

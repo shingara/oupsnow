@@ -6,13 +6,9 @@ class Milestone
   key :description, String
   key :expected_at, Date
 
-  before_destroy :destroy_ticket
+  many :tickets
 
   belongs_to :project
-
-  def destroy_ticket
-    tickets.each{|t| t.destroy}
-  end
 
   def write_event_create(user)
     Event.create(:eventable_class => self.class,

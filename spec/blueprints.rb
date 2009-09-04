@@ -36,10 +36,11 @@ def make_project_member(user=nil)
     user = User.first ? User.first : User.make(:admin)
   end
   ProjectMember.new(:user_name => user.login,
-                    :user_id => user.id,
+                    :user => user,
                     :project_admin => true)
 end
 
+##
 # generate a valid project
 # if you don't use this method, all validation failed
 def make_project(params={})
@@ -49,6 +50,9 @@ def make_project(params={})
     pr.project_members = project_members
   else
     pr.project_members = [make_project_member]
+  end
+  if pr.project_members.first
+    pr.user_creator = pr.project_members.first.user
   end
   pr.save
   pr

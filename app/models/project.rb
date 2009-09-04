@@ -2,18 +2,43 @@ class Project
 
   include MongoMapper::Document
   
+  ### PROPERTY ###
+  
   key :name, String, :unique => true
   key :description, String
   key :created_at, DateTime
   key :num_ticket, Integer, :default => 1
 
-  many :project_members
-  many :milestones
+  ### EmbeddedDocument ###
+  
+  many :project_members, :dependent => :destroy
 
-  validates_true_for :project_members, :logic => lambda { have_one_admin }, :message => 'need an admin'
+  ### Other Documents ###
+  
+  many :milestones, :dependent => :destroy
+  many :tickets, :dependent => :destroy
+  many :events, :dependent => :destroy
 
+  ### VALIDATIONS ###
+
+  validates_true_for :project_members, 
+    :logic => lambda { have_one_admin }, 
+    :message => 'need an admin'
   validates_presence_of :name
 
+  ### Callback ###
+
+  after_create :add_create_event
+  after_update :add_update_event
+
+  ### ACCESSOR ###
+  attr_writer :user_creator, :user_update
+
+  ##
+  # Return the next num ticket.
+  # Update the num save in this project
+  # 
+  # TODO: Need test
   def new_num_ticket
     old_num = num_ticket
     num_ticket.succ
@@ -21,22 +46,29 @@ class Project
     old_num
   end
 
-  def have_one_admin
-    project_members.any? {|m| m.project_admin?}
-  end
-
-  def have_member
-    not members.empty?
-  end
-
+  ##
+  # Check if use is member of this project
+  #
+  # @param[user] The user to test
+  # @return[Boolean] member is or not on this project
   def has_member?(user)
-    members.count(:user_id => user.id) > 0
+    project_members.any? {|member| member.user_id == user.id }
   end
 
-  #TODO: need spec about this function
+  ##
+  # Ad user with a define function in project
+  #
+  # TODO: need spec about this function
+  # 
+  # @params[user] User to add to this project
+  # @params[function] Function on this project to this User
   def add_member(user, function)
-    members.create(:function_id => function.id,
-                 :user_id => user.id)
+    return if has_member?(user)
+    project_members << ProjectMember.new(:user_name => user.login,
+                                         :function_name => function.name,
+                                         :project_admin => function.project_admin,
+                                         :user => user,
+                                         :function => function)
   end
 
   def current_milestone
@@ -65,6 +97,34 @@ class Project
   # object. count the number of object and you know how Tag used is on a Tag
   def ticket_tag_counts
     tickets.taggings.all.group_by(&:tag_id)
+  end
+
+  private
+
+  ##
+  # Check if project has one member define like admin
+  def have_one_admin
+    project_members.any? {|m| m.project_admin?}
+  end
+
+  ##
+  # Add an event about project creation
+  def add_create_event
+    raise ArgumentError.new('Need define a user_creator in your code') unless @user_creator.is_a?(User)
+    Event.create(:eventable => self,
+                 :user => @user_creator,
+                 :event_type => :created,
+                 :project => self)
+  end
+
+  ##
+  # Add an event about project update
+  def add_update_event
+    return unless @user_update.is_a?(User)
+    Event.create(:eventable => self,
+                 :user => @user_update,
+                 :event_type => :updated,
+                 :project => self)
   end
 
 end
