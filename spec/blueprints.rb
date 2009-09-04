@@ -72,3 +72,10 @@ end
 State.blueprint do
   name { /\w+/.gen }
 end
+
+Event.blueprint do
+  eventable { make_project }
+  user { User.first ? User.first : User.make(:admin) }
+  event_type { :created }
+  project { Project.first }
+end
