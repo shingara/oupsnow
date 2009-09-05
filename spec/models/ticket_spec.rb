@@ -4,35 +4,30 @@ describe Ticket do
 
   TAG_LIST = 'bar,foo,ko,ok'
 
-  before :all do
-    create_default_admin
-  end
-
   def valid_ticket
     Ticket.gen(:project_id => Project.first.id,
               :member_create_id => Project.first.members.first.user_id)
   end
 
   it "should be valid" do
-    valid_ticket.should be_valid
+    Ticket.make.should be_valid
   end
 
-  it 'should have good dm-sweatshop' do
-    Ticket.gen.should be_valid
-  end
+  describe 'validation' do
 
-  it 'should not be valid if no same project between ticket and milestone' do
-    project = Project.gen!
-    project_2 = Project.gen!
-    milestone = Milestone.gen(:project_id => project_2.id)
-    Ticket.make(:project_id => project.id,
-                  :milestone_id => milestone.id).should_not be_valid
+    it 'should not be valid if no same project between ticket and milestone' do
+      project = make_project
+      project_2 = make_project
+      milestone = Milestone.make(:project => project_2)
+      Ticket.make_unsaved(:project => project,
+                  :milestone => milestone).should_not be_valid
+    end
   end
 
   describe '#create' do
     it 'should generate Event of ticket creation' do
       lambda do
-        t = valid_ticket
+        t = Ticket.make
         t.write_create_event
       end.should change(Event, :count)
     end
@@ -41,25 +36,28 @@ describe Ticket do
   describe 'Ticket#paginate_by_search' do
 
     before :each  do
-      @state = State.gen!
-      @state_2 = State.gen!
+      @state = State.make
+      @state_2 = State.make
       @first_tag = /\w+/.generate
       @second_tag = /\w+/.generate
       @third_tag = /\w+/.generate
-      @first_ticket = Ticket.gen!(:state_id => @state.id,
+      @first_ticket = Ticket.make(:state => @state,
                                  :tag_list => @first_tag)
-      @second_ticket = Ticket.gen!(:state_id => @state.id,
+      @second_ticket = Ticket.make(:state => @state,
                                  :tag_list => "#{@second_tag},#{@third_tag}")
-      @third_ticket = Ticket.gen!(:state_id => @state_2.id,
+      @third_ticket = Ticket.make(:state => @state_2,
                                  :tag_list => @first_tag)
-      @four_ticket = Ticket.gen!(:state_id => @state_2.id,
+      @four_ticket = Ticket.make(:state => @state_2,
                                  :tag_list => @second_tag)
       @ticket_with_first_state = [@first_ticket,@second_ticket]
       @ticket_with_second_state = [@third_ticket, @four_ticket]
     end
 
     it 'should return all if no q value' do
-      Ticket.paginate_by_search('', :page => 1, :per_page => (Ticket.count + 1)).size.should == Ticket.count
+      Ticket.paginate_by_search('', 
+                                :page => 1, 
+                                :per_page => (Ticket.count + 1)
+                               ).size.should == Ticket.count
     end
 
     it 'should return all ticket with state information' do

@@ -62,6 +62,8 @@ Ticket.blueprint do
   title { /\w+/.gen }
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
   project { make_project }
+  user_creator { self.project.project_members.first.user }
+  state { State.first(:name => 'new') || State.make(:name => 'new') }
 end
 
 Milestone.blueprint do
@@ -75,7 +77,7 @@ end
 
 Event.blueprint do
   eventable { make_project }
-  user { User.first ? User.first : User.make(:admin) }
+  user { User.first || User.make(:admin) }
   event_type { :created }
   project { Project.first }
 end

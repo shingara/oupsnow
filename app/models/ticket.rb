@@ -9,8 +9,12 @@ class Ticket
   key :num, Integer, :required => true
   key :project_id, String, :required => true
   key :tags, Array
+  key :tag_list, String
+  key :state_name, String, :required => true
 
-  key :created_user_name, String
+  key :_keywords, Array, :required => true #It's all words in ticket. Usefull to full text search
+
+  key :creator_user_name, String, :required => true
 
   key :priority_ticket, Array, :length => 2 #[priority_name, priority_id]
   key :milestone_ticket, Array, :length => 2 #[milestone_name, milestone_id]
@@ -20,17 +24,21 @@ class Ticket
 
   belongs_to :project
   belongs_to :state
-  belongs_to :member_assigned, :class => User
+  belongs_to :user_assigned, :class_name => 'User'
   belongs_to :milestone
-  belongs_to :created_user, :class => User
+  belongs_to :user_creator, :class_name => 'User', :required => true
 
-  validates_true_for :created_user_ticket, :logic => lambda { users_in_members }, 
+  validates_true_for :created_user_ticket, 
+    :logic => lambda { users_in_members }, 
     :message => 'The user to assigned ticket need member of project'
-  validates_true_for :milestone_ticket, :logic => lambda { milestone_in_same_project },
+  validates_true_for :milestone_ticket, 
+    :logic => lambda { milestone_in_same_project },
     :message => "The milestone need to be in same project of this ticket"
 
   before_validation :define_num_ticket
   before_validation :define_state_new
+  before_validation :copy_user_creator_name
+  before_validation :update_tags
 
   after_destroy :delete_event_related
 
@@ -41,29 +49,18 @@ class Ticket
   end
 
   def write_create_event
-    Event.create(:eventable_class => self.class,
-                 :eventable_id => id,
-                 :user_id => member_create_id,
+    Event.create(:eventable => self,
+                 :user => user_creator,
                  :event_type => :created,
-                 :project_id => project_id)
+                 :project => project)
   end
 
   def delete_event_related
-    Event.all(:eventable_class => self.class,
-              :eventable_id => self.id).each do |event|
+    Event.all(:eventable => self.class).each do |event|
       event.destroy
     end
   end
 
-  def users_in_members
-    unless member_assigned_id.nil?
-      if Member.first(:user_id => member_assigned_id,
-                      :project_id => project_id).nil?
-        return false
-      end
-    end
-    return true
-  end
 
   def generate_update(ticket, user)
     t = ticket_updates.new
@@ -96,46 +93,37 @@ class Ticket
     end
   end
 
+  ##
+  # Search by query with pagination available
+  #
+  # @params[q] the string with search
+  # @params[conditions] conditions with pagination options
   def self.paginate_by_search(q,  conditions={})
+    query_conditions ||={}
     unless q.empty?
-      search_list = q.split(' ')
-      conditions[:conditions] ||= [[]]
-      new_tag ||= []
-      search_list.each {|search_pattern|
-        if search_pattern.include?(':')
-          what, how = search_pattern.split(':')
-          if what == 'tagged'
-            if conditions[:frozen_tag_list.like]
-              new_tag << how
-            else
-              conditions[:frozen_tag_list.like] = "%#{how}%"
-            end
-          elsif what == "state"
-            # We can only search one state. Every time the last
-            conditions['state.name'] = how
+      query_conditions = {}
+      q.split(' ').each {|v|
+        key = nil
+        if v.include?(':')
+          s = v.split(':')
+          if s[0] == 'state'
+            query_conditions['state_name'] = s[1]
+          elsif s[0] == 'tagged'
+            query_conditions['tags'] ||= []
+            query_conditions['tags'] << s[1]
+          else
+            p 'no what'
           end
         else
-          conditions[:conditions][0] = conditions[:conditions][0] + [" (title LIKE ? OR description LIKE ?) "]
-          conditions[:conditions] += ["%#{search_pattern}%", "%#{search_pattern}%"]
+          query_conditions['_keywords'] = v
         end
       }
-      if conditions[:conditions].size <= 1
-        conditions.delete(:conditions)
-      else
-        conditions[:conditions][0] = conditions[:conditions][0].join(' AND ')
-      end
-
-      new_tag.each {|t|
-        conditions[:id] ||= []
-        tickets_with_tag = Ticket.all(:frozen_tag_list.like => "%#{t}%").map(&:id)
-        if tickets_with_tag.empty?
-          return WillPaginate::Collection.new(1,10, 0) # Emulate a empty result because no result with a tag
-        else
-          conditions[:id] += tickets_with_tag
-        end
-      }
-
     end
+    if query_conditions['tags'] && query_conditions['tags'].size > 1
+      query_conditions['tags'] = {'$all' => query_conditions['tags']}
+    end
+    conditions[:conditions] = query_conditions
+    p conditions
     Ticket.paginate(conditions)
   end
 
@@ -168,11 +156,26 @@ class Ticket
 
   def define_state_new
     self.state ||= State.first(:name => 'new')
+    self.state_name = self.state.name
   end
 
   def milestone_in_same_project
-    return true if milestone.nil?
+    return true unless milestone_id?
     not project_id != milestone.project_id
+  end
+
+  def users_in_members
+    return true unless user_assigned_id?
+    project.has_member?(user_assigned)
+  end
+
+  def copy_user_creator_name 
+    self.creator_user_name ||= self.user_creator.login
+  end
+
+  def update_tags
+    p Ticket.list_tag(self.tag_list)
+    self.tags = Ticket.list_tag(self.tag_list)
   end
 
 end
