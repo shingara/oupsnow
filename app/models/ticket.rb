@@ -16,21 +16,6 @@ class Ticket
   key :priority_name, String
   key :milestone_name, String
 
-  [:title, :description, :tag_list, :state_name, :priority_name, :milestone_name].each do |tr|
-    eval <<-end_eval
-      def #{tr}=(value)
-        @dirty_attributes ||={}
-        if @dirty_attributes[:#{tr}]
-          @dirty_attributes[:#{tr}][1] = value
-        else
-          @dirty_attributes[:#{tr}] = [read_attribute(:#{tr}), value]
-        end
-        write_attribute(:'#{tr}', value)
-      end
-    end_eval
-  end
-  after_save :no_dirty
-
   many :ticket_updates
   many :attachments
 
@@ -49,6 +34,10 @@ class Ticket
   belongs_to :milestone
   belongs_to :user_creator, :class_name => 'User', :required => true
 
+  # WARNING: what's happen if another event has same id ?
+  many :events, :class_name => 'Event', :foreign_key => :eventable_id,
+    :dependent => :destroy
+
   validates_true_for :created_user_ticket, 
     :logic => lambda { users_in_members }, 
     :message => 'The user to assigned ticket need member of project'
@@ -60,8 +49,6 @@ class Ticket
   before_validation :define_state_new
   before_validation :copy_user_creator_name
   before_validation :update_tags
-
-  after_destroy :delete_event_related
 
   attr_accessor :comment
 
@@ -76,12 +63,6 @@ class Ticket
                  :project => project)
   end
 
-  def delete_event_related
-    Event.all(:eventable => self.class).each do |event|
-      event.destroy
-    end
-  end
-
   def to_hash
     h = {}
     self.class.keys.keys.collect do |name|
@@ -92,26 +73,25 @@ class Ticket
 
   def generate_update(ticket, user)
     t = TicketUpdate.new
-    to_hash.diff(ticket).each_key do |property|
-      if property.to_sym == :description
-        t.description = ticket[:description]
-        ticket.delete(:description)
-        next
+    unless ticket[:description].blank?
+      t.description = ticket[:description]
+    end
+
+    [:title, :state_id].each do |property|
+      if ticket[property] != self.send(property)
+        t.add_update(property,
+                     send(property),
+                     ticket[property])
+        self.send("#{property}=", ticket[property])
       end
-      t.add_update(property,
-                   send(property),
-                   ticket[property])
     end
-    p t
+
     # no change and description empty
-    if t.description.blank? && t.properties_update.empty?
-      return
-    end
+    return if t.description.blank? && t.properties_update.empty?
     t.user = user
     t.creator_name = user.login
     t.write_event(self)
     ticket_updates << t
-    update_attributes(ticket)
     save
   end
 

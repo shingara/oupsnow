@@ -2,11 +2,12 @@ class TicketUpdate
 
   include MongoMapper::EmbeddedDocument
 
-  key :properties_update, String, :default => []
+  key :properties_update, Array
   key :description, String
   key :created_at, DateTime
   key :creator_name, String, :required => true
 
+  key :user_id, String
   belongs_to :user
 
   def write_event(ticket)

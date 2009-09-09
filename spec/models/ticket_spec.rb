@@ -160,8 +160,6 @@ describe Ticket do
       before(:each) do
         generate_ticket({:title => 'new title', :description => '', 
                         'tag_list' => TAG_LIST})
-        require 'ruby-debug'
-        debugger
       end
 
       it 'should update title ticket' do
@@ -215,10 +213,9 @@ describe Ticket do
 
     describe 'change title, state with description' do
       before(:each) do
-        State.all(:name => 'check').each{|s| s.destroy}
         generate_ticket({:title => 'new title', 
                         :description => 'yahoo', 
-                        :state_id => State.gen(:name => 'check').id,
+                        :state_id => (State.first(:conditions => {:name => 'check'}) || State.make(:name => 'check')).id,
                         'tag_list' => TAG_LIST})
       end
 
@@ -227,7 +224,7 @@ describe Ticket do
       end
 
       it 'should update state of ticket' do
-        @t.state_id.should == State.first(:name => 'check').id
+        @t.state_id.should == State.first(:conditions => {:name => 'check'}).id
       end
 
       it 'should not update description ticket' do
@@ -244,7 +241,9 @@ describe Ticket do
 
       it 'should have properties_update about title' do
         @t.ticket_updates[0].properties_update.should be_include([:title, @old_title, 'new title'])
-         @t.ticket_updates[0].properties_update.should be_include([:state_id, State.first(:name => 'new').id, State.first(:name => 'check').id])
+        @t.ticket_updates[0].properties_update.should be_include([:state_id, 
+                                                                 State.first(:conditions => {:name => 'new'}).id, 
+                                                                 State.first(:conditions => {:name => 'check'}).id])
       end
     end
 
@@ -262,7 +261,7 @@ describe Ticket do
 
     describe 'destroy' do
       before :each do
-        @ticket = Ticket.gen
+        @ticket = Ticket.make
         @ticket.write_create_event
         @ticket.generate_update({:title => 'new title'}, User.first)
       end
@@ -276,20 +275,10 @@ describe Ticket do
       it 'should destroy all Event about this ticket' do
         lambda do
           @ticket.destroy
-        end.should change(Event, :count).by(-1)
+        end.should change(Event, :count).by(-2)
+        # there are 2 events. One after creation one after update
       end
 
-      it 'should destroy all TicketUpdate about this ticket' do
-        lambda do
-          @ticket.destroy
-        end.should change(TicketUpdate, :count)
-      end
-
-      it 'should destroy all tagging about this ticket' do
-        lambda do
-          @ticket.destroy
-        end.should change(Tagging, :count)
-      end
     end
     
   end

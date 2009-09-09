@@ -63,7 +63,7 @@ Ticket.blueprint do
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
   project { make_project }
   user_creator { self.project.project_members.first.user }
-  state { State.first(:name => 'new') || State.make(:name => 'new') }
+  state { State.first(:conditions => {:name => 'new'}) || State.make(:name => 'new') }
 end
 
 Milestone.blueprint do

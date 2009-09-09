@@ -18,7 +18,7 @@ class Event
 
   belongs_to :user
   belongs_to :project
-  belongs_to :eventable, :polymorphic => true
+  belongs_to :eventable, :polymorphic => true, :dependent => :destroy
 
 
   # USEFULL ?
