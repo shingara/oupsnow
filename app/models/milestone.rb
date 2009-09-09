@@ -8,6 +8,7 @@ class Milestone
 
   many :tickets
 
+  key :project_id, String
   belongs_to :project
 
   def write_event_create(user)

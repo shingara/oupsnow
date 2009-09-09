@@ -10,6 +10,11 @@ class Event
   key :eventable_id, String
   
   ### Association ###
+  
+  key :user_id, String
+  key :project_id, String
+  key :eventable_type, String
+  key :eventable_id, String
 
   belongs_to :user
   belongs_to :project

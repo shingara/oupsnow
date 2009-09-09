@@ -5,16 +5,15 @@ class TicketUpdate
   key :properties_update, String, :default => []
   key :description, String
   key :created_at, DateTime
-  key :user_name, String
+  key :creator_name, String, :required => true
 
   belongs_to :user
 
-  def write_event
-    Event.create(:eventable_class => self.class,
-                 :eventable_id => self.id,
-                 :user_id => self.member_create_id,
+  def write_event(ticket)
+    Event.create(:eventable => ticket,
+                 :user => user,
                  :event_type => :updated,
-                 :project_id => self.ticket.project_id)
+                 :project => ticket.project)
   end
 
   def add_update(type_change, old, new_value=nil)

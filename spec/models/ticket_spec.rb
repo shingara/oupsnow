@@ -112,13 +112,14 @@ describe Ticket do
   describe '#generate_update' do
 
     def generate_ticket(ticket)
-      @t = Ticket.gen(:project_id => Project.first.id,
-                     'tag_list' => TAG_LIST,
-                     :member_create_id => Project.first.members.first.user_id)
+      @t = Ticket.make(:project => Project.first || make_project,
+                       :tag_list => TAG_LIST,
+                       :user_creator => Project.first.project_members.first.user)
       @old_title = @t.title
       @old_description = @t.description
-      @t.generate_update(@t.attributes.merge(ticket), Project.first.members.first.user)
-      @t.reload
+      @t.generate_update(@t.attributes.merge(ticket), 
+                         Project.first.project_members.first.user)
+      @t = Ticket.find(@t.id)
     end
 
     describe 'no change' do
@@ -159,6 +160,8 @@ describe Ticket do
       before(:each) do
         generate_ticket({:title => 'new title', :description => '', 
                         'tag_list' => TAG_LIST})
+        require 'ruby-debug'
+        debugger
       end
 
       it 'should update title ticket' do
@@ -174,7 +177,7 @@ describe Ticket do
       end
 
       it 'should generate ticket update without description' do
-        @t.ticket_updates[0].description.should be_nil
+        @t.ticket_updates[0].description.should be_blank
       end
 
       it 'should have properties_update about title' do

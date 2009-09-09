@@ -26,8 +26,9 @@ dependency "merb-exceptions", merb_gems_version
 dependency "merb-haml", merb_gems_version
 dependency "merb-parts", "0.9.8"
 
-dependency "mongomapper", "=0.3.3"
-dependency "merb_mongomapper", "0.1.3", :require_as => 'merb_mongomapper'
+dependency "mongodb-mongo_ext", :require_as => false
+dependency "mongomapper"
+dependency "shingara-merb_mongomapper", :require_as => 'merb_mongomapper'
 
 dependency "RedCloth", "3.0.4",  :require_as => 'redcloth'
 dependency "activesupport", "2.3.3"

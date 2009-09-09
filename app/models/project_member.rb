@@ -5,6 +5,8 @@ class ProjectMember
   key :user_name, String
   key :function_name, String
   key :project_admin, Boolean
+  key :user_id, String
+  key :function_id, String
 
   belongs_to :user
   belongs_to :function

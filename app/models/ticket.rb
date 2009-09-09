@@ -4,10 +4,7 @@ class Ticket
   
   key :title, String, :required => true, :length => 255
   key :description, String
-  key :created_at, DateTime, :required => true
-  key :updated_at, DateTime, :required => true
   key :num, Integer, :required => true
-  key :project_id, String, :required => true
   key :tags, Array
   key :tag_list, String
   key :state_name, String, :required => true
@@ -16,11 +13,35 @@ class Ticket
 
   key :creator_user_name, String, :required => true
 
-  key :priority_ticket, Array, :length => 2 #[priority_name, priority_id]
-  key :milestone_ticket, Array, :length => 2 #[milestone_name, milestone_id]
+  key :priority_name, String
+  key :milestone_name, String
+
+  [:title, :description, :tag_list, :state_name, :priority_name, :milestone_name].each do |tr|
+    eval <<-end_eval
+      def #{tr}=(value)
+        @dirty_attributes ||={}
+        if @dirty_attributes[:#{tr}]
+          @dirty_attributes[:#{tr}][1] = value
+        else
+          @dirty_attributes[:#{tr}] = [read_attribute(:#{tr}), value]
+        end
+        write_attribute(:'#{tr}', value)
+      end
+    end_eval
+  end
+  after_save :no_dirty
 
   many :ticket_updates
   many :attachments
+
+  key :user_creator_id, String
+  key :project_id, String
+  key :state_id, String
+  key :user_assigned_id, String
+  key :milestone_id, String
+
+  timestamps!
+
 
   belongs_to :project
   belongs_to :state
@@ -61,36 +82,37 @@ class Ticket
     end
   end
 
+  def to_hash
+    h = {}
+    self.class.keys.keys.collect do |name|
+      h[name] = read_attribute(name)
+    end
+    h
+  end
 
   def generate_update(ticket, user)
-    t = ticket_updates.new
-    t.properties_update = []
-    ticket.each do |k,v|
-      if k.to_sym == :description
-        t.description = v unless v.blank?
+    t = TicketUpdate.new
+    to_hash.diff(ticket).each_key do |property|
+      if property.to_sym == :description
+        t.description = ticket[:description]
+        ticket.delete(:description)
         next
       end
-      send("#{k}=", v)
+      t.add_update(property,
+                   send(property),
+                   ticket[property])
     end
-
-    changes = self.dirty_attributes
-
-    changes.each do |property, new_value|
-      field_sym = property.field.to_sym
-      t.add_update(field_sym,
-                   self.original_values[field_sym],
-                   new_value)
+    p t
+    # no change and description empty
+    if t.description.blank? && t.properties_update.empty?
+      return
     end
-    t.add_tag_update(frozen_tag_list, ticket['tag_list'])
-
-    return true if t.description.nil? && t.properties_update.empty?
-    if save
-      t.created_by = user
-      if t.save
-        t.write_event
-        true
-      end
-    end
+    t.user = user
+    t.creator_name = user.login
+    t.write_event(self)
+    ticket_updates << t
+    update_attributes(ticket)
+    save
   end
 
   ##
@@ -123,7 +145,6 @@ class Ticket
       query_conditions['tags'] = {'$all' => query_conditions['tags']}
     end
     conditions[:conditions] = query_conditions
-    p conditions
     Ticket.paginate(conditions)
   end
 
@@ -174,8 +195,11 @@ class Ticket
   end
 
   def update_tags
-    p Ticket.list_tag(self.tag_list)
     self.tags = Ticket.list_tag(self.tag_list)
+  end
+
+  def no_dirty
+    @dirty_attributes = {}
   end
 
 end
