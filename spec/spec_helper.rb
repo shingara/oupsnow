@@ -42,14 +42,14 @@ Merb::Test.add_helpers do
   end
 
   def delete_default_member_from_project(project)
-    project.members(:user_id => User.first(:login => 'shingara').id).each {|m| m.destroy}
+    project.members(:user_id => User.first(:conditions => {:login => 'shingara'}).id).each {|m| m.destroy}
     project.save
   end
 
   def need_a_milestone
-    Project.gen unless Project.first
-    p = Project.first
-    Milestone.gen(:project => p) if p.milestones.empty?
+    make_project unless Project.first
+    pr = Project.first
+    Milestone.make(:project => pr) if pr.milestone_id.blank?
   end
 
   def create_default_data
@@ -57,30 +57,40 @@ Merb::Test.add_helpers do
     need_a_milestone
   end
 
+  def create_default_user
+    create_default_admin
+    unless User.first(:conditions => {:login => 'shingara'})
+      User.make(:login => 'shingara',
+                :password => 'tintinpouet',
+                :password_confirmation => 'tintinpouet')
+    end
+  end
+
   def create_default_admin
-    User.gen(:admin) unless User.first(:login => 'admin')
-    Function.gen!(:admin) unless Function.first(:name => 'Admin')
-    Project.gen! unless Project.first
-    State.gen(:name => 'new') unless State.first(:name => 'new')
-    State.gen(:name => 'check') unless State.first(:name => 'check')
-    unless Project.first.members('function.name' => 'Admin')
-      Project.first.members.create(:function_id => Function.gen(:admin).id,
-                                  :user_id => User.first(:login => 'admin').id)
+    User.make(:admin) unless User.first(:conditions => {:login => 'admin'})
+    Function.make(:admin) unless Function.first(:conditions => {:name => 'Admin'})
+    make_project unless Project.first
+    State.make(:name => 'new') unless State.first(:conditions => {:name => 'new'})
+    State.make(:name => 'check') unless State.first(:conditions => {:name => 'check'})
+    unless Project.first(:conditions => {'project_members.project_admin' => true})
+      pr = Project.first
+      pr.project_members << make_project_member
+      pr.save
     end
 
     if Project.first.tickets.empty?
-      create_ticket(:project_id => Project.first.id,
-                 :member_create_id => User.first.id)
+      create_ticket(:project => Project.first,
+                 :user_creator => User.first)
     end
 
     if Ticket.first.ticket_updates.empty?
-      Ticket.first.ticket_updates.create(:member_create_id => User.first.id,
-                                        :description => 'a good update')
+      t = Ticket.first
+      t.generate_update({:description => 'why not'}, User.first)
     end
   end
 
   def create_ticket(opts={})
-    ticket = Ticket.gen(opts)
+    ticket = Ticket.make(opts)
     ticket.write_create_event
   end
 
@@ -90,11 +100,17 @@ Merb::Test.add_helpers do
     request('/login', {:method => 'PUT',
             :params => { :login => 'shingara',
               :password => 'tintinpouet'}})
-    u = User.first(:login => 'shingara')
+    u = User.first(:conditions => {:login => 'shingara'})
+
     # if user is admin of this project. He becomes not admin
-    u.members(:function_id => Function.admin.id).each do |m|
-      m.function = function_not_admin
-      m.save
+    Project.all(:conditions => {'project_members.user_id' => u.id,
+                'project_members.project_admin' => true}).each do |p|
+      p.project_members.each do |m|
+        if m.user_id == u.id && m.project_admin
+          m.project_admin = false
+        end
+      end
+      p.save
     end
     u
   end

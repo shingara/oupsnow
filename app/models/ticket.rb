@@ -30,12 +30,17 @@ class Ticket
 
   belongs_to :project
   belongs_to :state
-  belongs_to :user_assigned, :class_name => 'User'
+  belongs_to :user_assigned, 
+    :class_name => 'User'
   belongs_to :milestone
-  belongs_to :user_creator, :class_name => 'User', :required => true
+  belongs_to :user_creator, 
+    :class_name => 'User', 
+    :required => true
 
   # WARNING: what's happen if another event has same id ?
-  many :events, :class_name => 'Event', :foreign_key => :eventable_id,
+  many :events, 
+    :class_name => 'Event', 
+    :foreign_key => :eventable_id,
     :dependent => :destroy
 
   validates_true_for :created_user_ticket, 

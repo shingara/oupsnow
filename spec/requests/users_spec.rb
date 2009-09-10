@@ -16,13 +16,13 @@ describe "resource(:users)" do
 
   describe "a successful POST" do
     before(:each) do
-      User.all.destroy!
-      User.gen(:admin) # a admin user is needed in bootstrap
+      User.make(:admin) unless User.first(:conditions => {:login => 'Admin'}) # a admin user is needed in bootstrap
       @response = create_user_by_request
     end
     
     it "redirects to resource(:users)" do
-      @response.should redirect_to(resource(User.first(:login => 'shingara'), :edit), :message => {:notice => "user was successfully created"})
+      @response.should redirect_to(resource(User.first(:conditions => {:login => 'shingara'}), :edit), 
+                                   :message => {:notice => "user was successfully created"})
     end
     
   end
@@ -63,8 +63,8 @@ describe "resource(@user, :edit)", :given => "a user exists" do
     end
 
     it "should return 401 if not own edit" do
-      User.gen
-      response = request(resource(User.first(:login.not => @user.login) , :edit))
+      User.make
+      response = request(resource(User.first(:conditions => {:login => {'$ne' => @user.login}}) , :edit))
       response.status.should == 401
     end
   end

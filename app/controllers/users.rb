@@ -53,7 +53,7 @@ class Users < Application
   private
 
   def only_own_account
-    @user = User.first(:login => params[:login])
+    @user = User.first(:conditions => {:login => params[:login]})
     unless @user == session.user
       raise Unauthenticated
     end
