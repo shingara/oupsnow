@@ -283,5 +283,27 @@ describe Ticket do
     
   end
 
+  describe 'self#get_by_permalink' do
+    before do
+      @pr = make_project
+      @t1 = Ticket.make(:project => @pr)
+      @t2 = Ticket.make(:project => @pr)
+    end
+
+    it 'should get ticket with this project_id and permalink' do
+      Ticket.get_by_permalink(@pr.id, @t1.num).should == @t1
+    end
+
+    it 'should return nil because no ticket with this bad permalink but good project_id' do
+      Ticket.get_by_permalink(@pr.id, (@t2.num + 10)).should be_nil
+    end
+
+    it 'should return nil because no ticket with existing permalink but bad project_id' do
+      Ticket.get_by_permalink((@pr.id.succ), @t1.num).should be_nil
+    end
+    it 'should return nil because no ticket with bad permalink and project_id' do
+      Ticket.get_by_permalink((@pr.id.succ), (@t2.num + 10)).should be_nil
+    end
+  end
 
 end

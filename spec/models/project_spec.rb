@@ -102,4 +102,23 @@ describe Project do
     end
   end
 
+  describe 'Project#new_with_admin_member' do
+
+    before :each do
+      @function = Function.make(:admin)
+      @admin_user = User.make(:admin)
+      @user = User.make
+    end
+
+    it 'should create a project with user like admin function' do
+      pr = Project.new_with_admin_member({'name' => 'first project',
+                                    'description' => 'so cool'},
+                                    @user)
+      pr.should be_new
+      pr.project_members.should have(1).items
+      pr.project_members.first.function_id.should == Function.admin.id
+      pr.project_members.first.user_id.should == @user.id
+    end
+  end
+
 end

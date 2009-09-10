@@ -43,8 +43,7 @@ class Projects < Application
   end
 
   def create(project)
-    @project = Project.new(project)
-    @project.members.build(:user => session.user, :function => Function.admin)
+    @project = Project.new_with_admin_member(project, session.user)
     if @project.save
       redirect resource(@project, :tickets), :message => {:notice => "Project was successfully created"}
     else

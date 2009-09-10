@@ -2,11 +2,14 @@ class ProjectMember
 
   include MongoMapper::EmbeddedDocument
 
-  key :user_name, String
-  key :function_name, String
+  # TODO: need test about required user_name and function_name
+  key :user_name, String, :required => true
+  key :function_name, String, :required => true
   key :project_admin, Boolean
   key :user_id, String
   key :function_id, String
+
+  # Update field is made on master document
 
   belongs_to :user
   belongs_to :function

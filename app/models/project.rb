@@ -31,6 +31,28 @@ class Project
   after_create :add_create_event
   after_update :add_update_event
 
+  # Callback about ProjectMember
+  before_validation :update_project_admin
+  before_validation :update_user_name
+
+  ### DM Compatibility ###
+  def self.get(*args)
+    self.find(*args)
+  end
+
+  def update_project_admin
+    project_members.each do |pr|
+      pr.function_name = pr.function.name
+      pr.project_admin = pr.function.project_admin
+    end
+  end
+
+  def update_user_name
+    project_members.each do |pr|
+      pr.user_name = pr.user.login
+    end
+  end
+
   ### ACCESSOR ###
   attr_writer :user_creator, :user_update
 
@@ -97,6 +119,24 @@ class Project
   # object. count the number of object and you know how Tag used is on a Tag
   def ticket_tag_counts
     tickets.taggings.all.group_by(&:tag_id)
+  end
+
+  class << self
+    ##
+    # Create a project with atribute and define user 
+    # with function define like project_admin
+    # 
+    # @params[Hash] attributes to new Prject
+    # @params[User] user define like first member of this project
+    # @returns[Project] project initialize with attributes and user define
+    #                   like first member with Function of project_admin
+    def new_with_admin_member(attributes, user)
+      @project = Project.new(attributes)
+      @project.project_members << ProjectMember.new(:user => user,
+                                                    :function => Function.admin)
+      @project.user_creator = user
+      @project
+    end
   end
 
   private

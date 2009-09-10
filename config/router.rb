@@ -45,18 +45,20 @@ Merb::Router.prepare do
     resources :users, :key => :login
   end
 
-  resources :projects do
-    member :overview, :method => :get
-    resources :milestones
-    resources :tickets, :identify => 'ticket_permalink' do
-      member :edit_main_description, :method => :get
-      member :update_main_description, :method => :put
-      resources :ticket_updates
-    end
-    namespace(:settings) do
-      match('/').to(:controller => 'members', :action => 'index')
-      resources :members do
-        collection :update_all, :method => :put
+  identify Project => :id do
+    resources :projects do
+      member :overview, :method => :get
+      resources :milestones
+      resources :tickets, :identify => 'ticket_permalink' do
+        member :edit_main_description, :method => :get
+        member :update_main_description, :method => :put
+        resources :ticket_updates
+      end
+      namespace(:settings) do
+        match('/').to(:controller => 'members', :action => 'index')
+        resources :members do
+          collection :update_all, :method => :put
+        end
       end
     end
   end
