@@ -64,7 +64,7 @@ describe Project do
       lambda do
         @project.destroy
       end.should change(Ticket, :count).by(-1)
-      Ticket.first(:project_id => @project.id).should be_nil
+      Ticket.first(:conditions => {:project_id => @project.id}).should be_nil
     end
 
     it 'should destroy all Event related to this project' do
@@ -72,7 +72,7 @@ describe Project do
       lambda do
         @project.destroy
       end.should change(Event, :count)
-      Event.first(:project_id => @project.id).should be_nil
+      Event.first(:conditions => {:project_id => @project.id}).should be_nil
     end
 
     it 'should destroy all Milestone related to this project' do
@@ -80,7 +80,7 @@ describe Project do
       lambda do
         @project.destroy
       end.should change(Milestone, :count)
-      Milestone.first(:project_id => @project.id).should be_nil
+      Milestone.first(:conditions => {:project_id => @project.id}).should be_nil
     end
   end
 
