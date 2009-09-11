@@ -11,12 +11,17 @@ class Milestone
   key :project_id, String
   belongs_to :project
 
+  ##
+  # Create a event about creation of this milestone
+  #
+  # TODO: need test
+  #
+  # @params[User] user to create this milestone
   def write_event_create(user)
-    Event.create(:eventable_class => self.class,
-                 :eventable_id => id,
-                 :user_id => user.id,
+    Event.create(:eventable => self,
+                 :user => user,
                  :event_type => :created,
-                 :project_id => project_id)
+                 :project => self.project)
   end
 
   alias_method :title, :name
@@ -26,21 +31,50 @@ class Milestone
     100.0 * ticket_closed_count / tickets.size
   end
 
+
+  ##
+  # Number of ticket allways open
+  #
+  # TODO: need test
+  #
+  # return[Integer] number of ticket open
   def ticket_open_count
-    tickets.count(:state_id.not => State.closed.map{|s| s.id})
+    tickets.count( :conditions => {:closed => false})
   end
 
+  ##
+  # Ticket open in this milestone
+  #
+  # TODO: need test
+  #
+  # @return[Array] all tickets in this milestone not closed
   def ticket_open
-    tickets.all(:state_id.not => State.closed.map{|s| s.id})
+    tickets.all(:conditions => {:closed => false})
   end
 
   def ticket_closed_count
     tickets.count(:state_id => State.closed.map{|s| s.id})
   end
 
+  ##
+  # Return a Hash of tagging object
+  # The key is the id number of tag and the value is an Array of Tagging
+  # object. count the number of object and you know how Tag used is on a Tag
+  # 
+  # TODO: need some test
+  # TODO: see refactoring because same code of Project#ticket_tag_counts
+  #
+  # @return[Hash] Hash with name of tag in key. and number of tag use in this project in value
   def tag_counts
-    Tagging.all(:taggable_id => tickets.map(&:id), :taggable_type => 'Ticket').group_by(&:tag_id)
+    tag_list = []
+    tickets.all.each do |t|
+      tag_list = t.tags
+    end
+    res = {}
+    tag_list.each do |v|
+      res[v] = res[v] ? res[v].inc : 1
+    end
+    res
   end
-
 
 end

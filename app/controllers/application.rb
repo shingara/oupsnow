@@ -33,16 +33,16 @@ class Application < Merb::Controller
   def tag_part(type, type_id, project_id = nil)
     @cloud = {}
     if type == 'Projects'
-      @cloud[:project] = Project.get(type_id)
+      @cloud[:project] = Project.find(type_id)
       @cloud[:tags] = @project.ticket_tag_counts
       @cloud[:key] = "projects/#{type_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last.created_at : @cloud[:project].created_at}"
     elsif type == 'Tickets'
-      @cloud[:project] = Project.get(project_id)
-      @cloud[:tags] = Ticket.get(type_id).tag_counts
+      @cloud[:project] = Project.find(project_id)
+      @cloud[:tags] = Ticket.find(type_id).tag_counts
       @cloud[:key] = "tickets/#{project_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last.created_at : @cloud[:project].created_at}"
     elsif type == 'Milestones'
-      @cloud[:project] = Project.get(project_id)
-      @cloud[:tags] = Milestone.get(type_id).tag_counts
+      @cloud[:project] = Project.find(project_id)
+      @cloud[:tags] = Milestone.find(type_id).tag_counts
       @cloud[:key] = "tickets/#{project_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last.created_at : @cloud[:project].created_at}"
     else
       raise NoMethodError

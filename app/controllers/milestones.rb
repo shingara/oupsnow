@@ -16,7 +16,7 @@ class Milestones < Application
   end
 
   def show(id)
-    @milestone = Milestone.get(id)
+    @milestone = Milestone.find(id)
     raise NotFound unless @milestone
     @title = "Milestone #{@milestone.name}"
     tag_cloud_part('Milestones', @milestone.id, @project.id)
@@ -32,7 +32,7 @@ class Milestones < Application
 
   def edit(id)
     only_provides :html
-    @milestone = Milestone.get(id)
+    @milestone = Milestone.find(id)
     raise NotFound unless @milestone
     @title = "edit milestone #{@milestone.name}"
     display @milestone
@@ -54,7 +54,7 @@ class Milestones < Application
   end
 
   def update(id, milestone)
-    @milestone = Milestone.get(id)
+    @milestone = Milestone.find(id)
     raise NotFound unless @milestone
     if @milestone.update_attributes(milestone)
        redirect resource(@project, @milestone)
@@ -64,7 +64,7 @@ class Milestones < Application
   end
 
   def destroy(id)
-    @milestone = Milestone.get(id)
+    @milestone = Milestone.find(id)
     raise NotFound unless @milestone
     if @milestone.destroy
       redirect resource(@project, :milestones)

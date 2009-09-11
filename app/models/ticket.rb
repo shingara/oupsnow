@@ -8,6 +8,7 @@ class Ticket
   key :tags, Array
   key :tag_list, String
   key :state_name, String, :required => true
+  key :closed, Boolean, :default => false
 
   key :_keywords, Array, :required => true #It's all words in ticket. Usefull to full text search
 
@@ -163,6 +164,7 @@ class Ticket
   def define_state_new
     self.state ||= State.first(:name => 'new')
     self.state_name = self.state.name
+    self.closed = self.state.closed
   end
 
   def milestone_in_same_project
