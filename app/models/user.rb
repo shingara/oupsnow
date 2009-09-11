@@ -25,9 +25,17 @@ class User
   validates_true_for :global_admin, :logic => lambda { allways_one_global_admin },
     :message => 'need a global admin'
 
+  ##
+  # Check if this user is admin of this project
+  #
+  # TODO: need test
+  #
+  # @params[Project] project to test
+  # @preturn[Boolean] if or not project_admin of this project
   def admin?(project)
-    m = members.first(:project_id => project.id)
-    m && m.project_admin?
+    project.project_members.any? {|pm|
+      pm.user_id = self.id && pm.project_admin?
+    }
   end
 
   def self.not_in_project(project)
