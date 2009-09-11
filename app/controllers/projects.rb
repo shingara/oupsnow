@@ -17,7 +17,7 @@ class Projects < Application
 
   def overview(id)
     @project = Project.get(id)
-    @events = @project.events.paginate(:order => [:created_at.desc],
+    @events = @project.events.paginate(:order => 'created_at',
                                        :page => params[:page],
                                        :per_page => 20)
     raise NotFound unless @project

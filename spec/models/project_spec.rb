@@ -3,7 +3,9 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 describe Project do
 
   it "should be valid" do
-    make_project.should be_valid
+    pr = make_project
+    pr.should be_valid
+    pr.project_members.should_not be_empty
   end
 
   it "should invalid without name" do
@@ -25,8 +27,7 @@ describe Project do
   end
 
   it "should not valid project without admin member" do
-    project_member = make_project_member
-    project_member.project_admin = false
+    project_member = make_project_member(nil, (Function.not_admin || Function.make))
     make_project(:project_members => [project_member]).should_not be_valid
   end
 
@@ -105,6 +106,7 @@ describe Project do
   describe 'Project#new_with_admin_member' do
 
     before :each do
+      Function.destroy_all
       @function = Function.make(:admin)
       @admin_user = User.make(:admin)
       @user = User.make

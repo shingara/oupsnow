@@ -4,7 +4,6 @@ class Event
 
   ### PROPERTY ###
   
-  key :created_at, DateTime
   key :user_name, String
   key :eventable_class, String
   key :eventable_id, String
@@ -20,11 +19,8 @@ class Event
   belongs_to :project
   belongs_to :eventable, :polymorphic => true, :dependent => :destroy
 
-
-  # USEFULL ?
-  #key :type_event, Array #[type_event_name, type_id]
-  #key :user_event, Array #[user_name, user_id]
-  #key :project_event, Array #[project_name, project_id]
+  # TODO: need test about created_at/updated_at needed
+  timestamps!
 
   # Generate the instance of event. It's like a polymorphic system
   def ticket
@@ -41,5 +37,6 @@ class Event
   def short_description
     ticket.title
   end
+
 
 end

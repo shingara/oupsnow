@@ -14,12 +14,12 @@ User.blueprint(:admin) do
   global_admin { true }
 end
 
-Function.blueprint(:admin) do
+Function.blueprint do
   name { /\w+/.gen }
   project_admin { false }
 end
 
-Function.blueprint do
+Function.blueprint(:admin) do
   name { 'Admin' }
   project_admin { true }
 end
@@ -31,12 +31,13 @@ Project.blueprint do
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
 end
 
-def make_project_member(user=nil)
+def make_project_member(user=nil, function=nil)
   unless user
     user = User.first ? User.first : User.make(:admin)
   end
   ProjectMember.new(:user_name => user.login,
                     :user => user,
+                    :function => function || Function.admin || Function.make(:admin),
                     :project_admin => true)
 end
 
@@ -46,11 +47,7 @@ end
 def make_project(params={})
   project_members = params[:project_members]
   pr = Project.make_unsaved(params)
-  if project_members
-    pr.project_members = project_members
-  else
-    pr.project_members = [make_project_member]
-  end
+  pr.project_members = project_members || [make_project_member]
   if pr.project_members.first
     pr.user_creator = pr.project_members.first.user
   end

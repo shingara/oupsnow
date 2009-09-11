@@ -6,8 +6,10 @@ class Project
   
   key :name, String, :unique => true
   key :description, String
-  key :created_at, DateTime
   key :num_ticket, Integer, :default => 1
+
+  # TODO: need test about created_at and updated_at needed
+  timestamps!
 
   ### EmbeddedDocument ###
   
@@ -93,8 +95,14 @@ class Project
                                          :function => function)
   end
 
+  ##
+  # check the current milestone
+  #
+  # TODO: need test unit
+  #
   def current_milestone
-    milestones.first(:expected_at.gt => Time.now, :order => [:expected_at])
+    milestones.first(:conditions => {:expected_at.gt => Time.now}, 
+                     :order => :expected_at)
   end
 
   def outdated_milestones
