@@ -8,7 +8,8 @@
             .left
               %span= time_overview(event.created_at)
             .item
-              =link_to event.short_description, resource(@project, event.ticket)
+              = event.eventable_type
+              =link_to event.short_description, (event.eventable.kind_of?(Project) ? resource(event.eventable) : resource(@project, event.eventable))
               was
               =event.event_type
               by

@@ -5,13 +5,14 @@ class Event
   ### PROPERTY ###
   
   key :user_name, String
-  key :eventable_class, String
-  key :eventable_id, String
+  key :event_type, String
   
   ### Association ###
   
   key :user_id, String
   key :project_id, String
+
+  # Polymorphic event
   key :eventable_type, String
   key :eventable_id, String
 
@@ -22,20 +23,8 @@ class Event
   # TODO: need test about created_at/updated_at needed
   timestamps!
 
-  # Generate the instance of event. It's like a polymorphic system
-  def ticket
-    case eventable_class
-    when "Ticket"
-      Ticket.get(eventable_id)
-    when "TicketUpdate"
-      TicketUpdate.get(eventable_id).ticket
-    when "Milestone"
-      Milestone.get(eventable_id)
-    end
-  end
-
   def short_description
-    ticket.title
+    eventable.title
   end
 
 

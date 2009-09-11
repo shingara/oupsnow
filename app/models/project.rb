@@ -5,6 +5,7 @@ class Project
   ### PROPERTY ###
   
   key :name, String, :unique => true
+  alias_method :title, :name
   key :description, String
   key :num_ticket, Integer, :default => 1
 
@@ -101,32 +102,63 @@ class Project
   # TODO: need test unit
   #
   def current_milestone
-    milestones.first(:conditions => {:expected_at.gt => Time.now}, 
-                     :order => :expected_at)
+    milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}}, 
+                     :order => 'expected_at ASC')
   end
 
+  ##
+  # check all milestone with expected_at in past.
+  # No get current milestone
+  #
+  # TODO: need test unit
+  #
   def outdated_milestones
-    milestones.all(:expected_at.lt => Time.now,
-                   :id.not => current_milestone ? current_milestone.id : 0,
-                   :order => [:expected_at.desc])
+    milestones.all(:conditions => {:expected_at => {'$lt' => Time.now},
+                                   :_id => { '$ne' => (current_milestone ? current_milestone.id : 0)}},
+                   :order => 'expected_at DESC')
   end
 
+  ##
+  # check all milestones with expected_at in futur
+  # No get current milestone
+  #
+  # TODO: need test unit
+  #
   def upcoming_milestones
-    milestones.all(:expected_at.gt => Time.now, 
-                   :id.not => current_milestone ? current_milestone.id : 0,
-                   :order => [:expected_at])
+    milestones.all(:conditions => { :expected_at => {'$gt' => Time.now},
+                                    :id => {'$ne' => (current_milestone ? current_milestone.id : 0)}},
+                   :order => 'expected_at ASC')
   end
   
+  ##
+  # check all milestone without expected_at
+  # No get current milestone
+  #
+  # TODO: need test unit
+  #
   def no_date_milestones
-    milestones.all(:expected_at => nil,
-                   :id.not => current_milestone ? current_milestone.id : 0)
+    milestones.all(:conditions => {:expected_at => nil,
+                                    :id => { '$ne' => (current_milestone ? current_milestone.id : 0)}})
   end
 
+  ##
   # Return a Hash of tagging object
   # The key is the id number of tag and the value is an Array of Tagging
   # object. count the number of object and you know how Tag used is on a Tag
+  # 
+  # TODO: need some test
+  #
+  # @return[Hash] Hash with name of tag in key. and number of tag use in this project in value
   def ticket_tag_counts
-    tickets.taggings.all.group_by(&:tag_id)
+    tag_list = []
+    tickets.all.each do |t|
+      tag_list = t.tags
+    end
+    res = {}
+    tag_list.each do |v|
+      res[v] = res[v] ? res[v].inc : 1
+    end
+    res
   end
 
   class << self
