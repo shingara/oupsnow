@@ -3,4 +3,4 @@
   - unless @cloud[:tags].empty?
     .content
       - tag_cloud @cloud[:tags], %w(css1 css2 css3 css4) do |tag, css_class|
-        %span{:class => css_class}= link_to tag.name, resource(@cloud[:project], :tickets, :q => "tagged:#{tag.name}")
+        %span{:class => css_class}= link_to tag, resource(@cloud[:project], :tickets, :q => "tagged:#{tag}")

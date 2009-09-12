@@ -18,16 +18,17 @@ class Ticket
   key :milestone_name, String
 
   many :ticket_updates
-  many :attachments
 
-  key :user_creator_id, String
+  mount_uploader :attachment, AttachmentUploader
+
+  key :user_creator_id, String, :required => true
   key :project_id, String
   key :state_id, String
   key :user_assigned_id, String
   key :milestone_id, String
+  key :priority_id, String
 
   timestamps!
-
 
   belongs_to :project
   belongs_to :state
@@ -35,8 +36,8 @@ class Ticket
     :class_name => 'User'
   belongs_to :milestone
   belongs_to :user_creator, 
-    :class_name => 'User', 
-    :required => true
+    :class_name => 'User'
+  belongs_to :priority
 
   # WARNING: what's happen if another event has same id ?
   many :events, 
@@ -55,6 +56,7 @@ class Ticket
   before_validation :define_state_new
   before_validation :copy_user_creator_name
   before_validation :update_tags
+  before_validation :update_priority
 
   attr_accessor :comment
 
@@ -144,15 +146,30 @@ class Ticket
     "#{num}"
   end
 
+  ##
+  # get ticket with num and project_id
+  #
+  # TODO: need test
+  #
+  # @params[String] project_id where find this ticket
+  # @params[String] permalink of this ticket (number of this ticket) in this project
   def self.get_by_permalink(project_id, permalink)
-    Ticket.first(:conditions => {:num => permalink, :project_id => project_id})
+    Ticket.first(:conditions => {:num => permalink.to_i, :project_id => project_id})
   end
 
+  ##
   # Return a Hash of tagging object
   # The key is the id number of tag and the value is an Array of Tagging
   # object. count the number of object and you know how Tag used is on a Tag
+  #
+  # TODO: need some test
+  # FIXME: see how use same with milestone and project method like a module ?
   def tag_counts
-    Tagging.all(:taggable_id => id, :taggable_type => 'Ticket').group_by(&:tag_id)
+    res = {}
+    tags.each do |t|
+      res[t] = 1
+    end
+    res
   end
 
   private
@@ -162,9 +179,10 @@ class Ticket
   end
 
   def define_state_new
-    self.state ||= State.first(:name => 'new')
+    self.state ||= State.first(:conditions => {:name => 'new'})
     self.state_name = self.state.name
     self.closed = self.state.closed
+    true
   end
 
   def milestone_in_same_project
@@ -173,7 +191,7 @@ class Ticket
   end
 
   def users_in_members
-    return true unless user_assigned_id?
+    return true unless user_assigned_id
     project.has_member?(user_assigned)
   end
 
@@ -183,6 +201,10 @@ class Ticket
 
   def update_tags
     self.tags = Ticket.list_tag(self.tag_list)
+  end
+
+  def update_priority
+    self.priority_name = self.priority.name
   end
 
   def no_dirty

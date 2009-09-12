@@ -12,7 +12,7 @@
         %h2= @ticket.title
         %p.date
           Reported by 
-          =@ticket.created_by.login
+          =@ticket.creator_user_name
           |
           =@ticket.created_at
 
@@ -50,14 +50,15 @@
           = form_for(@ticket, :action => resource(@project, @ticket), :class => 'form') do 
             .columns
               %div{:class => 'column left'}
+                -# TODO: extract this node in partial with same part in tickets/new
                 .group
                   %label.label{:for => 'ticket[description]'} Description
                   = text_area(@ticket_update.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area')
 
               %div{:class => 'column right'}
                 .group
-                  %label.label{:for => 'ticket[member_assigned_to]'} Who's is responsible ?
-                  = select :member_assigned_id, :collection => Member.all(:project_id => @project.id).map{|m| m.user},:text_method => 'login', :value_method => 'id', :selected => @ticket_update.member_assigned_id.to_s, :prompt => '-- None --'
+                  %label.label{:for => 'ticket[user_assigned]'} Who's is responsible ?
+                  = select :user_assigned, :collection => @ticket.project.project_members,:text_method => 'user_name', :value_method => 'user_id', :selected => @ticket.user_assigned_id.to_s, :prompt => '-- None --'
 
                 .group
                   %label.label{:for => 'ticket[state_id]'} Ticket status
@@ -73,7 +74,7 @@
             .clear
             .group
               %label.label{:for => 'ticket[tag_list]'} Choose some tags
-              = text_field :tag_list, :value => @ticket_update.tag_list.join(', '), :class => 'text_field'
+              = text_field :tag_list, :value => @ticket_update.tag_list, :class => 'text_field'
             %div{:class => 'group navform'}
               = submit "Update", :class => 'button'
               = submit "Preview", :class => 'button'

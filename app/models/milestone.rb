@@ -52,8 +52,14 @@ class Milestone
     tickets.all(:conditions => {:closed => false})
   end
 
+  ##
+  # number of ticket closed in this milestone
+  #
+  # TODO: need test
+  # 
+  # @return[Integer] number of ticket closed on this milestone
   def ticket_closed_count
-    tickets.count(:state_id => State.closed.map{|s| s.id})
+    tickets.count( :conditions => {:closed => true})
   end
 
   ##

@@ -81,7 +81,7 @@ module Merb
         else
           index = 0
         end
-        yield Tag.get(tag_id), classes[index]
+        yield tag_id, classes[index]
       end
     end
 

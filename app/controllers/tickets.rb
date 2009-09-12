@@ -8,9 +8,9 @@ class Tickets < Application
 
   params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id, :priority_id, :milestone_id, :attachments]
 
-  def index(sort_by='id', order='desc', q='')
+  def index(sort_by='_id', order='DESC', q='')
     @tickets = Ticket.paginate_by_search(q, :project_id => @project.id,
-                               :order => [sort_by.to_sym.send(order)],
+                               :order => "#{sort_by} #{order}",
                                :page => params[:page],
                                :per_page => 20)
     milestone_part(@project.id)
@@ -19,11 +19,18 @@ class Tickets < Application
     display @tickets
   end
 
+  ##
+  # Show a ticket
+  #
+  # TODO: need some test like test raise NotFound if no ticket found
+  # 
+  # @params[String] project id
+  # @params[String] permalink of this ticket (number of this ticket)
   def show(project_id, ticket_permalink)
     @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
+    raise NotFound unless @ticket
     @ticket_update = @ticket.dup
     @ticket_update.description = ''
-    raise NotFound unless @ticket
     @title = "ticket #{@ticket.title}"
     tag_cloud_part('Tickets', @ticket.id, @project.id)
     display @ticket
@@ -32,7 +39,7 @@ class Tickets < Application
   def new(project_id)
     only_provides :html
     @ticket = Ticket.new(:project_id => project_id)
-    @ticket.attachments.build
+    #@ticket.attachments.build
     @title = "new ticket"
     display @ticket
   end
@@ -60,7 +67,7 @@ class Tickets < Application
   def create(ticket)
     @ticket = Ticket.new(ticket)
     @ticket.project_id = @project.id
-    @ticket.created_by = session.user
+    @ticket.user_creator = session.user
     if params[:submit] == 'Preview'
       @preview = true
       @ticket_new = true
