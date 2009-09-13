@@ -85,7 +85,9 @@ Merb::Test.add_helpers do
 
     if Ticket.first.ticket_updates.empty?
       t = Ticket.first
-      t.generate_update({:description => 'why not'}, User.first)
+      t.generate_update({:description => 'why not',
+                          :state_id => State.first.id,
+                          :title => t.title}, User.first)
     end
   end
 
