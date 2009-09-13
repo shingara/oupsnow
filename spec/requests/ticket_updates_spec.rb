@@ -61,7 +61,8 @@ describe "resource(Project.first, @ticket, @ticket_update) PUT" do
   def req
     @response = request(resource(Project.first, Project.first.tickets.first, Project.first.tickets.first.ticket_updates.first), 
                         :method => "PUT", 
-                        :params => {:ticket_update => {:description => 'yahoo'}})
+                        :params => {:ticket_update => {:description => 'yahoo',
+    :state_id => State.first.id}})
   end
 
   it_should_behave_like "doesn't access to anonymous ticket_update"

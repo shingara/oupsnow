@@ -7,16 +7,16 @@ class TicketUpdates < Application
 
   def edit(num)
     only_provides :html
-    @ticket_update = @ticket.get_update(id)
+    @ticket_update = @ticket.get_update(num)
     raise NotFound unless @ticket_update
     @title = "edit update ticket #{@ticket.title}"
     display @ticket_update
   end
 
   def update(num, ticket_update)
-    @ticket_update = TicketUpdate.get(id)
+    @ticket_update = @ticket.get_update(num)
     @ticket_update.description = ticket_update[:description]
-    if @ticket_update.save
+    if @ticket.save
       redirect resource(@project, @ticket)
     else
       display @ticket_update
