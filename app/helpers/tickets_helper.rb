@@ -42,19 +42,19 @@ module Merb
       return "" if field.nil?
       case state
       when :state_id
-        State.get(field).name
+        State.find(field).name
       when :tag_list
         field
-      when :member_assigned_id
-        m = User.get(field)
+      when :user_assigned_id
+        m = User.find(field)
         m ? m.login : ""
       when :title
         field
       when :priority_id
-        p = Priority.get(field)
+        p = Priority.find(field)
         p ? p.name : ""
       when :milestone_id
-        m = Milestone.get(field)
+        m = Milestone.find(field)
         m ? m.name : ""
       end
     end

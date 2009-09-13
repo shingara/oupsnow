@@ -5,7 +5,7 @@ class TicketUpdate
   key :properties_update, Array
   key :description, String
   key :created_at, DateTime
-  key :creator_name, String, :required => true
+  key :creator_user_name, String, :required => true
 
   key :user_id, String
   belongs_to :user

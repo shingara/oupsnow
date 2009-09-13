@@ -89,7 +89,7 @@ class Tickets < Application
     if params[:submit] == 'Preview'
       @preview_description = ticket[:description]
       @ticket_update = @ticket.dup
-      [:title, :description, :member_assigned_id, :state_id, :priority_id, :milestone_id, :tag_list].each do |u|
+      [:title, :description, :user_assigned_id, :state_id, :priority_id, :milestone_id, :tag_list].each do |u|
         @ticket_update.send("#{u}=", ticket[u])
       end
       render :show

@@ -88,7 +88,7 @@ class Ticket
       t.description = ticket[:description]
     end
 
-    [:title, :state_id].each do |property|
+    [:state_id].each do |property|
       if ticket[property] != self.send(property)
         t.add_update(property,
                      send(property),
@@ -100,7 +100,7 @@ class Ticket
     # no change and description empty
     return if t.description.blank? && t.properties_update.empty?
     t.user = user
-    t.creator_name = user.login
+    t.creator_user_name = user.login
     t.write_event(self)
     ticket_updates << t
     save!

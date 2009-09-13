@@ -27,7 +27,7 @@
         - @ticket.ticket_updates.each do |up|
           %li{:id => "ticket_update-#{@ticket.num}-#{up.id}", :class => 'top-ticket-update'}
             %h4
-              =up.created_by.login
+              =up.creator_user_name
               |
               =up.created_at
             %ul.list_properties{:id => "properties_change-#{@ticket.num}-#{up.id}"}
