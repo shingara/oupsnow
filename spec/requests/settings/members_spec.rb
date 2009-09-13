@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 given 'a member exists' do
   Project.all.each {|p| p.destroy}
   create_default_admin
-  Project.gen
+  make_project
 end
 
 describe "resource(:members)", :given => 'a member exists' do
@@ -71,8 +71,7 @@ describe "resource(@member)", :given => "a member exists" do
   describe "GET" do
     before(:each) do
       login_admin
-      Member.gen(:project_id => Project.first.id) unless Member.first(:project_id => Project.first.id)
-      @response = request(resource(Project.first, :settings, Member.first))
+      @response = request(resource(Project.first, :settings, Project.first.project_members))
     end
   
     it "responds successfully" do

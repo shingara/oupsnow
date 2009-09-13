@@ -29,6 +29,8 @@ class Project
     :message => 'need an admin'
   validates_presence_of :name
 
+  # TODO: avoid 2 users members of this project
+
   ### Callback ###
 
   after_create :add_create_event

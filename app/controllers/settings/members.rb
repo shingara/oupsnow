@@ -2,33 +2,34 @@ module Settings
   class Members < Application
     # provides :xml, :yaml, :js
     
+    before :projects
     before :project_admin_authenticated
   
     def index(project_id)
-      @members = Member.all(:project_id => project_id)
+      @members = @project.project_members
       @title = "Members"
       display @members
     end
   
     def show(id)
-      @member = Member.get(id)
+      @member = @project.project_members.find{|pm| pm.user_name == id}
       raise NotFound unless @member
-      @title = "member #{@member.user.login}"
+      @title = "member #{@member.user_name}"
       display @member
     end
   
     def new
       only_provides :html
-      @member = Member.new
+      @member = ProjectMember.new
       @title = "new member"
       display @member
     end
   
-    def create(member)
-      @member = Member.new(member)
-      @member.function_id = Function.first(:name => 'Developper').id
-      @member.project_id = @project.id
-      if @member.save
+    def create(project_member)
+      @member = ProjectMember.new(project_member)
+      @member.function_id = Function.first(:conditions => {:name => 'Developper'}).id
+      @project.project_members << @member
+      if @project.save
         redirect url(:project_settings_members, @project), :message => {:notice => "Member was successfully created"}
       else
         message[:error] = "Member failed to be created"

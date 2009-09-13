@@ -38,8 +38,14 @@ class User
     }
   end
 
+  ##
+  # Get all user not in this project
+  #
+  # TODO: need some test
+  #
+  # @params[Project] project to test
   def self.not_in_project(project)
-    all(:_id => {'$ne' => project.users.map{|u| u.id}})
+    all(:conditions => {:_id => {'$nin' => project.project_members.map(&:user_id)}})
   end
 
   def destroy
