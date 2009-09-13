@@ -66,7 +66,7 @@ class Project
   # TODO: Need test
   def new_num_ticket
     old_num = num_ticket
-    num_ticket.succ
+    self.num_ticket = self.num_ticket.next
     save
     old_num
   end

@@ -51,8 +51,11 @@ class Ticket
   validates_true_for :milestone_ticket, 
     :logic => lambda { milestone_in_same_project },
     :message => "The milestone need to be in same project of this ticket"
+  validates_true_for :num,
+    :logic => lambda { num_already_used_in_same_project },
+    :message => "is already used in same project"
 
-  before_validation :define_num_ticket
+  before_validation_on_create :define_num_ticket
   before_validation :define_state_new
   before_validation :copy_user_creator_name
   before_validation :update_tags
@@ -100,7 +103,7 @@ class Ticket
     t.creator_name = user.login
     t.write_event(self)
     ticket_updates << t
-    save
+    save!
   end
 
   ##
@@ -148,8 +151,6 @@ class Ticket
 
   ##
   # get ticket with num and project_id
-  #
-  # TODO: need test
   #
   # @params[String] project_id where find this ticket
   # @params[String] permalink of this ticket (number of this ticket) in this project
@@ -209,6 +210,15 @@ class Ticket
 
   def no_dirty
     @dirty_attributes = {}
+  end
+
+  ##
+  # check if num of ticket is already used in project
+  # 
+  def num_already_used_in_same_project
+    Ticket.first(:conditions => {:project_id => self.project_id,
+                 :num => self.num,
+                  :_id => {'$ne' => self.id}}).nil?
   end
 
 end

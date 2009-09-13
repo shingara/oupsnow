@@ -22,6 +22,15 @@ describe Ticket do
       Ticket.make_unsaved(:project => project,
                   :milestone => milestone).should_not be_valid
     end
+
+    it 'shoud not have same num in same project' do
+      project = make_project
+      t1 = Ticket.make(:project => project,
+                  :num => 1)
+      t = Ticket.make_unsaved(:project => project,
+                          :num => 1)
+      t.should_not be_valid
+    end
   end
 
   describe '#create' do
@@ -75,7 +84,7 @@ describe Ticket do
     it 'should return all ticket with last state define in query if several state' do
       Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}", 
                                 :page => 1, 
-                                  :per_page => 10).should == @ticket_with_second_state
+                                :per_page => 10).should == @ticket_with_second_state
     end
 
     it 'should return all ticket with tag define by tagged:xxx in query' do
@@ -213,9 +222,10 @@ describe Ticket do
 
     describe 'change title, state with description' do
       before(:each) do
+        state = State.first(:conditions => {:name => 'check'}) || State.make(:name => 'check')
         generate_ticket({:title => 'new title', 
-                        :description => 'yahoo', 
-                        :state_id => (State.first(:conditions => {:name => 'check'}) || State.make(:name => 'check')).id,
+                        :description => 'yahoo',
+                        :state_id => state.id,
                         'tag_list' => TAG_LIST})
       end
 
@@ -288,6 +298,10 @@ describe Ticket do
       @pr = make_project
       @t1 = Ticket.make(:project => @pr)
       @t2 = Ticket.make(:project => @pr)
+    end
+
+    it 'should get ticket with this project_id and permlink in string' do
+      Ticket.get_by_permalink(@pr.id.to_s, @t1.num.to_s).should == @t1
     end
 
     it 'should get ticket with this project_id and permalink' do
