@@ -33,7 +33,7 @@ Merb::Router.prepare do
       collection :update_all, :method => :put
     end
     resources :priorities
-    resources :users do
+    resources :users, :identify => :id do
       collection :update_all, :method => :put
     end
     resources :states do

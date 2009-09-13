@@ -34,7 +34,7 @@ class User
   # @preturn[Boolean] if or not project_admin of this project
   def admin?(project)
     project.project_members.any? {|pm|
-      pm.user_id = self.id && pm.project_admin?
+      pm.user_id == self.id && pm.project_admin?
     }
   end
 

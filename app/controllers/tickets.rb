@@ -2,7 +2,8 @@ class Tickets < Application
   # provides :xml, :yaml, :js
   
   before :projects
-  before :load_ticket, :only => [:show, :update, :edit_main, :update_main]
+  before :load_ticket, :only => [:show, :update, :edit_main_description, 
+    :update_main_description]
   before :ensure_authenticated, :exclude => [:index, :show]
   before :admin_project, :only => [:edit_main_description, 
                                     :update_main_description]
@@ -49,7 +50,6 @@ class Tickets < Application
   end
 
   def update_main_description(project_id, ticket_permalink, ticket)
-    raise NotFound unless @ticket
     @ticket.description = ticket[:description]
     @ticket.title = ticket[:title]
     if @ticket.save
@@ -100,7 +100,9 @@ class Tickets < Application
   private
 
   def load_ticket
-    @ticket = Ticket.get_by_permalink(params[:project_id], params[:ticket_permalink])
+    @ticket = Ticket.get_by_permalink(params[:project_id], 
+                                      params[:ticket_permalink])
+    raise NotFound unless @ticket
   end
 
 end # Tickets

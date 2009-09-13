@@ -12,14 +12,14 @@ module Admin
     end
   
     def show(id)
-      @user = User.find(:login => k)
+      @user = User.find(id)
       raise NotFound unless @user
       @title = "Administration : user #{@user.login}"
       display @user
     end
   
     def destroy(id)
-      @user = User.find(:login => k)
+      @user = User.find(id)
       raise NotFound unless @user
       if @user.destroy
         redirect resource(:admin, :users)

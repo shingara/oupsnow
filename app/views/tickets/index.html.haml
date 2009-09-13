@@ -20,7 +20,7 @@
             %tr{:class => "#{cycle('odd','even')} ticket" }
               %td= link_to "##{ticket.num}", resource(@project, ticket)
               %td= ticket.title
-              %td= ticket.assigned_to ? ticket.assigned_to.login : ""
+              %td= ticket.user_assigned ? ticket.user_assigned.login : ""
               %td= ticket.state.name
               %td= ticket.priority ? ticket.priority.name : ""
               %td= ticket.milestone ? ticket.milestone.name : ""

@@ -42,14 +42,18 @@ Merb::Test.add_helpers do
   end
 
   def delete_default_member_from_project(project)
-    project.members(:user_id => User.first(:conditions => {:login => 'shingara'}).id).each {|m| m.destroy}
+    project.project_members.each do |pm|
+      if pm.user_id == User.first(:conditions => {:login => 'shingara'})
+        project.project_members.delete(pm)
+      end
+    end
     project.save
   end
 
   def need_a_milestone
     make_project unless Project.first
     pr = Project.first
-    Milestone.make(:project => pr) if pr.milestone_id.blank?
+    Milestone.make(:project => pr) if pr.milestones.empty?
   end
 
   def create_default_data
@@ -104,15 +108,17 @@ Merb::Test.add_helpers do
               :password => 'tintinpouet'}})
     u = User.first(:conditions => {:login => 'shingara'})
 
+
     # if user is admin of this project. He becomes not admin
     Project.all(:conditions => {'project_members.user_id' => u.id,
                 'project_members.project_admin' => true}).each do |p|
       p.project_members.each do |m|
         if m.user_id == u.id && m.project_admin
-          m.project_admin = false
+          m.function = (Function.first(:conditions => {:project_admin => false}) || 
+                        Function.make)
         end
       end
-      p.save
+      p.save!
     end
     u
   end

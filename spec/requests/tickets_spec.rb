@@ -37,8 +37,9 @@ describe "resource(Project.first, :tickets)" do
 
     def post_request(project, options = {})
       @response = request(resource(project, :tickets), :method => "POST", 
-        :params => { :ticket => { :title => 'a new ticket'},
-                      :project_id => project.id}.merge(options))
+                          :params => { :ticket => { :title => 'a new ticket',
+                            :state_id => State.first.id},
+                            :project_id => project.id}.merge(options))
     end
 
     describe 'with anonymous user' do
@@ -56,9 +57,8 @@ describe "resource(Project.first, :tickets)" do
     describe 'ticket creation success', :shared => true do
 
       before :each do
-        @project.tickets.each {|t| t.destroy}
+        @project.tickets.each{|t| t.destroy}
         post_request(@project)
-        @project.reload
       end
 
       it 'should create ticket' do
@@ -66,7 +66,8 @@ describe "resource(Project.first, :tickets)" do
       end
 
       it "redirects to resource(Project.first, :tickets)" do
-        @response.should redirect_to(resource(@project, @project.tickets.first), :message => {:notice => "ticket was successfully created"})
+        @response.should redirect_to(resource(@project, @project.tickets.first), 
+                                     :message => {:notice => "ticket was successfully created"})
       end
 
       it 'project should have one ticket' do
@@ -80,8 +81,9 @@ describe "resource(Project.first, :tickets)" do
       before(:each) do
         login
         @project = Project.first
-        @project.members.build(:user_id => User.first(:login => 'shingara').id,
-                         :function_id => Function.first.id)
+        pm = ProjectMember.new(:user => User.first(:conditions => {:login => 'shingara'}),
+                          :function => Function.first)
+        @project.project_members << pm
         @project.save
       end
 
@@ -233,8 +235,10 @@ describe "resource(Project.first, @ticket)" do
     def put_request
       @project = Project.first
       @ticket = @project.tickets.first
-      @response = request(resource(@project, @ticket), :method => "PUT", 
-                          :params => { :ticket => {:id => @ticket.id} })
+      @response = request(resource(@project, @ticket), 
+                          :method => "PUT", 
+                          :params => { :ticket => {:description => 'new comment',
+                                                    :state_id => State.first.id} })
     end
 
     describe "with anonymous" do
@@ -260,7 +264,7 @@ describe "resource(Project.first, @ticket)" do
       end
     end
 
-    describe "with user logged"do
+    describe "with user logged" do
       before(:each) do
         login
         put_request
