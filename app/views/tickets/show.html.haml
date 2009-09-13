@@ -1,3 +1,6 @@
+- tag_cloud_part('Tickets', @ticket.id, @project.id)
+- @title = "ticket #{@ticket.title}"
+
 - throw_content :attachment_sidebar do
   = partial 'tickets/attachments'
 
@@ -43,6 +46,7 @@
             %legend Preview
             = textilized @preview_description
 
+        = message[:error]
         = error_messages_for @ticket
 
         #ticket_update_form
@@ -53,28 +57,28 @@
                 -# TODO: extract this node in partial with same part in tickets/new
                 .group
                   %label.label{:for => 'ticket[description]'} Description
-                  = text_area(@ticket_update.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area')
+                  = text_area(@ticket_change.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area')
 
               %div{:class => 'column right'}
                 .group
-                  %label.label{:for => 'ticket[user_assigned]'} Who's is responsible ?
-                  = select :user_assigned, :collection => @ticket.project.project_members,:text_method => 'user_name', :value_method => 'user_id', :selected => @ticket.user_assigned_id.to_s, :prompt => '-- None --'
+                  %label.label{:for => 'ticket[user_assigned_id]'} Who's is responsible ?
+                  = select :user_assigned_id, :collection => @ticket.project.project_members,:text_method => 'user_name', :value_method => 'user_id', :selected => @ticket.user_assigned_id.to_s, :prompt => '-- None --'
 
                 .group
                   %label.label{:for => 'ticket[state_id]'} Ticket status
-                  = select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id', :selected => @ticket_update.state_id.to_s
+                  = select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id', :selected => @ticket_change.state_id.to_s
 
                 .group
                   %label.label{:for => 'ticket[priority_id]'} Ticket Priority
-                  = select :priority_id, :collection => Priority.all, :text_method => :name, :value_method => :id, :selected => @ticket_update.priority_id.to_s, :prompt => '-- None --'
+                  = select :priority_id, :collection => Priority.all, :text_method => :name, :value_method => :id, :selected => @ticket_change.priority_id.to_s, :prompt => '-- None --'
 
                 .group
                   %label.label{:for => 'ticket[milestone_id]'} Milestone
-                  = select :milestone_id, :collection => @project.milestones, :text_method => :name, :value_method => :id, :selected => @ticket_update.milestone_id.to_s, :prompt => '-- None --'
+                  = select :milestone_id, :collection => @project.milestones, :text_method => :name, :value_method => :id, :selected => @ticket_change.milestone_id.to_s, :prompt => '-- None --'
             .clear
             .group
               %label.label{:for => 'ticket[tag_list]'} Choose some tags
-              = text_field :tag_list, :value => @ticket_update.tag_list, :class => 'text_field'
+              = text_field :tag_list, :value => @ticket_change.tag_list, :class => 'text_field'
             %div{:class => 'group navform'}
               = submit "Update", :class => 'button'
               = submit "Preview", :class => 'button'

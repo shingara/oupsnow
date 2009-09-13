@@ -2,6 +2,7 @@ class Tickets < Application
   # provides :xml, :yaml, :js
   
   before :projects
+  before :load_ticket, :only => [:show, :update, :edit_main, :update_main]
   before :ensure_authenticated, :exclude => [:index, :show]
   before :admin_project, :only => [:edit_main_description, 
                                     :update_main_description]
@@ -27,33 +28,27 @@ class Tickets < Application
   # @params[String] project id
   # @params[String] permalink of this ticket (number of this ticket)
   def show(project_id, ticket_permalink)
-    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
-    @ticket_update = @ticket.dup
-    @ticket_update.description = ''
-    @title = "ticket #{@ticket.title}"
-    tag_cloud_part('Tickets', @ticket.id, @project.id)
+    @ticket_change = @ticket.dup
+    @ticket_change.description = ''
     display @ticket
   end
 
   def new(project_id)
     only_provides :html
     @ticket = Ticket.new(:project_id => project_id)
-    #@ticket.attachments.build
     @title = "new ticket"
     display @ticket
   end
 
   def edit_main_description(project_id, ticket_permalink)
     only_provides :html
-    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     @title = "Edit ticket description #{@ticket.title}"
     display @ticket
   end
 
   def update_main_description(project_id, ticket_permalink, ticket)
-    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
     @ticket.description = ticket[:description]
     @ticket.title = ticket[:title]
@@ -84,22 +79,28 @@ class Tickets < Application
   end
 
   def update(project_id, ticket_permalink, ticket)
-    @ticket = Ticket.get_by_permalink(project_id, ticket_permalink)
     raise NotFound unless @ticket
-    if params[:submit] == 'Preview'
-      @preview_description = ticket[:description]
-      @ticket_update = @ticket.dup
+    @ticket_change = @ticket.dup
+    if params[:submit] != 'Preview' && 
+        @ticket.generate_update(ticket, session.user)
+      redirect resource(@project, @ticket)
+    else
+      if params[:submit] == 'Preview'
+        @preview_description = ticket[:description]
+      else
+        message[:error] = 'No new update added'
+      end
       [:title, :description, :user_assigned_id, :state_id, :priority_id, :milestone_id, :tag_list].each do |u|
-        @ticket_update.send("#{u}=", ticket[u])
+        @ticket_change.send("#{u}=", ticket[u])
       end
       render :show
-    else
-      if @ticket.generate_update(ticket, session.user)
-        redirect resource(@project, @ticket)
-      else
-        display @ticket, :show
-      end
     end
+  end
+
+  private
+
+  def load_ticket
+    @ticket = Ticket.get_by_permalink(params[:project_id], params[:ticket_permalink])
   end
 
 end # Tickets

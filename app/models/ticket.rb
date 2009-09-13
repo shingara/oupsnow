@@ -60,6 +60,7 @@ class Ticket
   before_validation :copy_user_creator_name
   before_validation :update_tags
   before_validation :update_priority
+  before_validation :update_num_of_ticket_updates
 
   attr_accessor :comment
 
@@ -74,21 +75,22 @@ class Ticket
                  :project => project)
   end
 
-  def to_hash
-    h = {}
-    self.class.keys.keys.collect do |name|
-      h[name] = read_attribute(name)
-    end
-    h
-  end
-
+  ##
+  # with a ticket and a user, check difference between ticket send by params
+  # and this ticket. If there are difference, generate a ticket_updates to this ticket
+  #
+  # TODO: need test with all change possibility. BIG BIG issue
+  #
+  # @params[Hash] a hash with new value to see difference between this
+  # @params[User] user submit new change
+  # @return[Boolean] true if ticket_update created. False
   def generate_update(ticket, user)
     t = TicketUpdate.new
     unless ticket[:description].blank?
       t.description = ticket[:description]
     end
 
-    [:state_id].each do |property|
+    [:state_id, :tag_list, :milestone_id, :user_assigned_id].each do |property|
       if ticket[property] != self.send(property)
         t.add_update(property,
                      send(property),
@@ -101,6 +103,7 @@ class Ticket
     return if t.description.blank? && t.properties_update.empty?
     t.user = user
     t.creator_user_name = user.login
+    t.created_at = Time.now
     t.write_event(self)
     ticket_updates << t
     save!
@@ -173,6 +176,16 @@ class Ticket
     res
   end
 
+  ##
+  # get ticket_update with this id
+  #
+  # TODO: need test
+  def get_update(id)
+    ticket_updates.find{ |tu|
+      tu.num = id
+    }
+  end
+
   private
 
   def define_num_ticket
@@ -219,6 +232,14 @@ class Ticket
     Ticket.first(:conditions => {:project_id => self.project_id,
                  :num => self.num,
                   :_id => {'$ne' => self.id}}).nil?
+  end
+
+  ##
+  # Define a number of each ticket_update
+  def update_num_of_ticket_updates
+    ticket_updates.each_with_index do |tu, i|
+      tu.num ||= (i+1)
+    end
   end
 
 end

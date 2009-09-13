@@ -26,8 +26,8 @@
 
           %div{:class => 'column right'}
             .group
-              %label.label{:for => 'ticket[user_assigned]'} Who's is responsible ?
-              = select :user_assigned, :collection => @ticket.project.project_members,:text_method => 'user_name', :value_method => 'user_id', :selected => @ticket.user_assigned_id.to_s, :prompt => '-- None --'
+              %label.label{:for => 'ticket[user_assigned_id]'} Who's is responsible ?
+              = select :user_assigned_id, :collection => @ticket.project.project_members,:text_method => 'user_name', :value_method => 'user_id', :selected => @ticket.user_assigned_id.to_s, :prompt => '-- None --'
 
             .group
               %label.label{:for => 'ticket[state_id]'} Ticket status

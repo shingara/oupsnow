@@ -213,14 +213,14 @@ describe "resource(Project.first, @ticket)" do
   
   describe "GET" do
     before(:each) do
-      p = Project.gen!
-      t = Ticket.gen(:project_id => p.id,
-                    :member_create_id => p.members.first.user_id)
+      p = make_project
+      t = Ticket.make(:project => p,
+                    :user_creator => p.project_members.first.user)
       @response = request(resource(p,t))
     end
 
     after :each do
-      Ticket.all.each {|t| t.destroy}
+      Ticket.destroy_all
     end
   
     it "responds successfully" do
@@ -241,7 +241,9 @@ describe "resource(Project.first, @ticket)" do
       before :each do
         create_default_admin
         logout
-        Project.first.tickets.first.ticket_updates.each {|tu| tu.destroy}
+        t = Project.first.tickets.first
+        t.ticket_updates = []
+        t.save
         put_request
       end
 
@@ -265,7 +267,7 @@ describe "resource(Project.first, @ticket)" do
       end
 
       after :each do
-        Ticket.all.each {|t| t.destroy}
+        Ticket.destroy_all
       end
     
       it "redirect to the article show action" do

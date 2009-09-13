@@ -54,7 +54,7 @@ Merb::Router.prepare do
       resources :tickets, :identify => 'ticket_permalink' do
         member :edit_main_description, :method => :get
         member :update_main_description, :method => :put
-        resources :ticket_updates
+        resources :ticket_updates, :identify => :num
       end
       namespace(:settings) do
         match('/').to(:controller => 'members', :action => 'index')
