@@ -1,5 +1,5 @@
 module Settings
-  class Members < Application
+  class ProjectMembers < Application
     # provides :xml, :yaml, :js
     
     before :projects
@@ -11,8 +11,8 @@ module Settings
       display @members
     end
   
-    def show(id)
-      @member = @project.project_members.find{|pm| pm.user_name == id}
+    def show(user_name)
+      @member = @project.project_members.find{|pm| pm.user_name == user_name}
       raise NotFound unless @member
       @title = "member #{@member.user_name}"
       display @member
@@ -29,8 +29,8 @@ module Settings
       @member = ProjectMember.new(project_member)
       @member.function_id = Function.first(:conditions => {:name => 'Developper'}).id
       @project.project_members << @member
-      if @project.save
-        redirect url(:project_settings_members, @project), :message => {:notice => "Member was successfully created"}
+      if @project.save!
+        redirect url(:project_settings_project_members, @project), :message => {:notice => "Member was successfully created"}
       else
         message[:error] = "Member failed to be created"
         render :new
@@ -62,7 +62,7 @@ module Settings
       @project = Project.get(params[:project_id])
       raise Unauthenticated unless session.user
       return true if session.user.global_admin?
-      member = @project.members.first(:user_id => session.user.id)
+      member = @project.project_members.find{|pm| pm.user_id == session.user.id}
       raise Unauthenticated if member.nil?
       raise Unauthenticated unless member.project_admin?
     end

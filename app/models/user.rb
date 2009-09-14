@@ -48,6 +48,14 @@ class User
     all(:conditions => {:_id => {'$nin' => project.project_members.map(&:user_id)}})
   end
 
+  ##
+  # Get all project where user is member
+  #
+  # TODO: need some test
+  def projects
+    Project.all(:conditions => {'project_members.user_id' => self.id})
+  end
+
   def destroy
     deleted_at = Time.now
     save

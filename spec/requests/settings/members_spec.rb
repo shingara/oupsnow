@@ -1,9 +1,11 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 given 'a member exists' do
-  Project.all.each {|p| p.destroy}
+  Project.destroy_all
+  Function.destroy_all
   create_default_admin
   make_project
+  Function.make(:name => 'Developper')
 end
 
 describe "resource(:members)", :given => 'a member exists' do
@@ -13,7 +15,7 @@ describe "resource(:members)", :given => 'a member exists' do
     describe 'with user admin' do
       before(:each) do
         login_admin
-        @response = request(url(:project_settings_members, Project.first))
+        @response = request(url(:project_settings_project_members, Project.first))
       end
       
       it "responds successfully" do
@@ -28,7 +30,7 @@ describe "resource(:members)", :given => 'a member exists' do
     describe 'with user logged' do
       before :each do
         login
-        @response = request(url(:project_settings_members, Project.first))
+        @response = request(url(:project_settings_project_members, Project.first))
       end
 
       it 'should render 401' do
@@ -44,11 +46,13 @@ describe "resource(:members)", :given => 'a member exists' do
       it 'should create member' do
         login_admin
         need_developper_function
-        lambda {
-          @response = request(url(:project_settings_members, User.first(:login => 'admin').projects.first), :method => "POST", 
-            :params => { :member => { :user_id => User.gen.id }})
-          @response.should redirect_to(url(:project_settings_members, User.first(:login => 'admin').projects.first), :message => {:notice => "Email send to shingara.gmail"})
-        }.should change(Member, :count)
+        u_admin = User.first(:conditions => {:login => 'admin'})
+        project = u_admin.projects.first
+        pms = Project.find(project.id).project_members.size
+        @response = request(url(:project_settings_project_members, project), :method => "POST", 
+                            :params => { :project_member => { :user_id => User.make.id }})
+        @response.should redirect_to(url(:project_settings_project_members, project), :message => {:notice => "Email send to shingara.gmail"})
+        (pms + 1).should == Project.find(project.id).project_members.size
       end
     end
     
@@ -58,7 +62,7 @@ end
 describe "resource(:members, :new)" do
   before(:each) do
     login_admin
-    @response = request(resource(Project.first, :settings, :members, :new))
+    @response = request(resource(Project.first, :settings, :project_members, :new))
   end
   
   it "responds successfully" do
@@ -71,7 +75,7 @@ describe "resource(@member)", :given => "a member exists" do
   describe "GET" do
     before(:each) do
       login_admin
-      @response = request(resource(Project.first, :settings, Project.first.project_members))
+      @response = request(resource(Project.first, :settings, Project.first.project_members.first))
     end
   
     it "responds successfully" do

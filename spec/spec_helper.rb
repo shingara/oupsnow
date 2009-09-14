@@ -21,6 +21,10 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::ViewHelper)
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
+  config.before(:each) do
+    Ticket.destroy_all
+    Project.destroy_all
+  end
 end
 
 def list_mock_project

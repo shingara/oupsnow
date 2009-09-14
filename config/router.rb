@@ -59,7 +59,7 @@ Merb::Router.prepare do
       namespace(:settings) do
         match('/').to(:controller => 'members', :action => 'index')
         identify ProjectMember => :user_name do
-          resources :members do
+          resources :project_members do
             collection :update_all, :method => :put
           end
         end

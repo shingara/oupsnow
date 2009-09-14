@@ -9,7 +9,7 @@
       .flash
         = error_messages_for @member
 
-      = form_for(@member, :action => url(:project_settings_members, @project), :class => 'form') do
+      = form_for(@member, :action => url(:project_settings_project_members, @project), :class => 'form') do
 
         .group
           %label.label{:for => 'member[user_id]'} User

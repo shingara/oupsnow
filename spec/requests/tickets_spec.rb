@@ -45,7 +45,7 @@ describe "resource(Project.first, :tickets)" do
     describe 'with anonymous user' do
       before :each do
         logout
-        Project.gen unless Project.first
+        make_project unless Project.first
         post_request(Project.first)
       end
 
