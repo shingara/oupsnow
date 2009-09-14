@@ -90,7 +90,14 @@ class Ticket
       t.description = ticket[:description]
     end
 
-    [:state_id, :tag_list, :milestone_id, :user_assigned_id].each do |property|
+    if Ticket.list_tag(ticket[:tag_list]) != Ticket.list_tag(self.tag_list)
+      t.add_update(:tag_list,
+                   Ticket.list_tag(self.tag_list),
+                   Ticket.list_tag(ticket[:tag_list]))
+      self.send("#{property}=", ticket[property])
+    end
+
+    [:state_id, :milestone_id, :user_assigned_id].each do |property|
       if ticket[property] != self.send(property)
         t.add_update(property,
                      send(property),

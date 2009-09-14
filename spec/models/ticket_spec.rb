@@ -165,42 +165,10 @@ describe Ticket do
       end
     end
 
-    describe 'change only title' do
+    describe 'change only description' do
       before(:each) do
-        generate_ticket({:title => 'new title', :description => '', 
+        generate_ticket({:description => 'yahoo',
                         'tag_list' => TAG_LIST})
-      end
-
-      it 'should update title ticket' do
-        @t.title.should == 'new title'
-      end
-
-      it 'should not change description of ticket' do
-        @t.description.should == @old_description
-      end
-
-      it 'should generate ticket update' do
-        @t.ticket_updates.should have(1).items
-      end
-
-      it 'should generate ticket update without description' do
-        @t.ticket_updates[0].description.should be_blank
-      end
-
-      it 'should have properties_update about title' do
-        @t.ticket_updates[0].properties_update.should == [[:title, @old_title, 'new title']]
-      end
-    end
-
-    describe 'change title with description' do
-      before(:each) do
-        generate_ticket({:title => 'new title', 
-                        :description => 'yahoo',
-                        'tag_list' => TAG_LIST})
-      end
-
-      it 'should update title ticket' do
-        @t.title.should == 'new title'
       end
 
       it 'should not update description ticket' do
@@ -215,22 +183,14 @@ describe Ticket do
         @t.ticket_updates[0].description.should == 'yahoo'
       end
 
-      it 'should have properties_update about title' do
-        @t.ticket_updates[0].properties_update.should == [[:title, @old_title, 'new title']]
-      end
     end
 
-    describe 'change title, state with description' do
+    describe 'change state with description' do
       before(:each) do
         state = State.first(:conditions => {:name => 'check'}) || State.make(:name => 'check')
-        generate_ticket({:title => 'new title', 
-                        :description => 'yahoo',
+        generate_ticket({:description => 'yahoo',
                         :state_id => state.id,
-                        'tag_list' => TAG_LIST})
-      end
-
-      it 'should update title ticket' do
-        @t.title.should == 'new title'
+                        :tag_list => TAG_LIST})
       end
 
       it 'should update state of ticket' do
@@ -249,8 +209,7 @@ describe Ticket do
         @t.ticket_updates[0].description.should == 'yahoo'
       end
 
-      it 'should have properties_update about title' do
-        @t.ticket_updates[0].properties_update.should be_include([:title, @old_title, 'new title'])
+      it 'should have properties_update with state change' do
         @t.ticket_updates[0].properties_update.should be_include([:state_id, 
                                                                  State.first(:conditions => {:name => 'new'}).id, 
                                                                  State.first(:conditions => {:name => 'check'}).id])
@@ -273,7 +232,7 @@ describe Ticket do
       before :each do
         @ticket = Ticket.make
         @ticket.write_create_event
-        @ticket.generate_update({:title => 'new title'}, User.first)
+        @ticket.generate_update({:description => 'new title'}, User.first)
       end
 
       it 'should destroy ticket' do
