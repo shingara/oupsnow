@@ -30,7 +30,7 @@ module Admin
 
     def update_all(user_admin)
       user_admin.each do |k, v|
-        f = User.find(:login => k)
+        f = User.find(k)
         f.global_admin = (v == "1".to_s)
         f.save
       end
