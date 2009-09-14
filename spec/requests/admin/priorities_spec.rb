@@ -7,7 +7,7 @@ describe "resource(:priorities)" do
     describe "GET" do
       before(:each) do
         login_admin
-        Priority.gen
+        Priority.make
         @response = request(resource(:admin, :priorities))
       end
       
@@ -18,7 +18,7 @@ describe "resource(:priorities)" do
     
     describe "a successful POST" do
       before(:each) do
-        Priority.all(:name => 'foo').each {|priority| priority.destroy}
+        Priority.all(:conditions => {:name => 'foo'}).each {|priority| priority.destroy}
         login_admin
         @response = request(resource(:admin, :priorities), :method => "POST", 
           :params => { :priority => { :name => 'foo' }})
