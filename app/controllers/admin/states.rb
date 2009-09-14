@@ -38,8 +38,7 @@ module Admin
     end
   
     def destroy(id)
-      @state = State.get(id)
-      raise NotFound unless @state
+      @state = State.find(id)
       if @state.destroy
         redirect resource(:admin, :states)
       else

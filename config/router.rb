@@ -36,7 +36,7 @@ Merb::Router.prepare do
     resources :users, :identify => :id do
       collection :update_all, :method => :put
     end
-    resources :states do
+    resources :states, :identify => :id do
       collection :update_all, :method => :put
     end
   end
