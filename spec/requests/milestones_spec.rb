@@ -32,13 +32,14 @@ describe "resource(:milestones)" do
   
   describe "a successful POST" do
     before(:each) do
+      Milestone.destroy_all
       login_admin
       @response = request(resource(Project.first, :milestones), :method => "POST", 
         :params => { :milestone => { :name => 'New Milestone' }})
     end
     
     it "redirects to resource(:milestones)" do
-      @response.should redirect_to(resource(Project.first, Milestone.first(:name => 'New Milestone')), :message => {:notice => "milestone was successfully created"})
+      @response.should redirect_to(resource(Project.first, Milestone.first(:conditions => {:name => 'New Milestone'})), :message => {:notice => "milestone was successfully created"})
     end
     
   end
@@ -108,7 +109,7 @@ describe "resource(@milestone)" do
 
 
     it "change name of milestone" do
-      @milestone.reload.name.should == 'HELLO'
+      Milestone.find(@milestone.id).name.should == 'HELLO'
     end
   end
   
