@@ -4,7 +4,7 @@ describe "resource(:projects)" do
   describe "GET" do
     
     before(:each) do
-      Project.all.each{|project| project.destroy}
+      Project.destroy_all
       @response = request(resource(:projects))
     end
     
@@ -20,7 +20,7 @@ describe "resource(:projects)" do
   
   describe "GET" do
     before(:each) do
-      2.of{Project.gen!}
+      2.of{make_project}
       @response = request(resource(:projects))
     end
     
@@ -33,13 +33,14 @@ describe "resource(:projects)" do
 
     describe "a successful POST" do
       before(:each) do
-        Project.all.each{|p| p.destroy}
+        Project.destroy_all
         login_admin
         @response = request(resource(:projects), :method => "POST", :params => {:project => { :name => 'oupsnow' }})
       end
       
       it "redirects to resource(:projects)" do
-        @response.should redirect_to(resource(Project.first(:name => 'oupsnow'), :tickets), :message => {:notice => "project was successfully created"})
+        @response.should redirect_to(resource(Project.first(:conditions => {:name => 'oupsnow'}), :tickets), 
+                                     :message => {:notice => "project was successfully created"})
       end
       
     end
@@ -51,7 +52,7 @@ describe "resource(@project) DELETE" do
   describe 'with admin user' do
     before(:each) do
       login_admin
-      @project = Project.gen!
+      @project = make_project
       @response = request(resource(@project, :delete))
     end
 
@@ -64,7 +65,7 @@ describe "resource(@project) DELETE" do
   describe 'with user project admin' do
     before(:each) do
       user = login
-      @project = Project.gen!
+      @project = make_project
       @project.add_member(user, Function.admin)
       @response = request(resource(@project, :delete))
     end
@@ -78,7 +79,7 @@ describe "resource(@project) DELETE" do
   describe 'with base user' do
     before(:each) do
       user = login
-      @project = Project.gen!
+      @project = make_project
       @project.add_member(user, function_not_admin)
       @response = request(resource(@project, :delete))
     end
@@ -95,7 +96,7 @@ describe "resource(@project) DESTROY" do
   describe 'with admin user' do
     before(:each) do
       login_admin
-      @project = Project.gen!
+      @project = make_project
       @response = request(resource(@project), :method => "DELETE")
     end
 
@@ -104,7 +105,7 @@ describe "resource(@project) DESTROY" do
     end
 
     it 'should delete project' do
-      Project.get(@project.id).should be_nil
+      Project.find_by__id(@project.id).should be_nil
     end
 
   end
@@ -112,7 +113,7 @@ describe "resource(@project) DESTROY" do
   describe 'with user project admin' do
     before(:each) do
       user = login
-      @project = Project.gen!
+      @project = make_project
       @project.add_member(user, Function.admin)
       @response = request(resource(@project), :method => "DELETE")
     end
@@ -126,7 +127,7 @@ describe "resource(@project) DESTROY" do
   describe 'with base user' do
     before(:each) do
       user = login
-      @project = Project.gen!
+      @project = make_project
       @project.add_member(user, function_not_admin)
       @response = request(resource(@project), :method => "DELETE")
     end
@@ -166,7 +167,7 @@ describe "resource(@project, :edit)" do
   describe 'with user logged' do
     before(:each) do
       login
-      @response = request(resource(Project.gen!, :edit))
+      @response = request(resource(make_project, :edit))
     end
     
     it "responds successfully" do
@@ -177,7 +178,7 @@ describe "resource(@project, :edit)" do
   describe 'with admin logged' do
     before(:each) do
       login_admin
-      @response = request(resource(Project.gen!, :edit))
+      @response = request(resource(make_project, :edit))
     end
     
     it "responds successfully" do
@@ -190,7 +191,7 @@ describe "resource(@project)" do
   
   describe "GET" do
     before(:each) do
-      @project = Project.gen!
+      @project = make_project
       @response = request(resource(@project))
     end
   
@@ -230,7 +231,7 @@ describe 'resource(@project, :overview)' do
   describe 'anonymous user' do
     before :each do
       logout
-      Project.gen! unless Project.first
+      make_project unless Project.first
       @project = Project.first
       test_request
     end
@@ -241,8 +242,7 @@ describe 'resource(@project, :overview)' do
   describe 'login user' do
     before :each do
       login
-      Project.gen! unless Project.first
-      @project = Project.first
+      @project = Project.first || make_project
       test_request
     end
 
@@ -252,8 +252,7 @@ describe 'resource(@project, :overview)' do
   describe 'admin user' do
     before :each do
       login_admin
-      Project.gen! unless Project.first
-      @project = Project.first
+      @project = Project.first || make_project
       test_request
     end
 

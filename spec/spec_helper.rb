@@ -128,7 +128,9 @@ Merb::Test.add_helpers do
   end
 
   def function_not_admin
-    Function.first(:name.not => Function::ADMIN)
+    fna = Function.first(:conditions => {:name => {'$ne' => Function::ADMIN}})
+    fna = Function.make unless fna
+    fna
   end
 
   def login_admin

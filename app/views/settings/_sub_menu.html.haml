@@ -1,6 +1,6 @@
 .secondary-navigation
   %ul
-    %li.first{:class => members_active}= link_to('Members', url(:project_settings_members, @project))
+    %li.first{:class => members_active}= link_to('Members', url(:project_settings_project_members, @project))
     %li{:class => project_edit_active}= link_to('Project', resource(@project, :edit))
     %li{:class => project_delete_active}= link_to('Delete project', resource(@project, :delete)) if global_admin?
   .clear

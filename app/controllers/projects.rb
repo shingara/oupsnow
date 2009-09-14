@@ -10,13 +10,13 @@ class Projects < Application
   end
 
   def show(id)
-    @project = Project.get(id)
+    @project = Project.find(id)
     raise NotFound unless @project
     redirect resource(@project, :overview)
   end
 
   def overview(id)
-    @project = Project.get(id)
+    @project = Project.find(id)
     @events = @project.events.paginate(:order => 'created_at',
                                        :page => params[:page],
                                        :per_page => 20)
@@ -36,8 +36,7 @@ class Projects < Application
 
   def edit(id)
     only_provides :html
-    @project = Project.get(id)
-    raise NotFound unless @project
+    @project = Project.find(id)
     @title = "edit #{@project.name}"
     display @project
   end
@@ -53,8 +52,8 @@ class Projects < Application
   end
 
   def update(id, project)
-    @project = Project.get(id)
-    raise NotFound unless @project
+    @project = Project.find(id)
+    @project.user_creator = session.user
     if @project.update_attributes(project)
        redirect resource(@project, :tickets)
     else
@@ -64,13 +63,12 @@ class Projects < Application
 
   def delete(id)
     only_provides :html
-    @project = Project.get(id)
+    @project = Project.find(id)
     display @project
   end
 
   def destroy(id)
-    @project = Project.get(id)
-    raise NotFound unless @project
+    @project = Project.find(id)
     if @project.destroy
       redirect resource(:projects), :message => {:notice => "Project #{@project.name} is delete"}
     else
