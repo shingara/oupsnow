@@ -10,7 +10,7 @@ end
 require "merb-core"
 require "spec"
 require "merb_cucumber/world/webrat"
-require "merb_cucumber/helpers/datamapper"
+require 'spec/cucumber_helper'
 
 # Uncomment if you want transactional fixtures
 Merb::Test::World::Base.use_transactional_fixtures
@@ -19,6 +19,6 @@ Merb::Test::World::Base.use_transactional_fixtures
 # http://gist.github.com/37930
 def Spec.run? ; true; end
 
-Merb.start_environment(:testing => true, :adapter => 'runner', :environment => ENV['MERB_ENV'] || 'test')
+Merb.start_environment(:testing => true, :adapter => 'runner', :environment => ENV['MERB_ENV'] || 'cucumber')
   
-require File.join(File.dirname(__FILE__), '../../spec/fixtures.rb')
+require File.join(File.dirname(__FILE__), '../../spec/blueprints.rb')

@@ -124,7 +124,6 @@ describe Ticket do
       @t = Ticket.make(:project => Project.first || make_project,
                        :tag_list => TAG_LIST,
                        :user_creator => Project.first.project_members.first.user)
-      @old_title = @t.title
       @old_description = @t.description
       @t.generate_update(@t.attributes.merge(ticket), 
                          Project.first.project_members.first.user)

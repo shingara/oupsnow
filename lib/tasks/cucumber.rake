@@ -13,13 +13,13 @@ end
 Cucumber::Rake::Task.new(:features, &cucumber_options)
 Cucumber::Rake::FeatureTask.new(:feature, &cucumber_options)
 namespace :merb_cucumber do 
-  task :test_env do
-    Merb.start_environment(:environment => "test", :adapter => 'runner')
+  task :env do
+    Merb.start_environment(:environment => "cucumber", :adapter => 'runner')
   end
 end
 
 
-dependencies = ['merb_cucumber:test_env', 'db:automigrate']
+dependencies = ['merb_cucumber:env', 'db:drop']
 task :features => dependencies
 task :feature  => dependencies
 
