@@ -2,7 +2,9 @@ class Projects < Application
   # provides :xml, :yaml, :js
  
   before :ensure_authenticated, :exclude => [:index, :show, :overview]
-  before :need_admin, :exclude => [:index, :show, :overview]
+  before :need_admin, :exclude => [:index, :show, :overview, :edit, :update]
+  before :load_project, :only => [:edit, :update, :delete, :destroy]
+  before :admin_project, :only => [:edit, :update]
 
   def index
     @projects = Project.all
@@ -36,7 +38,6 @@ class Projects < Application
 
   def edit(id)
     only_provides :html
-    @project = Project.find(id)
     @title = "edit #{@project.name}"
     display @project
   end
@@ -52,7 +53,6 @@ class Projects < Application
   end
 
   def update(id, project)
-    @project = Project.find(id)
     @project.user_creator = session.user
     if @project.update_attributes(project)
        redirect resource(@project, :tickets)
@@ -63,12 +63,10 @@ class Projects < Application
 
   def delete(id)
     only_provides :html
-    @project = Project.find(id)
     display @project
   end
 
   def destroy(id)
-    @project = Project.find(id)
     if @project.destroy
       redirect resource(:projects), :message => {:notice => "Project #{@project.name} is delete"}
     else
@@ -78,5 +76,8 @@ class Projects < Application
 
   private
 
+  def load_project
+    @project = Project.find(params[:id])
+  end
 
 end # Projects

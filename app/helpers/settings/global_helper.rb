@@ -11,7 +11,7 @@ module Merb
       end
 
       def members_active
-        active_or_not(@request.params[:controller] == 'settings/members')
+        active_or_not(@request.params[:controller] == 'settings/project_members')
       end
 
       def project_edit_active

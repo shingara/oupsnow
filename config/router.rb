@@ -57,7 +57,7 @@ Merb::Router.prepare do
         resources :ticket_updates, :identify => :num
       end
       namespace(:settings) do
-        match('/').to(:controller => 'members', :action => 'index')
+        match('/').to(:controller => 'project_members', :action => 'index')
         identify ProjectMember => :user_name do
           resources :project_members do
             collection :update_all, :method => :put

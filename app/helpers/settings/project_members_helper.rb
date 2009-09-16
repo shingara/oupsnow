@@ -1,8 +1,7 @@
 module Merb
   module Settings
-    module MembersHelper
+    module ProjectMembersHelper
       include Settings::GlobalHelper
-
     end
   end # Settings
 end # Merb

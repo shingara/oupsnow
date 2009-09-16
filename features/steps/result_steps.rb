@@ -56,7 +56,7 @@ Given /^"([^\"]*)" not admin on project "([^\"]*)"$/ do |login, project_name|
 end
 
 Given /^(\d+) tickets with state "([^\"]*)" on project "(.*)"$/ do |num, state_name, project_name|
-  state = State.first(:conditions => {:name => state_name}) || State.make(:conditions => {:name => state_name})
+  state = State.first(:conditions => {:name => state_name}) || State.make(:name => state_name)
   project = Project.first(:name => project_name) || Project.make(:conditions => {:name => project_name})
   num.to_i.times {
      Ticket.make(:state => state,
