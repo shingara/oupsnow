@@ -7,6 +7,7 @@ module Merb
         module ClassMethods
           def use_transactional_fixtures
             $main.Before do
+              # TODO: see ::MongoMapper.db.collection{|
               ::MongoMapper.connection.drop_database(::MongoMapper.database.name)
             end
           end

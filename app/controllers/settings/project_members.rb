@@ -40,20 +40,19 @@ module Settings
     def update_all(member_function={})
       notice = ""
       # You can't change your own function
-      if @project.has_member?(session.user)
-        member = @project.members.first(:user_id => session.user.id)
-        unless member.function.id.to_s == member_function[member.id.to_s]
-          notice += "You can't update your own function to become a non admin"
-          member_function[member.id.to_s] = member.function.id.to_s
-        end
+      member = @project.project_membership(session.user)
+      if member && 
+          member.function_id.to_s != member_function[member.id.to_s]
+        notice += "You can't update your own function to become a non admin"
+        member_function[member.id.to_s] = member.function.id.to_s
       end
 
-      if Member.change_functions(member_function)
+      if @project.change_functions(member_function)
         notice += "All members was updated"
       else
         notice += "You can't have no admin in a project"
       end
-      redirect url(:project_settings_members, @project), :message => {:notice => notice}
+      redirect url(:project_settings_project_members, @project), :message => {:notice => notice}
     end
   
     private

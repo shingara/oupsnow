@@ -5,15 +5,16 @@ end
 
 
 Given /^I have one user "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
-    User.make(:login => login,
-             :password => password,
-             :password_confirmation => password)
+  User.make(:admin) unless User.first(:conditions => {:global_admin => true})
+  User.make(:login => login,
+            :password => password,
+            :password_confirmation => password)
 end
 
 Given /^I have one admin user "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
-    User.make(:admin, :login => login,
-             :password => password,
-             :password_confirmation => password)
+  User.make(:admin, :login => login,
+            :password => password,
+            :password_confirmation => password)
 end
 
 Given /^"([^\"]*)" is project admin of "([^\"]*)" project$/ do |login, project_name|

@@ -45,18 +45,6 @@ class Project
     self.find(*args)
   end
 
-  def update_project_admin
-    project_members.each do |pr|
-      pr.function_name = pr.function.name
-      pr.project_admin = pr.function.project_admin
-    end
-  end
-
-  def update_user_name
-    project_members.each do |pr|
-      pr.user_name = pr.user.login
-    end
-  end
 
   ### ACCESSOR ###
   attr_writer :user_creator, :user_update
@@ -80,6 +68,35 @@ class Project
   # @return[Boolean] member is or not on this project
   def has_member?(user)
     project_members.any? {|member| member.user_id == user.id }
+  end
+
+
+  ##
+  # get project_member object where user is
+  #
+  # TODO: need some test
+  # 
+  # @params[User] user to fetch membership
+  def project_membership(user)
+    project_members.find{|member| member.user_id == user.id }
+  end
+
+  ##
+  # change function of som user in this project.
+  # This change save project
+  #
+  # TODO: need some test
+  #
+  # @params[Hash] hash with project_member.id and new function
+  #               {project_member.id => function_id}
+  # @returns[Boolean] true if change works false instead of
+  def change_functions(member_function)
+    member_function.each do |pm_id, function_id|
+      project_members.find{ |pm|
+        pm.id == pm_id
+      }.function = Function.find(function_id)
+    end
+    save
   end
 
   ##
@@ -207,6 +224,19 @@ class Project
                  :user => @user_update,
                  :event_type => :updated,
                  :project => self)
+  end
+
+  def update_project_admin
+    project_members.each do |pr|
+      pr.function_name = pr.function.name
+      pr.project_admin = pr.function.project_admin
+    end
+  end
+
+  def update_user_name
+    project_members.each do |pr|
+      pr.user_name = pr.user.login
+    end
   end
 
 end
