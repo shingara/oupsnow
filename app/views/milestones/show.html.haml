@@ -18,5 +18,5 @@
         - @milestone.ticket_open.each do |ticket|
           %li
             %span="##{ticket.num}"
-            =link_to ticket.title, resource(@project, ticket)
-            = ticket.tag_list.join(', ')
+            = link_to ticket.title, resource(@project, ticket)
+            = ticket.tag_list

@@ -6,7 +6,7 @@ class Ticket
   key :description, String
   key :num, Integer, :required => true
   key :tags, Array
-  key :tag_list, String
+  key :tag_list, String, :default => ''
   key :state_name, String, :required => true
   key :closed, Boolean, :default => false
 

@@ -86,10 +86,18 @@ describe "resource(@milestone)" do
   describe "GET" do
     before(:each) do
       need_a_milestone
-      @response = request(resource(Project.first, Project.first.milestones.first))
+    end
+
+    it 'responses successfully even if ticket has no tag' do
+      pr = Project.first
+      ml = pr.milestones.first
+      Ticket.make(:tag_list => '', :project => pr, :milestone => ml)
+      @response = request(resource(pr, ml))
+      @response.should be_successful
     end
   
     it "responds successfully" do
+      @response = request(resource(Project.first, Project.first.milestones.first))
       @response.should be_successful
     end
   end
