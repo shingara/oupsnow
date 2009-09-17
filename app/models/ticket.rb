@@ -94,7 +94,7 @@ class Ticket
       t.add_update(:tag_list,
                    Ticket.list_tag(self.tag_list),
                    Ticket.list_tag(ticket[:tag_list]))
-      self.send("#{property}=", ticket[property])
+      self.tag_list = ticket[tag_list]
     end
 
     [:state_id, :milestone_id, :user_assigned_id].each do |property|

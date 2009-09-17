@@ -46,38 +46,32 @@ module OupsNow
       require 'merb-core'
       ::Merb.start_environment(
         :environment => ENV['MERB_ENV'] || 'development')
-      require 'spec/fixtures'
+      require 'spec/blueprints'
       (4..10).of {
-        User.gen
+        User.make
       }
       3.of{
-        p = Project.gen!
+        pr = make_project
         (1..3).of {
-          Milestone.gen!(:project_id => p.id)
+          Milestone.make(:project => pr)
         }
         (4..10).of {
-          Member.gen(
-            :project_id => p.id,
-            :user_id => User.all[rand(User.count)].id,
-            :function_id => Function.all[rand(Function.count)].id)
+          make_project_member(User.first, Function.first)
         }
         (20..40).of {
-          Ticket.gen(
-            :project_id => p.id,
-            :member_create_id => p.members.first.user_id)
+          Ticket.make(
+            :project => pr,
+            :user_creator => pr.project_members.first.user)
         }
         (20..40).of {
-          t = p.tickets[rand(p.tickets.size)]
-          t.reload
-          t.project.reload
+          t = pr.tickets[rand(pr.tickets.size)]
           t.generate_update({
-            :title => rand(2) == 0 ? t.title : /\w+/.gen,
             :state_id => rand(2) == 0 ? t.state_id : State.all[rand(State.count)].id,
-            :tag_list => rand(2) == 0 ? t.frozen_tag_list : (0..3).of { /\w+/.gen }.join(','),
-            :member_assigned_id => rand(2) == 0 ? t.member_assigned_id : p.members[rand(p.members.size)].id,
-            :milestone_id => rand(2) == 0 ? t.milestone_id : t.project.milestones[rand(p.milestones.size)].id,
+            :tag_list => rand(2) == 0 ? t.tag_list : (0..3).of { /\w+/.gen }.join(','),
+            :user_assigned_id => rand(2) == 0 ? t.user_assigned_id : pr.project_members.first.user_id,
+            :milestone_id => rand(2) == 0 ? t.milestone_id : t.project.milestones[rand(pr.milestones.size)].id,
             :description =>rand(2) == 0 ? "" : (0..3).of { /[:paragraph:]/.generate }.join("\n"),
-          }, p.users[rand(p.users.size)])
+          }, pr.project_members.rand.user)
         }
       }
     end
