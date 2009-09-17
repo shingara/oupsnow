@@ -14,8 +14,8 @@ Feature: Login
     And I should not see "Administration" 
 
     Examples:
-      | mail           | password       |
-      | shingara | tintinpouet            |
+    | mail           | password       |
+    | shingara       | tintinpouet    |
 
  
   Scenario Outline: Failed Login

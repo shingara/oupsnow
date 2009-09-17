@@ -55,6 +55,16 @@ Given /^"([^\"]*)" not admin on project "([^\"]*)"$/ do |login, project_name|
     project.save
 end
 
+Given /^"([^\"]*)"\s+admin on project "([^\"]*)"$/ do |login, project_name|
+    project = Project.first(:conditions => {:name => project_name})
+    project.project_members.each {|pm|
+      if pm.user.login == login
+        pm.function = Function.admin
+      end
+    }
+    project.save
+end
+
 Given /^(\d+) tickets with state "([^\"]*)" on project "(.*)"$/ do |num, state_name, project_name|
   state = State.first(:conditions => {:name => state_name}) || State.make(:name => state_name)
   project = Project.first(:name => project_name) || Project.make(:conditions => {:name => project_name})

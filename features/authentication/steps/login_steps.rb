@@ -4,7 +4,7 @@ Given /^I am not authenticated$/ do
 end
 
 
-Given /^I have one user "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
+Given /^I have one\s+user "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
   User.make(:admin) unless User.first(:conditions => {:global_admin => true})
   User.make(:login => login,
             :password => password,

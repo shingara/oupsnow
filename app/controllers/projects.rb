@@ -55,7 +55,7 @@ class Projects < Application
   def update(id, project)
     @project.user_creator = session.user
     if @project.update_attributes(project)
-       redirect resource(@project, :tickets)
+       redirect resource(@project, :tickets), :message => {:notice => "Project is update"}
     else
       display @project, :edit
     end
