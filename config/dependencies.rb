@@ -26,14 +26,13 @@ dependency "merb-exceptions", merb_gems_version
 dependency "merb-haml", merb_gems_version
 dependency "merb-parts", "0.9.8"
 
-dependency "mongodb-mongo", :require_as => 'mongo'
 dependency "mongodb-mongo_ext", :require_as => false
 dependency "activesupport"
 dependency "mongomapper"
-dependency "shingara-merb_mongomapper", :require_as => 'merb_mongomapper'
+dependency "merb_mongomapper", :require_as => 'merb_mongomapper'
 dependency "carrierwave"
 
-dependency "RedCloth", "3.0.4",  :require_as => 'redcloth'
+dependency "RedCloth",  :require_as => 'redcloth'
 
 # if you want run spec you need install webrat gem
 dependency "webrat", :require_as => nil
@@ -41,4 +40,5 @@ dependency "cucumber", :require_as => nil
 dependency "roman-merb_cucumber", :require_as => nil 
 
 dependency "randexp"
-dependency "yeastymobs-machinist_mongomapper", :source => 'http://gems.github.com', :require_as => 'machinist/mongomapper'
+dependency "notahat-machinist", :source => "http://gems.github.com", :require_as => 'machinist'
+dependency "machinist_mongomapper", :source => 'http://gems.github.com', :require_as => 'machinist/mongomapper'
