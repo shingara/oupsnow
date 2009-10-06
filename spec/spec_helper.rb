@@ -23,8 +23,11 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
   config.before(:each) do
-    Ticket.destroy_all
-    Project.destroy_all
+    Project.collection.clear
+    Ticket.collection.clear
+    Function.collection.clear
+    User.collection.clear
+    State.collection.clear
   end
 end
 
@@ -77,7 +80,7 @@ Merb::Test.add_helpers do
 
   def create_default_admin
     User.make(:admin) unless User.first(:conditions => {:login => 'admin'})
-    Function.make(:admin) unless Function.first(:conditions => {:name => 'Admin'})
+    Function.make(:admin) unless Function.admin
     make_project unless Project.first
     State.make(:name => 'new') unless State.first(:conditions => {:name => 'new'})
     State.make(:name => 'check') unless State.first(:conditions => {:name => 'check'})
@@ -119,9 +122,15 @@ Merb::Test.add_helpers do
                 'project_members.project_admin' => true}).each do |p|
       p.project_members.each do |m|
         if m.user_id == u.id && m.project_admin
-          m.function = (Function.first(:conditions => {:project_admin => false}) || 
-                        Function.make)
+          m.function = (Function.not_admin || Function.make)
         end
+      end
+      # if no member admin add a user member
+      p.valid?
+      unless p.have_one_admin
+        p.project_members << ProjectMember.new(:user => User.make,
+                                               :function => Function.admin)
+        puts p.inspect
       end
       p.save!
     end

@@ -198,13 +198,14 @@ class Project
     end
   end
 
-  private
 
   ##
   # Check if project has one member define like admin
   def have_one_admin
     project_members.any? {|m| m.project_admin?}
   end
+
+  private
 
   ##
   # Add an event about project creation

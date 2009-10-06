@@ -4,7 +4,6 @@ describe "resource(:projects)" do
   describe "GET" do
     
     before(:each) do
-      Project.destroy_all
       @response = request(resource(:projects))
     end
     
@@ -32,15 +31,26 @@ describe "resource(:projects)" do
   describe 'with admin user' do
 
     describe "a successful POST" do
+      def post_request
+        @response = request(resource(:projects), 
+                            :method => "POST", 
+                            :params => {:project => { :name => 'oupsnow' }})
+      end
+
       before(:each) do
-        Project.destroy_all
         login_admin
-        @response = request(resource(:projects), :method => "POST", :params => {:project => { :name => 'oupsnow' }})
       end
       
       it "redirects to resource(:projects)" do
+        post_request
         @response.should redirect_to(resource(Project.first(:conditions => {:name => 'oupsnow'}), :tickets), 
                                      :message => {:notice => "project was successfully created"})
+      end
+
+      it 'should create one project' do
+        lambda do 
+          post_request
+        end.should change(Project, :count)
       end
       
     end

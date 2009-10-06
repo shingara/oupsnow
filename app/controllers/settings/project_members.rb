@@ -12,7 +12,9 @@ module Settings
     end
   
     def show(user_name)
-      @member = @project.project_members.find{|pm| pm.user_name == user_name}
+      # TODO: use detect instead find because find use by embeded proxy
+      # update mongomapper to use that
+      @member = @project.project_members.detect{|pm| pm.user_name == user_name}
       raise NotFound unless @member
       @title = "member #{@member.user_name}"
       display @member
@@ -61,7 +63,7 @@ module Settings
       @project = Project.get(params[:project_id])
       raise Unauthenticated unless session.user
       return true if session.user.global_admin?
-      member = @project.project_members.find{|pm| pm.user_id == session.user.id}
+      member = @project.project_members.detect{|pm| pm.user_id == session.user.id}
       raise Unauthenticated if member.nil?
       raise Unauthenticated unless member.project_admin?
     end
