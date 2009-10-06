@@ -22,7 +22,8 @@ class User
   key :global_admin, Boolean
   key :deleted_at, DateTime
 
-  validates_true_for :global_admin, :logic => lambda { allways_one_global_admin },
+  validates_true_for :global_admin, 
+    :logic => lambda { allways_one_global_admin },
     :message => 'need a global admin'
 
   ##
@@ -64,6 +65,10 @@ class User
   private
 
   def allways_one_global_admin
+    if User.count == 0
+      self.global_admin = true
+      return true
+    end
     unless self.global_admin
       if User.first(:conditions => {:_id => {'$ne' => self.id}, 
                                     :global_admin => true}) == nil

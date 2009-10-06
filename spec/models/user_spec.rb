@@ -11,7 +11,9 @@ describe User do
   end
   
   it 'should not valid if global_admin is false but no user global_admin' do
-    User.make_unsaved(:admin, :global_admin => false).should_not be_valid
+    u = User.make(:admin)
+    u.global_admin = false
+    u.should_not be_valid
   end
 
   it 'should valid with global_admin false because already user global_admin' do
@@ -24,6 +26,15 @@ describe User do
     u = User.first
     u.global_admin = false
     u.should_not be_valid
+  end
+
+  it 'should first user can be create and define like global_admin' do
+    u = User.new(:login => 'shingara',
+             :email => 'cyril.mougel@gmail.com',
+             :password => 'tintinpouet',
+             :password_confirmation => 'tintinpouet')
+    u.save.should be_true
+    u.global_admin.should be_true
   end
 
 end
