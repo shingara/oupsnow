@@ -188,7 +188,7 @@ class Ticket
   #
   # TODO: need test
   def get_update(id)
-    ticket_updates.find{ |tu|
+    ticket_updates.detect{ |tu|
       tu.num = id
     }
   end
