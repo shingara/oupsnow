@@ -38,7 +38,7 @@ describe "resource(Project.first, :tickets)" do
     def post_request(project, options = {})
       @response = request(resource(project, :tickets), :method => "POST", 
                           :params => { :ticket => { :title => 'a new ticket',
-                            :state_id => State.first.id},
+                            :state_id => (State.first ? State.first : State.make).id},
                             :project_id => project.id}.merge(options))
     end
 

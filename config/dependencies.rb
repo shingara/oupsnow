@@ -35,12 +35,10 @@ dependency "carrierwave"
 dependency "RedCloth",  :require_as => 'redcloth'
 
 # if you want run spec you need install webrat gem
-if Merb.env == 'test'
-  dependency "webrat"
-  dependency "ZenTest", "4.1.4", :require_as => nil
-  dependency "cucumber", :require_as => nil 
-  dependency "roman-merb_cucumber", :require_as => nil 
-end
+dependency "webrat"
+dependency "ZenTest", "4.1.4", :require_as => nil
+dependency "cucumber", :require_as => nil 
+dependency "roman-merb_cucumber", :require_as => nil 
 
 dependency "randexp"
 dependency "notahat-machinist", :source => "http://gems.github.com", :require_as => 'machinist'
