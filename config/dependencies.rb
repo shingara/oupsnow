@@ -42,4 +42,4 @@ dependency "roman-merb_cucumber", :require_as => nil
 
 dependency "randexp"
 dependency "notahat-machinist", :source => "http://gems.github.com", :require_as => 'machinist'
-dependency "machinist_mongomapper", :source => 'http://gems.github.com', :require_as => 'machinist/mongomapper'
+dependency "machinist_mongomapper", "0.9.5", :source => 'http://gems.github.com', :require_as => 'machinist/mongomapper'

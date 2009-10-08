@@ -13,6 +13,7 @@ module Gem
   end
   
   def self.searcher
+    p 'search'
     MultiPathSearcher.new
   end
   
@@ -29,6 +30,7 @@ module Gem
     end
   end
 
+  p 'load'
   class MultiPathSearcher
     def initialize
       @main_searcher = ArbitrarySearcher.new(MAIN_INDEX)
@@ -45,6 +47,10 @@ module Gem
       try = @main_searcher.find_all(path)
       return try unless try.empty?
       @fallback_searcher.find_all(path)
+    end
+  
+    def matching_files(*args)
+      @main_searcher.matching_files(args)
     end
   end
   

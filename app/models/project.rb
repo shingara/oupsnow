@@ -78,7 +78,7 @@ class Project
   # 
   # @params[User] user to fetch membership
   def project_membership(user)
-    project_members.find{|member| member.user_id == user.id }
+    project_members.detect{|member| member.user_id == user.id }
   end
 
   ##
@@ -92,7 +92,7 @@ class Project
   # @returns[Boolean] true if change works false instead of
   def change_functions(member_function)
     member_function.each do |pm_id, function_id|
-      project_members.find{ |pm|
+      project_members.detect{ |pm|
         pm.id == pm_id
       }.function = Function.find(function_id)
     end

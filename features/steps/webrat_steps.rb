@@ -22,7 +22,7 @@ When /^I select "([^\"]*)" from "([^\"]*)"$/ do |value, field|
 end
 
 When /^I select "([^\"]*)" from "member_function" of "([^\"]*)" from "([^\"]*)" project$/ do |value, user_name, project_name|
-  field = "member_function[#{Project.first(:condtions => {:name => project_name}).project_members.find{ |pm|
+  field = "member_function[#{Project.first(:condtions => {:name => project_name}).project_members.detect{ |pm|
     pm.user_name == user_name
   }.id}]"
   @response = select(value, :from => field) 

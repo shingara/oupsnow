@@ -118,7 +118,7 @@ Then /^the member "([^\"]*)" has function "([^\"]*)" in project "([^\"]*)"$/ do 
   u = User.first(:conditions => {:login => user_name})
   pr = Project.first(:conditions => {:name => project_name})
   pr.project_members.should_not be_empty
-  pr.project_members.find{|pm| pm.user_id = u.id}
+  pr.project_members.detect{|pm| pm.user_id = u.id}
 end
 
 Given /^I have state "([^\"]*)"$/ do |name|
