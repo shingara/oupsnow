@@ -238,6 +238,20 @@ describe 'resource(@project, :overview)' do
     @response = request(resource(@project, :overview))
   end
 
+  describe 'with event desapear', :shared => true do
+    before :each do
+      ticket = Ticket.make
+      @project = ticket.project
+      ticket.write_create_event
+      ticket.destroy
+      test_request
+    end
+
+    it 'should be successfull with event deseapear' do
+      @response.should be_successful
+    end
+  end
+
   describe 'anonymous user' do
     before :each do
       logout
@@ -247,6 +261,7 @@ describe 'resource(@project, :overview)' do
     end
 
     it_should_behave_like 'it should be successful'
+    it_should_behave_like 'with event desapear'
   end
 
   describe 'login user' do
@@ -257,6 +272,7 @@ describe 'resource(@project, :overview)' do
     end
 
     it_should_behave_like 'it should be successful'
+    it_should_behave_like 'with event desapear'
   end
 
   describe 'admin user' do
@@ -267,6 +283,7 @@ describe 'resource(@project, :overview)' do
     end
 
     it_should_behave_like 'it should be successful'
+    it_should_behave_like 'with event desapear'
   end
 
 end

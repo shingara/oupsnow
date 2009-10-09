@@ -68,6 +68,7 @@ class Ticket
     all(:state_id => State.first(:name.not => 'closed').id)
   end
 
+  ## TODO: change name to create_event
   def write_create_event
     Event.create(:eventable => self,
                  :user => user_creator,

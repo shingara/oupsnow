@@ -28,6 +28,7 @@ Spec::Runner.configure do |config|
     Function.collection.clear
     User.collection.clear
     State.collection.clear
+    Event.collection.clear
   end
 end
 
