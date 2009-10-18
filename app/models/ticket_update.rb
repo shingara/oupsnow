@@ -26,8 +26,8 @@ class TicketUpdate
 
   def add_tag_update(old, new_value)
     new_value.downcase! if new_value
-    if old != Ticket.list_tag(new_value).join(',')
-      add_update(:tag_list, old, Ticket.list_tag(new_value).join(','))
+    if Ticket.list_tag(old).join(',') != Ticket.list_tag(new_value).join(',')
+      add_update(:tag_list, Ticket.list_tag(old).join(','), Ticket.list_tag(new_value).join(','))
     end
   end
 

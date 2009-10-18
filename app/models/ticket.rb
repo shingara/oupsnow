@@ -18,8 +18,8 @@ class Ticket
   key :milestone_name, String
 
   many :ticket_updates
+  many :attachments
 
-  mount_uploader :attachment, AttachmentUploader
 
   key :user_creator_id, String, :required => true
   key :project_id, String

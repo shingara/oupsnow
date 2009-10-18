@@ -2,6 +2,5 @@
   %h3 Attachments
   .content
     %ul
-      -# see how use attachment
-      -# @ticket.attachments.each do |attachment|
+      - @ticket.attachments.each do |attachment|
         %li=attachment.content_file_name

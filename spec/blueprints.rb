@@ -55,6 +55,12 @@ def make_project(params={})
   pr
 end
 
+def make_ticket_update(params={}, ticket=Ticket.make)
+  ticket.generate_update(Ticket.make, User.make)
+  ticket.ticket_updates.last
+end
+        
+
 Ticket.blueprint do
   title { /\w+/.gen }
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }

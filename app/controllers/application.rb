@@ -35,15 +35,15 @@ class Application < Merb::Controller
     if type == 'Projects'
       @cloud[:project] = Project.find(type_id)
       @cloud[:tags] = @project.ticket_tag_counts
-      @cloud[:key] = "projects/#{type_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last.created_at : @cloud[:project].created_at}"
+      @cloud[:key] = "projects/#{type_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last(:order => 'updated_at DESC').created_at : @cloud[:project].created_at}"
     elsif type == 'Tickets'
       @cloud[:project] = Project.find(project_id)
       @cloud[:tags] = Ticket.find(type_id).tag_counts
-      @cloud[:key] = "tickets/#{project_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last.created_at : @cloud[:project].created_at}"
+      @cloud[:key] = "tickets/#{project_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last(:order => 'updated_at DESC').created_at : @cloud[:project].created_at}"
     elsif type == 'Milestones'
       @cloud[:project] = Project.find(project_id)
       @cloud[:tags] = Milestone.find(type_id).tag_counts
-      @cloud[:key] = "tickets/#{project_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last.created_at : @cloud[:project].created_at}"
+      @cloud[:key] = "tickets/#{project_id}/#{ !@cloud[:project].events.empty? ? @cloud[:project].events.last(:order => 'updated_at DESC').created_at : @cloud[:project].created_at}"
     else
       raise NoMethodError
     end
