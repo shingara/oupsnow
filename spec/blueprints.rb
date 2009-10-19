@@ -31,14 +31,15 @@ Project.blueprint do
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
 end
 
-def make_project_member(user=nil, function=nil)
-  unless user
-    user = User.first ? User.first : User.make(:admin)
-  end
-  ProjectMember.new(:user_name => user.login,
-                    :user => user,
-                    :function => function || Function.admin || Function.make(:admin),
-                    :project_admin => true)
+
+ProjectMember.blueprint do
+  user { User.make }
+  function { Function.make }
+end
+
+ProjectMember.blueprint(:admin) do
+  user { User.first || User.make(:admin) }
+  function { Function.admin || Function.make(:admin) }
 end
 
 ##
@@ -47,7 +48,7 @@ end
 def make_project(params={})
   project_members = params[:project_members]
   pr = Project.make_unsaved(params)
-  pr.project_members = project_members || [make_project_member]
+  pr.project_members = project_members || [ProjectMember.make(:admin)]
   if pr.project_members.first
     pr.user_creator = pr.project_members.first.user
   end

@@ -15,7 +15,7 @@ class User
   include MongoMapper::Document
   extend Merb::Authentication::Mixins::SaltedUser::MongoMapperClassMethods
   
-  key :login,  String
+  key :login,  String , :unique => true
   key :email,  String
   key :firstname, String
   key :lastname, String

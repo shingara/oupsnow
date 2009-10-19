@@ -72,7 +72,7 @@ describe Ticket do
     it 'should return all ticket with state information' do
       Ticket.paginate_by_search("state:#{@state.name}", 
                                 :page => 1, 
-                                  :per_page => 10).should == @ticket_with_first_state
+                                  :per_page => 10).sort_by(&:id).should == @ticket_with_first_state.sort_by(&:id)
     end
 
     it 'should return no ticket if no ticket with state' do
@@ -84,13 +84,13 @@ describe Ticket do
     it 'should return all ticket with last state define in query if several state' do
       Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}", 
                                 :page => 1, 
-                                :per_page => 10).should == @ticket_with_second_state
+                                :per_page => 10).sort_by(&:id).should == @ticket_with_second_state.sort_by(&:id)
     end
 
     it 'should return all ticket with tag define by tagged:xxx in query' do
       Ticket.paginate_by_search("tagged:#{@first_tag}",
                                 :page => 1,
-                                  :per_page => 10).should == [@first_ticket, @third_ticket]
+                                  :per_page => 10).sort_by(&:id).should == [@first_ticket, @third_ticket].sort_by(&:id)
     end
 
     it 'should return no ticket with tag define by tagged:xxx in query but no ticket tagged with that' do

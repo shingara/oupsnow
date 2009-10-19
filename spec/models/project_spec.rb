@@ -27,7 +27,8 @@ describe Project do
   end
 
   it "should not valid project without admin member" do
-    project_member = make_project_member(nil, (Function.not_admin || Function.make))
+    project_member = ProjectMember.make(:user => nil, 
+                                        :function => (Function.not_admin || Function.make))
     make_project(:project_members => [project_member]).should_not be_valid
   end
 

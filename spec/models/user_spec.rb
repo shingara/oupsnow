@@ -37,4 +37,9 @@ describe User do
     u.global_admin.should be_true
   end
 
+  it 'should not valid if same login' do
+    u = User.make
+    User.make_unsaved(:login => u.login).should_not be_valid
+  end
+
 end
