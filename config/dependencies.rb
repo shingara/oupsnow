@@ -29,7 +29,7 @@ dependency "merb-parts", "0.9.8"
 dependency "mongo_ext", '0.15.1', :require_as => false
 dependency "mongo", '0.15.1'
 dependency "activesupport"
-dependency "mongo_mapper", '0.5.5'
+dependency "mongo_mapper", '0.5.6'
 dependency "merb_mongomapper", '0.1.7', :require_as => 'merb_mongomapper'
 dependency "carrierwave"
 
