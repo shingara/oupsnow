@@ -39,7 +39,10 @@ ActionController::Routing::Routes.draw do |map|
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
   
-  map.connect '/admin', :controller => 'functions', :action => 'index'
+  #TODO change with authlogic
+  map.login '/login', :controller => 'projects', :action => 'index'
+  
+  map.admin_root '/admin', :controller => 'functions', :action => 'index'
   map.namespace :admin do |admin|
     admin.resources :functions, :collection => {:update_all => :put}
     admin.resources :priorities

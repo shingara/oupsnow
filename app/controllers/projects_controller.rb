@@ -1,20 +1,18 @@
-class Projects < Application
-  # provides :xml, :yaml, :js
+class ProjectsController < ApplicationController
  
-  before :ensure_authenticated, :exclude => [:index, :show, :overview]
-  before :need_admin, :exclude => [:index, :show, :overview, :edit, :update]
-  before :load_project, :only => [:edit, :update, :delete, :destroy]
-  before :admin_project, :only => [:edit, :update]
+  before_filter :ensure_authenticated, :except => [:index, :show, :overview]
+  before_filter :need_admin, :except => [:index, :show, :overview, :edit, :update]
+  before_filter :load_project, :only => [:edit, :update, :delete, :destroy]
+  before_filter :admin_project, :only => [:edit, :update]
 
   def index
     @projects = Project.all
-    display @projects
   end
 
   def show(id)
     @project = Project.find(id)
-    raise NotFound unless @project
-    redirect resource(@project, :overview)
+    return return_404 unless @project
+    redirect_to overview_project_url(@project)
   end
 
   def overview(id)
@@ -22,32 +20,28 @@ class Projects < Application
     @events = @project.events.paginate(:order => 'created_at',
                                        :page => params[:page],
                                        :per_page => 20)
-    raise NotFound unless @project
+    return return_404 unless @project
     milestone_part(@project.id)
     tag_cloud_part('Projects', @project.id)
     @title = "overview"
-    display @events
   end
 
   def new
-    only_provides :html
     @project = Project.new
     @title = "New Project"
-    display @project
   end
 
   def edit(id)
-    only_provides :html
     @title = "edit #{@project.name}"
-    display @project
   end
 
   def create(project)
     @project = Project.new_with_admin_member(project, session.user)
     if @project.save
-      redirect resource(@project, :tickets), :message => {:notice => "Project was successfully created"}
+      flash[:notice] = "Project was successfully created"
+      redirect_to project_tickets_index(@project)
     else
-      message[:error] = "Project failed to be created"
+      flash[:error] = "Project failed to be created"
       render :new
     end
   end
@@ -55,20 +49,20 @@ class Projects < Application
   def update(id, project)
     @project.user_creator = session.user
     if @project.update_attributes(project)
-       redirect resource(@project, :tickets), :message => {:notice => "Project is update"}
+      flash[:notice] = 'Project is update'
+      redirect_to project_tickets(@project)
     else
-      display @project, :edit
+      render :edit
     end
   end
 
   def delete(id)
-    only_provides :html
-    display @project
   end
 
   def destroy(id)
     if @project.destroy
-      redirect resource(:projects), :message => {:notice => "Project #{@project.name} is delete"}
+      flash[:notice] = "Project #{@project.name} is delete"
+      redirect_to projects_url
     else
       raise InternalServerError
     end

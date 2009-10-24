@@ -1,14 +1,14 @@
 development:
   adapter: mongodb
-  database: error_logger_dev
+  database: oupsnow_dev
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   adapter: mongodb
-  database: error_logger_test
+  database: oupsnow_test
 
 production:
   adapter: mongodb
-  database: error_logger
+  database: oupsnow

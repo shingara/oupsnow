@@ -1,9 +1,8 @@
-class Milestones < Application
-  # provides :xml, :yaml, :js
+class MilestonesController < ApplicationController
 
-  before :projects
-  before :ensure_authenticated, :exclude => [:index, :show]
-  before :admin_project, :exclude => [:index, :show]
+  before_filter :projects
+  before_filter :ensure_authenticated, :except => [:index, :show]
+  before_filter :admin_project, :except => [:index, :show]
 
   def index
     @current_milestone = @project.current_milestone
@@ -15,8 +14,8 @@ class Milestones < Application
     display @milestones
   end
 
-  def show(id)
-    @milestone = Milestone.find(id)
+  def show
+    @milestone = Milestone.find(params[:id])
     raise NotFound unless @milestone
     @title = "Milestone #{@milestone.name}"
     tag_cloud_part('Milestones', @milestone.id, @project.id)

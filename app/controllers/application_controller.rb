@@ -1,15 +1,25 @@
-class Application < Merb::Controller
+class ApplicationController < ActionController::Base
+
+  helper :all
+  layout 'application'
+
   private
 
   def need_admin
+    # TODO integrate authlogic
+    redirect_to login_url
+    ##
     unless session.user.global_admin?
-      raise Unauthenticated
+      redirect_to login_url
     end
   end
 
   def admin_project
+    # TODO integrate authlogic
+    redirect_to login_url
+    ##
     unless session.user.global_admin? || session.user.admin?(@project)
-      raise Unauthenticated
+      redirect_to login_url
     end
   end
 
@@ -19,7 +29,8 @@ class Application < Merb::Controller
 
   # attach to sidebar the part Milestone with project id define in argument
   def milestone_part(project_id)
-    throw_content :sidebar, part(MilestonePart => :index, :project_id => project_id)
+    logger.warn('need reimplement milestone')
+    #throw_content :sidebar, part(MilestonePart => :index, :project_id => project_id)
   end
 
   # Attach to sidebar the part Tags
@@ -32,6 +43,7 @@ class Application < Merb::Controller
 
   def tag_part(type, type_id, project_id = nil)
     @cloud = {}
+    #TODO: @cloud[:key] is usefull ?
     if type == 'Projects'
       @cloud[:project] = Project.find(type_id)
       @cloud[:tags] = @project.ticket_tag_counts
@@ -47,6 +59,10 @@ class Application < Merb::Controller
     else
       raise NoMethodError
     end
+  end
+
+  def return_404
+    #TODO: need render like 404
   end
 
 end

@@ -1,0 +1,57 @@
+!!! Strict
+%html
+  %head
+    %title= title_header
+    = stylesheet_link_tag 'base'
+    = stylesheet_link_tag 'default'
+    = stylesheet_link_tag 'oupsnow'
+  %body
+    #container
+      #header
+        %h1= link_to title_project, '/'
+        #user-navigation
+          %ul
+            - unless authenticated?
+              %li= link_to('Login', login_url)
+              %li= link_to('Register', new_user_url)
+            - else
+              %li= link_to('My profile', edit_user_url(session.user))
+              %li= link_to 'Logout', logout_url
+              - if global_admin?
+                %li= link_to 'Administration', admin_root_url
+          .clear
+
+        #main-navigation
+          %ul
+            %li.first{:class => projects_current}= link_to 'Projects', projects_url
+            - unless @project.nil? || @project.id.nil?
+              %li{:class => overview_current}=link_to 'Overview', overview_project_url(@project)
+              %li{:class => milestone_current}=link_to 'Milestones', milestones_project_url(@project)
+              %li{:class => tickets_current}= link_to 'Tickets', tickets_project_url(@project)
+              - if authenticated?
+                %li{:class => tickets_new_current}= link_to 'Add new ticket', new_tickets_project_url(@project)
+              - if admin? @project
+                %li{:class => settings_current}= link_to 'Settings', project_settings_project_members_url(@project)
+          .clear
+        - if flash[:notice]
+          .notice
+            %p.notice{:class => 'flash'}= flash[:notice]
+    #wrapper
+      #main
+        .block
+          = sub_menu
+          = yield
+        #footer
+          .block
+            %p
+              Powered by
+              %a{:href => 'http://oupsnow.rubyforge.org'} Oupsnow
+              = '-'
+              = Oupsnow::VERSION
+        .clear
+      #sidebar
+        = yield :sidebar
+        - if @cloud
+          - render :partial => 'shared/tag_cloud', :locals => {:cloud => @cloud}
+        = yield :attachment_sidebar
+      .clear
