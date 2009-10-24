@@ -8,12 +8,10 @@
 # see merb/merb-auth/setup.rb to see how to disable the salted_user mixin
 # 
 # You will need to setup your database and create a user.
-require 'lib/mongomapper_salted_user.rb'
 
 class User
 
   include MongoMapper::Document
-  extend Merb::Authentication::Mixins::SaltedUser::MongoMapperClassMethods
   
   key :login,  String , :unique => true
   key :email,  String
