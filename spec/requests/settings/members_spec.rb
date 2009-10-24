@@ -1,14 +1,13 @@
 require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
-given 'a member exists' do
-  Project.destroy_all
-  Function.destroy_all
-  create_default_admin
-  make_project
-  Function.make(:name => 'Developper')
-end
-
-describe "resource(:members)", :given => 'a member exists' do
+describe "resource(:members)" do
+  before :each do
+    Project.destroy_all
+    Function.destroy_all
+    create_default_admin
+    make_project
+    Function.make(:name => 'Developper')
+  end
 
   describe "GET" do
 
@@ -40,7 +39,7 @@ describe "resource(:members)", :given => 'a member exists' do
     
   end
   
-  describe "a successful POST", :given => 'a member exists' do
+  describe "a successful POST" do
 
     describe 'with logged admin' do
       it 'should create member' do
@@ -70,7 +69,15 @@ describe "resource(:members, :new)" do
   end
 end
 
-describe "resource(@member)", :given => "a member exists" do
+describe "resource(@member)" do
+
+  before :each do
+    Project.destroy_all
+    Function.destroy_all
+    create_default_admin
+    make_project
+    Function.make(:name => 'Developper')
+  end
   
   describe "GET" do
     before(:each) do

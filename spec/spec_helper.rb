@@ -13,14 +13,6 @@ require 'spec/rails'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
 Spec::Runner.configure do |config|
-  config.include(Merb::Test::ViewHelper)
-  config.include(Merb::Test::RouteHelper)
-  config.include(Merb::Test::ControllerHelper)
-  config.before(:all) do
-    MongoMapper.database.collection_names.each do |c|
-      MongoMapper.database.drop_collection(c)
-    end
-  end
   config.before(:each) do
     Project.collection.clear
     Ticket.collection.clear

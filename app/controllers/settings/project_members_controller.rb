@@ -1,45 +1,42 @@
 module Settings
-  class ProjectMembers < Application
-    # provides :xml, :yaml, :js
+  class ProjectMembersController < ApplicationController
     
-    before :projects
-    before :project_admin_authenticated
+    before_filter :projects
+    before_filter :project_admin_authenticated
   
-    def index(project_id)
+    def index
       @members = @project.project_members
       @title = "Members"
-      display @members
     end
   
-    def show(user_name)
+    def show
       # TODO: use detect instead find because find use by embeded proxy
       # update mongomapper to use that
-      @member = @project.project_members.detect{|pm| pm.user_name == user_name}
-      raise NotFound unless @member
+      @member = @project.project_members.detect{|pm| pm.user_name == params[:user_name]}
+      return return_404 unless @member
       @title = "member #{@member.user_name}"
-      display @member
     end
   
     def new
-      only_provides :html
       @member = ProjectMember.new
       @title = "new member"
-      display @member
     end
   
-    def create(project_member)
-      @member = ProjectMember.new(project_member)
+    def create
+      @member = ProjectMember.new(params[:project_member])
       @member.function_id = Function.first(:conditions => {:name => 'Developper'}).id
       @project.project_members << @member
       if @project.save!
-        redirect url(:project_settings_project_members, @project), :message => {:notice => "Member was successfully created"}
+        flash[:notice] = "Member was successfully created"
+        redirect_to  project_settings_project_members(@project)
       else
-        message[:error] = "Member failed to be created"
+        flash[:error] = "Member failed to be created"
         render :new
       end
     end
 
-    def update_all(member_function={})
+    def update_all
+      member_function = params[:member_function] || {}
       notice = ""
       # You can't change your own function
       member = @project.project_membership(session.user)
@@ -54,7 +51,8 @@ module Settings
       else
         notice += "You can't have no admin in a project"
       end
-      redirect url(:project_settings_project_members, @project), :message => {:notice => notice}
+      flash[:notice] = notice
+      redirect_to project_settings_project_members_url(@project)
     end
   
     private

@@ -8,10 +8,6 @@ def create_user_by_request
       :password_confirmation => 'tintinpouet' }})
 end
 
-given "a user exists" do
-  login
-end
-
 describe "resource(:users)" do
 
   describe "a successful POST" do
@@ -29,8 +25,9 @@ describe "resource(:users)" do
 end
 
 describe "resource(@user)" do 
-  describe "a successful DELETE", :given => "a user exists" do
+  describe "a successful DELETE" do
      before(:each) do
+       login
        @response = request(resource(User.first), :method => "DELETE")
      end
 
@@ -51,7 +48,12 @@ describe "resource(:users, :new)" do
   end
 end
 
-describe "resource(@user, :edit)", :given => "a user exists" do
+describe "resource(@user, :edit)" do
+
+  before :each do
+    login
+  end
+
   describe 'with user login' do
     before(:each) do
       @user = login
@@ -70,7 +72,10 @@ describe "resource(@user, :edit)", :given => "a user exists" do
   end
 end
 
-describe "resource(@user)", :given => "a user exists" do
+describe "resource(@user)" do
+  before :each do
+    login
+  end
   
   describe "PUT" do
     before(:each) do
