@@ -3,7 +3,9 @@ module ProjectsHelper
   include Settings::BaseHelper
 
   def sub_menu
-    partial 'settings/sub_menu' if params[:action] == "edit" || params[:action] == "delete"
+    if @project
+      render(:partial => 'settings/sub_menu') if params[:action] == "edit" || params[:action] == "delete"
+    end
   end
 
   def time_overview(date)

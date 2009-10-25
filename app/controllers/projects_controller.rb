@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
  
-  before_filter :ensure_authenticated, :except => [:index, :show, :overview]
+  before_filter :authenticate_user!, :except => [:index, :show, :overview]
   before_filter :need_admin, :except => [:index, :show, :overview, :edit, :update]
   before_filter :load_project, :only => [:edit, :update, :delete, :destroy]
   before_filter :admin_project, :only => [:edit, :update]

@@ -1,7 +1,7 @@
 class MilestonesController < ApplicationController
 
   before_filter :projects
-  before_filter :ensure_authenticated, :except => [:index, :show]
+  before_filter :authenticate_user!, :except => [:index, :show]
   before_filter :admin_project, :except => [:index, :show]
 
   def index

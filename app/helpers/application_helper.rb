@@ -13,22 +13,13 @@ module ApplicationHelper
     ret
   end
 
-  def authenticated?
-    ## TODO: need authlogic
-    return false
-    session.user
-  end
 
   def admin?(project)
-    ## TODO: need authlogic
-    return false
-    authenticated? && (session.user.global_admin? || session.user.admin?(project))
+    user_signed_in? && (current_user.global_admin? || current_user.admin?(project))
   end
 
   def global_admin?
-    ## TODO: need authlogic
-    return false
-    authenticated? && session.user.global_admin?
+    user_signed_in? && current_user.global_admin?
   end
 
   def sub_menu
@@ -39,17 +30,17 @@ module ApplicationHelper
   end
 
   def overview_current
-    current_or_not(@request.params[:controller] == 'projects' &&
-                   @request.params[:action] == 'overview')
+    current_or_not(params[:controller] == 'projects' &&
+                   params[:action] == 'overview')
   end
 
   def milestone_current
-    current_or_not(@request.params[:controller] == 'milestones')
+    current_or_not(params[:controller] == 'milestones')
   end
 
   def tickets_current
-    current_or_not((@request.params[:controller] == 'tickets' && @request.params[:action] != 'new' && !@new_ticket) ||
-                   @request.params[:controller] == 'ticket_updates')
+    current_or_not((params[:controller] == 'tickets' && params[:action] != 'new' && !@new_ticket) ||
+                   params[:controller] == 'ticket_updates')
   end
 
   def projects_current

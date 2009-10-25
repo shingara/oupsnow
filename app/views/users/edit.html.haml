@@ -4,23 +4,23 @@
 
     .inner
       .flash
-        = error_messages_for @user
+        = error_messages_for :user
 
-      = form_for(@user, :action => url(:user, @user), :class => 'form') do
+      - form_for(@user, :html => {:class => 'form'}) do |f|
         .group
           %label.label{:for => 'user[email]'} Email
-          = text_field :email, :class => 'text_field'
+          = f.text_field :email, :class => 'text_field'
         .group
           %label.label{:for => 'user[firstname]'} Firstname
-          = text_field :firstname, :class => 'text_field'
+          = f.text_field :firstname, :class => 'text_field'
         .group
           %label.label{:for => 'user[lastname]'} Lastname
-          = text_field :lastname, :class => 'text_field'
+          = f.text_field :lastname, :class => 'text_field'
         .group
           %label.label{:for => 'user[password]'} Password
-          = password_field :password, :class => 'text_field'
+          = f.password_field :password, :class => 'text_field'
         .group
           %label.label{:for => 'user[password_confirmation]'} Password confirmation
-          = password_field :password_confirmation, :class => 'text_field'
+          = f.password_field :password_confirmation, :class => 'text_field'
         %div{:class => 'group navform'}
-          = submit "Update", :class => 'button'
+          = submit_tag "Update", :class => 'button'

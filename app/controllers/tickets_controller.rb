@@ -3,7 +3,7 @@ class TicketsController < ApplicationController
   before_filter :projects
   before_filter :load_ticket, :only => [:show, :update, :edit_main_description, 
     :update_main_description]
-  before_filter :ensure_authenticated, :except => [:index, :show]
+  before_filter :authenticate_user!, :except => [:index, :show]
   before_filter :admin_project, :only => [:edit_main_description, 
                                     :update_main_description]
 

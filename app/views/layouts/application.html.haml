@@ -11,12 +11,12 @@
         %h1= link_to title_project, '/'
         #user-navigation
           %ul
-            - unless authenticated?
+            - unless user_signed_in?
               %li= link_to('Login', login_url)
               %li= link_to('Register', new_user_url)
             - else
-              %li= link_to('My profile', edit_user_url(session.user))
-              %li= link_to 'Logout', logout_url
+              %li= link_to('My profile', edit_user_url(current_user))
+              %li= link_to 'Logout', destroy_user_session_url
               - if global_admin?
                 %li= link_to 'Administration', admin_root_url
           .clear
@@ -28,7 +28,7 @@
               %li{:class => overview_current}=link_to 'Overview', overview_project_url(@project)
               %li{:class => milestone_current}=link_to 'Milestones', milestones_project_url(@project)
               %li{:class => tickets_current}= link_to 'Tickets', tickets_project_url(@project)
-              - if authenticated?
+              - if user_signed_in?
                 %li{:class => tickets_new_current}= link_to 'Add new ticket', new_tickets_project_url(@project)
               - if admin? @project
                 %li{:class => settings_current}= link_to 'Settings', project_settings_project_members_url(@project)

@@ -1,7 +1,7 @@
 module Admin
   class PrioritiesController < ApplicationController
 
-    before_filter :ensure_authenticated
+    before_filter :authenticate_user!
     before_filter :need_admin
   
     def index

@@ -40,6 +40,7 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing or commenting them out if you're using named routes and resources.
   
   #TODO change with authlogic
+  map.devise_for :users
   map.login '/login', :controller => 'projects', :action => 'index'
   
   map.admin_root '/admin', :controller => 'functions', :action => 'index'
@@ -57,7 +58,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :update_main_description => :put} do |ticket|
       ticket.resources :ticket_updates
     end
-    project.connect '/settings', :controller => 'project_members', :action => 'index'
+    project.settings '/settings', :controller => 'project_members', :action => 'index'
     project.namespace :settings do |setting|
       setting.resources :project_members, :collection => {:update_all => :put}
     end

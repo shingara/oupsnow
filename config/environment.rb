@@ -44,4 +44,5 @@ Rails::Initializer.run do |config|
   config.gem 'mongo_mapper', :version => '0.5.6'
   config.gem 'RedCloth', :version => '4.2.2', :lib => 'redcloth'
   config.gem 'haml', :version => '2.2.9'
+  config.gem 'devise', :version => '0.2.0'
 end

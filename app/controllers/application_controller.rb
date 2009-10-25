@@ -6,19 +6,13 @@ class ApplicationController < ActionController::Base
   private
 
   def need_admin
-    # TODO integrate authlogic
-    redirect_to login_url
-    ##
-    unless session.user.global_admin?
+    unless current_user.global_admin?
       redirect_to login_url
     end
   end
 
   def admin_project
-    # TODO integrate authlogic
-    redirect_to login_url
-    ##
-    unless session.user.global_admin? || session.user.admin?(@project)
+    unless current_user.global_admin? || current_user.admin?(@project)
       redirect_to login_url
     end
   end

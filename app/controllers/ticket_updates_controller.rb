@@ -2,7 +2,7 @@ class TicketUpdatesController < ApplicationController
 
   before_filter :projects
   before_filter :load_ticket
-  before_filter :ensure_authenticated
+  before_filter :authenticate_user!
   before_filter :admin_project 
 
   def edit

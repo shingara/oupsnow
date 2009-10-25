@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_filter :ensure_authenticated, :except => [:new, :create]
+  before_filter :authenticate_user!, :except => [:new, :create]
   before_filter :only_own_account, :only => [:edit, :update]
 
   ## TODO: put it on model
@@ -12,12 +12,12 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = session.user
+    @user = current_user
     @title = "edit my profile"
   end
 
-  def create(user)
-    @user = User.new(user)
+  def create
+    @user = User.new(params[:user])
     if @user.save
       flash[:notice] =  "User was successfully created"
       redirect_to edit_user_url(@user)
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.first(:login => params[:login])
+    @user = User.find(params[:id])
     return return_404 unless @user
     if @user.update_attributes(params[:user])
        redirect_to projects_url
@@ -50,8 +50,10 @@ class UsersController < ApplicationController
   private
 
   def only_own_account
-    @user = User.first(:conditions => {:login => params[:login]})
-    unless @user == session.user
+    @user = User.find(params[:id])
+    puts "current user in controller : " + current_user.inspect
+    p @user
+    unless @user == current_user
       raise Unauthenticated
     end
   end

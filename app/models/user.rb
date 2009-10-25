@@ -12,6 +12,29 @@
 class User
 
   include MongoMapper::Document
+  #extend Devise::ActiveRecord
+  #extend Devise::Models::ClassMethods
+
+  devise
+
+  ## Devise key
+  # authenticable
+  #key :email, String
+  #key :encrypted_password, String
+  #key :password_salt, String
+
+  ## confirmable
+  #key :confirmation_token, String
+  #key :confirmed_at, DateTime
+  #key :confirmation_sent_at, DateTime
+
+  ## recoverable
+  #key :reset_password_token, String
+
+  ## rememberable
+  #key :remember_token, String
+  #key :remember_created_at, DateTime
+
   
   key :login,  String , :unique => true
   key :email,  String
