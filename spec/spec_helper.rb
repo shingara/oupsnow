@@ -14,12 +14,12 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].e
 
 Spec::Runner.configure do |config|
   config.before(:each) do
-    Project.collection.clear
-    Ticket.collection.clear
-    Function.collection.clear
-    User.collection.clear
-    State.collection.clear
-    Event.collection.clear
+    Project.collection.remove
+    Ticket.collection.remove
+    Function.collection.remove
+    User.collection.remove
+    State.collection.remove
+    Event.collection.remove
   end
 end
 
@@ -97,7 +97,7 @@ def create_ticket(opts={})
   ticket.write_create_event
 end
 
-def login
+def login_request
   create_default_user
   request('/logout')
   request('/login', {:method => 'PUT',
