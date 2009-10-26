@@ -35,7 +35,7 @@ end
 require File.dirname(__FILE__) + '/blueprints.rb'
 
 def logout
-  request('/logout')
+  @request.session = {}
 end
 
 def delete_default_member_from_project(project)
@@ -68,7 +68,7 @@ def create_default_user
 end
 
 def create_default_admin
-  User.make(:admin) unless User.first(:conditions => {:login => 'admin'})
+  user = User.first(:conditions => {:login => 'admin'}) || User.make(:admin)
   Function.make(:admin) unless Function.admin
   make_project unless Project.first
   State.make(:name => 'new') unless State.first(:conditions => {:name => 'new'})
@@ -90,6 +90,7 @@ def create_default_admin
                       :state_id => State.first.id,
                       :title => t.title}, User.first)
   end
+  user
 end
 
 def create_ticket(opts={})
@@ -97,17 +98,19 @@ def create_ticket(opts={})
   ticket.write_create_event
 end
 
-def login_request
+def login_request(user = nil)
   create_default_user
-  request('/logout')
-  request('/login', {:method => 'PUT',
-          :params => { :login => 'shingara',
-            :password => 'tintinpouet'}})
-  u = User.first(:conditions => {:login => 'shingara'})
+  logout
+  user = User.first(:conditions => {:login => 'shingara'}) unless user
+  @mock_warden = OpenStruct.new
+  request.env['warden'] = @mock_warden
+  @mock_warden.expects(:authenticate!).with(:scope => :user).returns(user)
+  @mock_warden.expects(:user).with(:user).returns(user)
+  @request.session["warden.user.user.key"] = [User, user.id]
 
 
   # if user is admin of this project. He becomes not admin
-  Project.all(:conditions => {'project_members.user_id' => u.id,
+  Project.all(:conditions => {'project_members.user_id' => user.id,
               'project_members.project_admin' => true}).each do |p|
     p.project_members.each do |m|
       if m.user_id == u.id && m.project_admin
@@ -123,7 +126,7 @@ def login_request
     end
     p.save!
               end
-  u
+  user
 end
 
 def function_not_admin
@@ -133,11 +136,10 @@ def function_not_admin
 end
 
 def login_admin
-  create_default_admin
+  user = create_default_admin
   need_a_milestone
-  request('/logout')
-  request('/login', {:method => 'PUT',
-          :params => {:login => 'admin', :password => 'tintinpouet'}})
+  logout
+  login_request(user)
 end
 
 def need_developper_function

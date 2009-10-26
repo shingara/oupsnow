@@ -59,4 +59,8 @@ class ApplicationController < ActionController::Base
     #TODO: need render like 404
   end
 
+  def return_401
+    render :status => 401, :template => 'exceptions/unauthenticated'
+  end
+
 end

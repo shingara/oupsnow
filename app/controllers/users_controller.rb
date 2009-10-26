@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.first(:login => params[:login])
+    @user = User.find(params[:id])
     return return_404 unless @user
     if @user.destroy
       redirect_to users_url
@@ -51,10 +51,8 @@ class UsersController < ApplicationController
 
   def only_own_account
     @user = User.find(params[:id])
-    puts "current user in controller : " + current_user.inspect
-    p @user
     unless @user == current_user
-      raise Unauthenticated
+      return return_401
     end
   end
 
