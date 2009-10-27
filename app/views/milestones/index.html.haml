@@ -10,14 +10,14 @@
       - if @current_milestone
         %ul#milestones.list
           %li.milestone
-            =partial :milestone, :milestone => @current_milestone
+            = render :partial => @current_milestone
 
       - unless @upcoming_milestones.empty?
         %h3 Upcomming Milestones
         %ul#milestones.list
           - @upcoming_milestones.each do |milestone|
             %li.milestone
-              = partial :milestone, :milestone => milestone
+              = render :partial => milestone
         
 
       - unless @no_date_milestones.empty?
@@ -26,7 +26,7 @@
           - @no_date_milestones.each do |milestone|
             - next if milestone == @current_milestone
             %li.milestone
-              = partial :milestone, :milestone => milestone
+              = render :partial => milestone
 
       - unless @outdated_milestones.empty?
         %h3 Outdated Milestones
@@ -40,7 +40,7 @@
           %tbody
             - @outdated_milestones.each do |milestone|
               %tr{:class => cycle('odd','even')}
-                %td= link_to milestone.name, resource(@project, milestone)
+                %td= link_to milestone.name, project_milestone_url(@project, milestone)
                 %td= milestone.expected_at
                 %td
                   = milestone.percent_complete.to_i

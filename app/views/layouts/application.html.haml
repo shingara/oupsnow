@@ -26,12 +26,12 @@
             %li.first{:class => projects_current}= link_to 'Projects', projects_url
             - unless @project.nil? || @project.id.nil?
               %li{:class => overview_current}=link_to 'Overview', overview_project_url(@project)
-              %li{:class => milestone_current}=link_to 'Milestones', milestones_project_url(@project)
-              %li{:class => tickets_current}= link_to 'Tickets', tickets_project_url(@project)
+              %li{:class => milestone_current}=link_to 'Milestones', project_milestones_url(@project)
+              %li{:class => tickets_current}= link_to 'Tickets', project_ticket_index_url(@project)
               - if user_signed_in?
-                %li{:class => tickets_new_current}= link_to 'Add new ticket', new_tickets_project_url(@project)
+                %li{:class => tickets_new_current}= link_to 'Add new ticket', new_project_ticket_url(@project)
               - if admin? @project
-                %li{:class => settings_current}= link_to 'Settings', project_settings_project_members_url(@project)
+                %li{:class => settings_current}= link_to 'Settings', project_project_members_url(@project)
           .clear
         - if flash[:notice]
           .notice
@@ -52,6 +52,6 @@
       #sidebar
         = yield :sidebar
         - if @cloud
-          - render :partial => 'shared/tag_cloud', :locals => {:cloud => @cloud}
+          - render :partial => 'shared/tag_cloud', :locals => {:clouds => @cloud}
         = yield :attachment_sidebar
       .clear

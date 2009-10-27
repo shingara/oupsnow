@@ -1,4 +1,4 @@
-%h3= link_to milestone.name, resource(@project, milestone)
+%h3= link_to milestone.name, project_milestone_url(@project, milestone)
 %span= textilized milestone.description
 %ul.milestone-information
   %li
@@ -10,5 +10,5 @@
   - if milestone.expected_at
     %li.last
       %span= milestone.expected_at
-=partial :pbar, :milestone => milestone
+= render :partial => 'pbar', :locals => {:milestone => milestone}
 .clear

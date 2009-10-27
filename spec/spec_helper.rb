@@ -105,6 +105,7 @@ def login_request(user = nil)
   @mock_warden = OpenStruct.new
   request.env['warden'] = @mock_warden
   @mock_warden.expects(:authenticate!).with(:scope => :user).returns(user)
+  @mock_warden.stubs(:authenticated?).returns(true)
   @mock_warden.expects(:user).with(:user).returns(user)
   @request.session["warden.user.user.key"] = [User, user.id]
 
@@ -113,7 +114,7 @@ def login_request(user = nil)
   Project.all(:conditions => {'project_members.user_id' => user.id,
               'project_members.project_admin' => true}).each do |p|
     p.project_members.each do |m|
-      if m.user_id == u.id && m.project_admin
+      if m.user_id == user.id && m.project_admin
         m.function = (Function.not_admin || Function.make)
       end
     end
@@ -122,7 +123,6 @@ def login_request(user = nil)
     unless p.have_one_admin
       p.project_members << ProjectMember.new(:user => User.make,
                                              :function => Function.admin)
-      puts p.inspect
     end
     p.save!
               end
