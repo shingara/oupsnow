@@ -20,6 +20,9 @@ Spec::Runner.configure do |config|
     User.collection.remove
     State.collection.remove
     Event.collection.remove
+    @mock_warden = OpenStruct.new
+    request.env['warden'] = @mock_warden
+    @mock_warden.stubs(:authenticated?).returns(false)
   end
 end
 

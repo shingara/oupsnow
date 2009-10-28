@@ -1,7 +1,7 @@
 - if global_admin?
   .secondary-navigation
     %ul
-      %li.first= link_to('New project',resource(:projects, :new))
+      %li.first= link_to('New project',new_project_url)
     .clear
 
 #block-text.block
@@ -12,6 +12,6 @@
 
       - @projects.each do |project|
         %h2
-          %span= link_to project.name, resource(project, :overview)
+          %span= link_to project.name, overview_project_url(project)
 
         %p= textilized project.description

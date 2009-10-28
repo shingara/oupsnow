@@ -9,14 +9,14 @@ class ProjectsController < ApplicationController
     @projects = Project.all
   end
 
-  def show(id)
-    @project = Project.find(id)
+  def show
+    @project = Project.find(params[:id])
     return return_404 unless @project
     redirect_to overview_project_url(@project)
   end
 
-  def overview(id)
-    @project = Project.find(id)
+  def overview
+    @project = Project.find(params[:id])
     @events = @project.events.paginate(:order => 'created_at',
                                        :page => params[:page],
                                        :per_page => 20)
@@ -31,35 +31,35 @@ class ProjectsController < ApplicationController
     @title = "New Project"
   end
 
-  def edit(id)
+  def edit
     @title = "edit #{@project.name}"
   end
 
-  def create(project)
-    @project = Project.new_with_admin_member(project, session.user)
+  def create
+    @project = Project.new_with_admin_member(params[:project], current_user)
     if @project.save
       flash[:notice] = "Project was successfully created"
-      redirect_to project_tickets_index(@project)
+      redirect_to project_ticket_index_url(@project)
     else
       flash[:error] = "Project failed to be created"
       render :new
     end
   end
 
-  def update(id, project)
-    @project.user_creator = session.user
-    if @project.update_attributes(project)
+  def update
+    @project.user_creator = current_user
+    if @project.update_attributes(params[:project])
       flash[:notice] = 'Project is update'
-      redirect_to project_tickets(@project)
+      redirect_to project_ticket_index_url(@project)
     else
       render :edit
     end
   end
 
-  def delete(id)
+  def delete
   end
 
-  def destroy(id)
+  def destroy
     if @project.destroy
       flash[:notice] = "Project #{@project.name} is delete"
       redirect_to projects_url
