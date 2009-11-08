@@ -20,26 +20,26 @@ Spec::Runner.configure do |config|
     User.collection.remove
     State.collection.remove
     Event.collection.remove
-    @mock_warden = OpenStruct.new
-    request.env['warden'] = @mock_warden
-    @mock_warden.stubs(:authenticated?).returns(false)
+    #@mock_warden = OpenStruct.new
+    #request.env['warden'] = @mock_warden
+    #@mock_warden.stubs(:authenticated?).returns(false)
   end
 end
 
+class Unauthorized < Exception
+
+end
+
 def list_mock_project
-  [mock(:project, 
+  [mock(:project,
         :name => 'oupsnow',
-        :description => nil ), 
-        mock(:project, 
+        :description => nil ),
+        mock(:project,
              :name => 'pictrails',
              :description => 'a gallery in Rails')]
 end
 
 require File.dirname(__FILE__) + '/blueprints.rb'
-
-def logout
-  @request.session = {}
-end
 
 def delete_default_member_from_project(project)
   project.project_members.each do |pm|
@@ -65,6 +65,7 @@ def create_default_user
   create_default_admin
   unless User.first(:conditions => {:login => 'shingara'})
     User.make(:login => 'shingara',
+              :email => 'cyril.mougel@gmail.com',
               :password => 'tintinpouet',
               :password_confirmation => 'tintinpouet')
   end
@@ -82,35 +83,45 @@ def create_default_admin
     pr.save
   end
 
-  if Project.first.tickets.empty?
-    create_ticket(:project => Project.first,
-                  :user_creator => User.first)
-  end
+  #if Project.first.tickets.empty?
+    #create_ticket(:project => Project.first,
+                  #:user_creator => User.first)
+  #end
 
-  if Ticket.first.ticket_updates.empty?
-    t = Ticket.first
-    t.generate_update({:description => 'why not',
-                      :state_id => State.first.id,
-                      :title => t.title}, User.first)
-  end
+  #if Ticket.first.ticket_updates.empty?
+    #t = Ticket.first
+    #t.generate_update({:description => 'why not',
+                      #:state_id => State.first.id,
+                      #:title => t.title}, User.first)
+  #end
   user
 end
 
-def create_ticket(opts={})
-  ticket = Ticket.make(opts)
-  ticket.write_create_event
+
+def login_anonymous
+  #Devise::Controllers::Filters.stubs(:authenticate_user!).
+  request.env['warden'] = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable],:silence_missing_strategies => true})
+  Rack::Request.any_instance.stubs(:request_uri).returns('/projects/new')
+
 end
 
 def login_request(user = nil)
   create_default_user
-  logout
   user = User.first(:conditions => {:login => 'shingara'}) unless user
-  @mock_warden = OpenStruct.new
-  request.env['warden'] = @mock_warden
-  @mock_warden.expects(:authenticate!).with(:scope => :user).returns(user)
-  @mock_warden.stubs(:authenticated?).returns(true)
-  @mock_warden.expects(:user).with(:user).returns(user)
-  @request.session["warden.user.user.key"] = [User, user.id]
+
+  proxy = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable], :silence_missing_strategies => true})
+  proxy.set_user(user, :store => true, :scope => :user)
+  request.env['warden'] = proxy
+
+  #request.session['warden.user.user.key'] = user.id
+
+
+  #@mock_warden = OpenStruct.new
+  #request.env['warden'] = @mock_warden
+  #@mock_warden.expects(:authenticate!).with(:scope => :user).returns(user)
+  #@mock_warden.stubs(:authenticated?).returns(true)
+  #@mock_warden.expects(:user).with(:user).returns(user)
+  #@request.session["warden.user.user.key"] = [User, user.id]
 
 
   # if user is admin of this project. He becomes not admin
@@ -141,7 +152,6 @@ end
 def login_admin
   user = create_default_admin
   need_a_milestone
-  logout
   login_request(user)
 end
 

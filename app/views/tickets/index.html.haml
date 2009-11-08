@@ -1,7 +1,7 @@
 #block-tables.block
 
   #ticket_search.block
-    = form :action => resource(@project, :tickets), :id => 'ticket_search_form', :method => 'GET' do
+    - form_tag(project_tickets_url(@project), {:id => 'ticket_search_form', :method => 'GET'}) do
       = text_field :q, :label => 'Find tickets :' 
 
   .content
@@ -9,8 +9,8 @@
       %table.table
         %thead
           %tr
-            %th.first= link_to 'id', resource(@project, :tickets, sort_by('id').merge(:q => params[:q]))
-            %th= link_to 'name', resource(@project, :tickets, sort_by('title').merge(:q => params[:q]))
+            %th.first= link_to 'id', project_tickets_url(@project, sort_by('id').merge(:q => params[:q]))
+            %th= link_to 'name', project_tickets_url(@project, sort_by('title').merge(:q => params[:q]))
             %th responsible
             %th status
             %th priority
@@ -18,7 +18,7 @@
         %tbody
           - for ticket in @tickets
             %tr{:class => "#{cycle('odd','even')} ticket" }
-              %td= link_to "##{ticket.num}", resource(@project, ticket)
+              %td= link_to "##{ticket.num}", project_ticket_url(@project, ticket)
               %td= ticket.title
               %td= ticket.user_assigned ? ticket.user_assigned.login : ""
               %td= ticket.state.name
@@ -28,4 +28,4 @@
       .actions-bar
         = will_paginate @tickets
         .actions
-          = link_to 'New', resource(@project, :tickets, :new) if session.authenticated?
+          = link_to 'New', new_project_ticket_url(@project) if user_signed_in?

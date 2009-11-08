@@ -60,7 +60,7 @@ def make_ticket_update(params={}, ticket=Ticket.make)
   ticket.generate_update(Ticket.make, User.make)
   ticket.ticket_updates.last
 end
-        
+
 
 Ticket.blueprint do
   title { /\w+/.gen }
@@ -68,6 +68,12 @@ Ticket.blueprint do
   project { make_project }
   user_creator { self.project.project_members.first.user }
   state { State.first(:conditions => {:name => 'new'}) || State.make(:name => 'new') }
+end
+
+def make_ticket(opts={})
+  ticket = Ticket.make(opts)
+  ticket.write_create_event
+  ticket
 end
 
 Milestone.blueprint do

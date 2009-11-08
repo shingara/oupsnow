@@ -1,10 +1,10 @@
 class TicketsController < ApplicationController
-  
+
   before_filter :projects
-  before_filter :load_ticket, :only => [:show, :update, :edit_main_description, 
+  before_filter :load_ticket, :only => [:show, :update, :edit_main_description,
     :update_main_description]
   before_filter :authenticate_user!, :except => [:index, :show]
-  before_filter :admin_project, :only => [:edit_main_description, 
+  before_filter :admin_project, :only => [:edit_main_description,
                                     :update_main_description]
 
   # TODO change and report it on model because not params_accessible in Rails
@@ -27,7 +27,7 @@ class TicketsController < ApplicationController
   # Show a ticket
   #
   # TODO: need some test like test raise NotFound if no ticket found
-  # 
+  #
   # @params[String] project id
   # @params[String] permalink of this ticket (number of this ticket)
   def show
@@ -42,25 +42,21 @@ class TicketsController < ApplicationController
   end
 
   def edit_main_description
-    return return_404 unless @ticket
     @title = "Edit ticket description #{@ticket.title}"
-    display @ticket
   end
 
   def update_main_description
     @ticket.description = params[:ticket][:description]
     @ticket.title = params[:ticket][:title]
     if @ticket.save
-      redirect ticket_project_url(@project, @ticket)
+      redirect_to project_ticket_url(@project, @ticket)
     else
       render :edit_main_description
     end
   end
 
   def create
-    @ticket = Ticket.new(params[:ticket])
-    @ticket.project_id = @project.id
-    @ticket.user_creator = session.user
+    @ticket = Ticket.new_by_params(params[:ticket], @project, current_user)
     if params[:submit] == 'Preview'
       @preview = true
       @ticket_new = true
@@ -69,7 +65,7 @@ class TicketsController < ApplicationController
       if @ticket.save
         @ticket.write_create_event
         flash[:notice] = "Ticket was successfully created"
-        redirect_to project_ticket(@project, @ticket)
+        redirect_to project_ticket_url(@project, @ticket)
       else
         falsh[:error] = "Ticket failed to be created"
         render :new
@@ -80,9 +76,9 @@ class TicketsController < ApplicationController
   def update
     return return_404 unless @ticket
     @ticket_change = @ticket.dup
-    if params[:submit] != 'Preview' && 
-      @ticket.generate_update(params[:ticket], session.user)
-      redirect_to project_ticket(@project, @ticket)
+    if params[:submit] != 'Preview' &&
+      @ticket.generate_update(params[:ticket], current_user)
+      redirect_to project_ticket_url(@project, @ticket)
     else
       if params[:submit] == 'Preview'
         @preview_description = params[:ticket][:description]
@@ -99,8 +95,9 @@ class TicketsController < ApplicationController
   private
 
   def load_ticket
-    @ticket = Ticket.get_by_permalink(params[:project_id], 
-                                      params[:ticket_permalink])
+    # The id of ticket is his num
+    @ticket = Ticket.get_by_permalink(params[:project_id],
+                                      params[:id])
     return return_404 unless @ticket
   end
 

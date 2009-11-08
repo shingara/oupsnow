@@ -38,11 +38,12 @@ Rails::Initializer.run do |config|
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
-  
+
   config.gem 'mongo', :version => '0.15.1'
   config.gem 'mongo_ext', :version => '0.15.1', :lib => false
   config.gem 'mongo_mapper', :version => '0.5.6'
   config.gem 'RedCloth', :version => '4.2.2', :lib => 'redcloth'
   config.gem 'haml', :version => '2.2.9'
+  config.gem 'warden'
   config.gem 'devise', :version => '0.2.0'
 end

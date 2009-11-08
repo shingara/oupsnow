@@ -1,284 +1,204 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
-describe "resource(Project.first, :tickets)" do
+describe "TicketsController" do
+
+  include Rack::Test::Methods
+
+  def app
+    ActionController::Dispatcher.new
+  end
+
+  def i_am_logged
+    request "/users/sign_in", 
+      :method => :post,
+      :params => {:user => {:email => 'cyril.mougel@gmail.com',
+        :password => 'tintinpouet'}}
+  end
+
   describe "GET" do
-    
-    before(:each) do
-      login
-      @response = request(resource(Project.first, :tickets))
+    before :each do
+      create_default_user
     end
     
-    it "responds successfully" do
-      @response.should be_successful
+    it 'should access if you are logged' do
+      TicketsController.any_instance.expects(:index).at_most_once
+      i_am_logged
+      get "/projects/#{Project.first.id}/tickets"
     end
 
-    it "contains a list of tickets" do
-      @response.should have_xpath("//ul")
+    it 'should access if not logged' do
+      TicketsController.any_instance.expects(:index).at_most_once
+      get "/projects/#{Project.first.id}/tickets"
     end
-    
   end
-  
-  describe "GET" do
-    before(:each) do
-      login
-      @response = request(resource(Project.first, :tickets))
-    end
 
-    after(:each) do
-      Ticket.all.each {|t| t.destroy}
-    end
-    
-    it "has a list of tickets" do
-      @response.should have_xpath("//ul/li")
-    end
-  end
-  
-  describe "a successful POST" do
+  describe "POST" do
 
     def post_request(project, options = {})
-      @response = request(resource(project, :tickets), :method => "POST", 
-                          :params => { :ticket => { :title => 'a new ticket',
-                            :state_id => (State.first ? State.first : State.make).id},
-                            :project_id => project.id}.merge(options))
+      request("/project/#{project.id}/tickets", :method => "POST", 
+              :params => { :ticket => { :title => 'a new ticket',
+                :state_id => (State.first || State.make).id},
+                :project_id => project.id}.merge(options))
     end
-
-    describe 'with anonymous user' do
-      before :each do
-        logout
-        make_project unless Project.first
-        post_request(Project.first)
-      end
-
-      it 'should not access' do
-        @response.status.should == 401
-      end
-    end
-
-    describe 'ticket creation success', :shared => true do
-
-      before :each do
-        @project.tickets.each{|t| t.destroy}
-        post_request(@project)
-      end
-
-      it 'should create ticket' do
-        @project.tickets.first.should_not be_nil
-      end
-
-      it "redirects to resource(Project.first, :tickets)" do
-        @response.should redirect_to(resource(@project, @project.tickets.first), 
-                                     :message => {:notice => "ticket was successfully created"})
-      end
-
-      it 'project should have one ticket' do
-        @project.tickets.should have(1).items
-      end
-      
-    end
-
-
-    describe 'with user logged, member of project but not admin' do
-      before(:each) do
-        login
-        @project = Project.first
-        pm = ProjectMember.new(:user => User.first(:conditions => {:login => 'shingara'}),
-                          :function => Function.first)
-        @project.project_members << pm
-        @project.save
-      end
-
-      it_should_behave_like 'ticket creation success'
-
-    end
-
-    describe 'with user logged, no member of project but not admin' do
-      before(:each) do
-        login
-        @project = Project.first
-        delete_default_member_from_project(@project)
-      end
-
-      it_should_behave_like 'ticket creation success'
-
-    end
-    
-  end
-end
-
-describe "resource(Project.first, :tickets, :new)" do
-  before(:each) do
-    logout
-    create_default_admin unless Project.first
-    @response = request(resource(Project.first, :tickets, :new))
-  end
-  
-  it "responds successfully" do
-    @response.status.should == 401
-  end
-end
-
-describe "doesn't access to anonymous", :shared => true do
-  before :each do
-    req
-  end
-
-  it 'should respond 401' do
-    @response.status.should == 401
-  end
-
-  it 'should not update ticket description' do
-    Ticket.first.description.should_not == 'yahoo'
-  end
-
-end
-
-describe "doesn't access with user logged", :shared => true do
-
-  before :each do
-    login
-    req
-  end
-
-  it "responds successfully" do
-    @response.status.should == 401
-  end
-
-  it 'should not update ticket description' do
-    Ticket.first.description.should_not == 'yahoo'
-  end
-end
-
-describe "resource(Project.first, @ticket, :edit_main_description)" do
-  def req
-    @response = request(resource(Project.first, Ticket.first, :edit_main_description))
-  end
-
-  before :each do
-    login
-  end
-
-  it_should_behave_like "doesn't access to anonymous"
-  it_should_behave_like "doesn't access with user logged"
-
-
-  describe 'with admin user logged' do
 
     before :each do
-      login_admin
-      req
+      @project = Project.first || make_project
     end
 
-    it "responds successfully" do
-      @response.should be_successful
+    it 'should not post if not logged' do
+      TicketsController.any_instance.expects(:create).never
+      post_request(@project)
     end
-  end
-end
 
-describe "resource(Project.first, @ticket, :update_main_description)" do
-  def req
-    @response = request(resource(Project.first, Ticket.first, :update_main_description), 
-                        :method => "PUT", 
-                        :params => {:ticket => {:description => 'yahoo',
-                                                :title => Ticket.first.title}})
+    it 'should post if logged' do
+      TicketsController.any_instance.expects(:create).at_most_once
+      i_am_logged
+      post_request(@project)
+    end
+
   end
 
-  before :each do
-    login
-  end
-
-  it_should_behave_like "doesn't access to anonymous"
-  it_should_behave_like "doesn't access with user logged"
-
-
-  describe 'with admin user logged' do
-
+  describe "/new" do
     before :each do
-      login_admin
-      req
+      @project = Project.first || create_default_admin
+      request("/projects/#{@project.id}/tickets/new")
     end
+    it 'should not see page if not logged'
+    it 'should see page if logged'
 
-    it "responds successfully" do
-      @response.should redirect_to(resource(Project.first, Ticket.first))
-    end
-
-    it "should update ticket description" do
-      Ticket.first.description.should == 'yahoo'
-    end
   end
-end
 
-describe "resource(Project.first, @ticket)" do
+#describe "resource(Project.first, @ticket, :edit_main_description)" do
+  #def req
+    #@response = request(resource(Project.first, Ticket.first, :edit_main_description))
+  #end
 
-  before :each do
-    login
-  end
+  #before :each do
+    #login
+  #end
+
+  #it_should_behave_like "doesn't access to anonymous"
+  #it_should_behave_like "doesn't access with user logged"
+
+
+  #describe 'with admin user logged' do
+
+    #before :each do
+      #login_admin
+      #req
+    #end
+
+    #it "responds successfully" do
+      #@response.should be_successful
+    #end
+  #end
+#end
+
+#describe "resource(Project.first, @ticket, :update_main_description)" do
+  #def req
+    #@response = request(resource(Project.first, Ticket.first, :update_main_description), 
+                        #:method => "PUT", 
+                        #:params => {:ticket => {:description => 'yahoo',
+                                                #:title => Ticket.first.title}})
+  #end
+
+  #before :each do
+    #login
+  #end
+
+  #it_should_behave_like "doesn't access to anonymous"
+  #it_should_behave_like "doesn't access with user logged"
+
+
+  #describe 'with admin user logged' do
+
+    #before :each do
+      #login_admin
+      #req
+    #end
+
+    #it "responds successfully" do
+      #@response.should redirect_to(resource(Project.first, Ticket.first))
+    #end
+
+    #it "should update ticket description" do
+      #Ticket.first.description.should == 'yahoo'
+    #end
+  #end
+#end
+
+#describe "resource(Project.first, @ticket)" do
+
+  #before :each do
+    #login
+  #end
   
-  describe "GET" do
-    before(:each) do
-      p = make_project
-      t = Ticket.make(:project => p,
-                    :user_creator => p.project_members.first.user)
-      @response = request(resource(p,t))
-    end
+  #describe "GET" do
+    #before(:each) do
+      #p = make_project
+      #t = Ticket.make(:project => p,
+                    #:user_creator => p.project_members.first.user)
+      #@response = request(resource(p,t))
+    #end
 
-    after :each do
-      Ticket.destroy_all
-    end
+    #after :each do
+      #Ticket.destroy_all
+    #end
   
-    it "responds successfully" do
-      @response.should be_successful
-    end
-  end
+    #it "responds successfully" do
+      #@response.should be_successful
+    #end
+  #end
   
-  describe "PUT" do
+  #describe "PUT" do
 
-    def put_request
-      @project = Project.first
-      @ticket = @project.tickets.first
-      @response = request(resource(@project, @ticket), 
-                          :method => "PUT", 
-                          :params => { :ticket => {:description => 'new comment',
-                                                    :state_id => State.first.id} })
-    end
+    #def put_request
+      #@project = Project.first
+      #@ticket = @project.tickets.first
+      #@response = request(resource(@project, @ticket), 
+                          #:method => "PUT", 
+                          #:params => { :ticket => {:description => 'new comment',
+                                                    #:state_id => State.first.id} })
+    #end
 
-    describe "with anonymous" do
-      before :each do
-        create_default_admin
-        logout
-        t = Project.first.tickets.first
-        t.ticket_updates = []
-        t.save
-        put_request
-      end
+    #describe "with anonymous" do
+      #before :each do
+        #create_default_admin
+        #logout
+        #t = Project.first.tickets.first
+        #t.ticket_updates = []
+        #t.save
+        #put_request
+      #end
 
-      it 'should be successful' do
-        @response.status.should == 401
-      end
+      #it 'should be successful' do
+        #@response.status.should == 401
+      #end
 
-      it 'should not change ticket' do
-        @ticket.should == Project.first.tickets.first
-      end
+      #it 'should not change ticket' do
+        #@ticket.should == Project.first.tickets.first
+      #end
 
-      it 'should not create ticket update' do
-        Project.first.tickets.first.ticket_updates.should be_empty
-      end
-    end
+      #it 'should not create ticket update' do
+        #Project.first.tickets.first.ticket_updates.should be_empty
+      #end
+    #end
 
-    describe "with user logged" do
-      before(:each) do
-        login
-        put_request
-      end
+    #describe "with user logged" do
+      #before(:each) do
+        #login
+        #put_request
+      #end
 
-      after :each do
-        Ticket.destroy_all
-      end
+      #after :each do
+        #Ticket.destroy_all
+      #end
     
-      it "redirect to the article show action" do
-        @response.should redirect_to(resource(@project, @ticket))
-      end
-    end
-  end
+      #it "redirect to the article show action" do
+        #@response.should redirect_to(resource(@project, @ticket))
+      #end
+    #end
+  #end
   
 end
 

@@ -11,46 +11,46 @@
 
     .inner
       .flash
-        = message[:error]
-        = error_messages_for @ticket
+        = flash[:error]
+        = error_messages_for :ticket
 
-      = form_for(@ticket, :action => url(:project_tickets), :id => 'ticket_form' , :class => 'form') do
+      - form_for([@project, @ticket], :id => 'ticket_form' , :class => 'form') do |f|
         .columns
           %div{:class => 'column left'}
             .group
               %label.label{:for => 'ticket[title]'} Title
-              = text_field :title, :size => 40, :class => 'text_field'
+              = f.text_field :title, :size => 40, :class => 'text_field'
             .group
               %label.label{:for => 'ticket[description]'} Description
-              = text_area(@ticket.description, :name => 'ticket[description]', :cols => 40, :rows => 15, :class => 'text_area')
+              = f.text_area(:description, :cols => 40, :rows => 15, :class => 'text_area')
 
           %div{:class => 'column right'}
             .group
               %label.label{:for => 'ticket[user_assigned_id]'} Who's is responsible ?
-              = select :user_assigned_id, :collection => @ticket.project.project_members,:text_method => 'user_name', :value_method => 'user_id', :selected => @ticket.user_assigned_id.to_s, :prompt => '-- None --'
+              = f.collection_select :user_assigned_id, @ticket.project.project_members, :user_id, :user_name, :prompt => '-- None --'
 
             .group
               %label.label{:for => 'ticket[state_id]'} Ticket status
-              = select :state_id, :collection => State.all, :text_method => 'name', :value_method => 'id', :selected => @ticket.state_id.to_s
+              = f.collection_select :state_id, State.all, :id, :name
 
             .group
               %label.label{:for => 'ticket[priority_id]'} Ticket Priority
-              = select :priority_id, :collection => Priority.all, :text_method => :name, :value_method => :id, :selected => @ticket.priority_id.to_s, :prompt => '-- None --'
+              = f.collection_select :priority_id, Priority.all, :id, :name, :prompt => '-- None --'
 
             .group
               %label.label{:for => 'ticket[milestone_id]'} Milestone
-              = select :milestone_id, :collection => @project.milestones, :text_method => :name, :value_method => :id, :selected => @ticket.milestone_id.to_s, :prompt => '-- None --'
+              = f.collection_select :milestone_id, @project.milestones, :id, :name, :prompt => '-- None --'
         .clear
         .group
           %label.label{:for => 'ticket[tag_list]'} Choose some tags
-          = text_field :tag_list, :value => @ticket.tag_list, :class => 'text_field'
+          = f.text_field :tag_list, :value => @ticket.tag_list, :class => 'text_field'
         .clear
         .group
           %label.label{:for => 'ticket[attachment]'} Attach a file [500MB limit]
-          = file_field :name => 'ticket[attachment]', :class => 'text_field'
+          = f.file_field :attachment, :class => 'text_field'
 
         %div{:class => 'group navform'}
-          = submit "Create", :class => 'button'
-          = submit "Preview", :class => 'button'
+          = submit_tag "Create", :class => 'button'
+          = submit_tag "Preview", :class => 'button'
           or
-          = link_to 'Cancel', resource(@project, :tickets)
+          = link_to 'Cancel', project_tickets_url(@project)

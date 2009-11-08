@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
   end
 
   def return_404
-    #TODO: need render like 404
+    render :status => 404, :file => 'public/404.html'
   end
 
   def return_401

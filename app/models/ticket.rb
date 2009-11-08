@@ -1,7 +1,7 @@
 class Ticket
 
   include MongoMapper::Document
-  
+
   key :title, String, :required => true, :length => 255
   key :description, String
   key :num, Integer, :required => true
@@ -32,23 +32,23 @@ class Ticket
 
   belongs_to :project
   belongs_to :state
-  belongs_to :user_assigned, 
+  belongs_to :user_assigned,
     :class_name => 'User'
   belongs_to :milestone
-  belongs_to :user_creator, 
+  belongs_to :user_creator,
     :class_name => 'User'
   belongs_to :priority
 
   # WARNING: what's happen if another event has same id ?
-  many :events, 
-    :class_name => 'Event', 
+  many :events,
+    :class_name => 'Event',
     :foreign_key => :eventable_id,
     :dependent => :destroy
 
-  validates_true_for :created_user_ticket, 
-    :logic => lambda { users_in_members }, 
+  validates_true_for :created_user_ticket,
+    :logic => lambda { users_in_members },
     :message => 'The user to assigned ticket need member of project'
-  validates_true_for :milestone_ticket, 
+  validates_true_for :milestone_ticket,
     :logic => lambda { milestone_in_same_project },
     :message => "The milestone need to be in same project of this ticket"
   validates_true_for :num,
@@ -151,9 +151,16 @@ class Ticket
     Ticket.paginate(conditions)
   end
 
+  def self.new_by_params(params, project, user)
+    ticket = Ticket.new(params)
+    ticket.project_id = project.id
+    ticket.user_creator = user
+    ticket
+  end
+
   def self.list_tag(string)
-    string.to_s.split(',').map { |name| 
-      name.gsub(/[^\w_-]/i, '').strip 
+    string.to_s.split(',').map { |name|
+      name.gsub(/[^\w_-]/i, '').strip
     }.uniq.sort
   end
 
@@ -195,6 +202,10 @@ class Ticket
     }
   end
 
+  def to_param
+    num.to_s
+  end
+
   private
 
   def define_num_ticket
@@ -218,7 +229,7 @@ class Ticket
     project.has_member?(user_assigned)
   end
 
-  def copy_user_creator_name 
+  def copy_user_creator_name
     self.creator_user_name ||= self.user_creator.login
   end
 
@@ -236,7 +247,7 @@ class Ticket
 
   ##
   # check if num of ticket is already used in project
-  # 
+  #
   def num_already_used_in_same_project
     Ticket.first(:conditions => {:project_id => self.project_id,
                  :num => self.num,
@@ -250,5 +261,6 @@ class Ticket
       tu.num ||= (i+1)
     end
   end
+
 
 end
