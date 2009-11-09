@@ -2,6 +2,8 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe TicketsController do
 
+  integrate_views
+
   before :each do
     @project = make_project
     State.make
@@ -78,6 +80,23 @@ describe TicketsController do
     end
   end
 
+  describe 'update ticket', :shared => true do
+    before do
+      @ticket = make_ticket(:project => @project)
+    end
+    describe 'update success' do
+      before do
+        put :update, :id => @ticket.num,
+          :project_id => @project.id,
+          :ticket => {:description => 'new comment',
+            :state_id => State.first.id}
+      end
+      it { response.should redirect_to(project_ticket_url(@project, @ticket)) }
+      it { Ticket.find(@ticket.id).ticket_updates.should_not be_empty }
+      it { Ticket.find(@ticket.id).ticket_updates.first.description.should == 'new comment' }
+    end
+  end
+
   describe 'with a anonymous' do
     before do
       login_anonymous
@@ -105,6 +124,21 @@ describe TicketsController do
       it_should_behave_like 'not access'
       it 'should not add tickets to project' do
         @project.tickets.should be_empty
+      end
+    end
+    describe '#update' do
+      def req
+        put :update, :id => @ticket.num,
+          :project_id => @project.id,
+          :ticket => {:description => 'new comment',
+            :state_id => State.first.id}
+      end
+      before do
+        @ticket = make_ticket(:project => @project)
+      end
+      it_should_behave_like 'not access'
+      it 'should not add ticket updates' do
+        Ticket.find(@ticket.id).ticket_updates.should be_empty
       end
     end
     describe '/edit_main_description' do
@@ -163,6 +197,9 @@ describe TicketsController do
             :title => ticket.title}
       end
       it { response.should redirect_to(login_url) }
+    end
+    describe 'PUT' do
+      it_should_behave_like 'update ticket'
     end
   end
 
@@ -239,43 +276,9 @@ describe TicketsController do
         it { response.should render_template('public/404.html') }
       end
     end
+    describe 'PUT' do
+      it_should_behave_like 'update ticket'
+    end
   end
 
-    #describe "PUT" do
-
-      #def put_request
-        #@project = Project.first
-        #@ticket = @project.tickets.first
-        #put :update, :id => @ticket.num,
-          #:project_id => @project.id,
-          #:ticket => {:description => 'new comment',
-                      #:state_id => State.first.id}
-      #end
-
-        #it 'should not change ticket' do
-        #pending
-          #@ticket.should == Project.first.tickets.first
-        #end
-
-        #it 'should not create ticket update' do
-        #pending
-          #Project.first.tickets.first.ticket_updates.should be_empty
-        #end
-      #end
-
-      #describe "with user logged" do
-        #before(:each) do
-          #login_request
-          #put_request
-        #end
-
-        #it "redirect to the article show action" do
-        #pending
-          #p flash
-          #response.should redirect_to(project_ticket_url(@project, @ticket))
-        #end
-      #end
-    #end
-
-  #end
 end
