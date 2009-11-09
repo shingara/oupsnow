@@ -63,27 +63,27 @@ describe Ticket do
     end
 
     it 'should return all if no q value' do
-      Ticket.paginate_by_search('', 
-                                :page => 1, 
+      Ticket.paginate_by_search('',
+                                :page => 1,
                                 :per_page => (Ticket.count + 1)
                                ).size.should == Ticket.count
     end
 
     it 'should return all ticket with state information' do
-      Ticket.paginate_by_search("state:#{@state.name}", 
-                                :page => 1, 
+      Ticket.paginate_by_search("state:#{@state.name}",
+                                :page => 1,
                                   :per_page => 10).sort_by(&:id).should == @ticket_with_first_state.sort_by(&:id)
     end
 
     it 'should return no ticket if no ticket with state' do
-      Ticket.paginate_by_search("state:a_bad_state", 
-                                :page => 1, 
+      Ticket.paginate_by_search("state:a_bad_state",
+                                :page => 1,
                                 :per_page => 10).should be_empty
     end
 
     it 'should return all ticket with last state define in query if several state' do
-      Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}", 
-                                :page => 1, 
+      Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}",
+                                :page => 1,
                                 :per_page => 10).sort_by(&:id).should == @ticket_with_second_state.sort_by(&:id)
     end
 
@@ -125,7 +125,7 @@ describe Ticket do
                        :tag_list => TAG_LIST,
                        :user_creator => Project.first.project_members.first.user)
       @old_description = @t.description
-      @t.generate_update(@t.attributes.merge(ticket), 
+      @t.generate_update(@t.attributes.merge(ticket),
                          Project.first.project_members.first.user)
       @t = Ticket.find(@t.id)
     end
@@ -142,7 +142,7 @@ describe Ticket do
 
     describe 'change only description' do
       before(:each) do
-        generate_ticket({:description => 'new description', 
+        generate_ticket({:description => 'new description',
                         'tag_list' => TAG_LIST})
       end
 
@@ -209,8 +209,8 @@ describe Ticket do
       end
 
       it 'should have properties_update with state change' do
-        @t.ticket_updates[0].properties_update.should be_include([:state_id, 
-                                                                 State.first(:conditions => {:name => 'new'}).id, 
+        @t.ticket_updates[0].properties_update.should be_include([:state_id,
+                                                                 State.first(:conditions => {:name => 'new'}).id,
                                                                  State.first(:conditions => {:name => 'check'}).id])
       end
     end
@@ -248,7 +248,7 @@ describe Ticket do
       end
 
     end
-    
+
   end
 
   describe 'self#get_by_permalink' do
@@ -275,6 +275,24 @@ describe Ticket do
     end
     it 'should return nil because no ticket with bad permalink and project_id' do
       Ticket.get_by_permalink((@pr.id.succ), (@t2.num + 10)).should be_nil
+    end
+  end
+
+  describe '#get_update' do
+    it 'should get ticket_update with num if exist' do
+      @ticket = make_ticket
+      ticket_update = make_ticket_update(@ticket)
+      ticket_update2 = make_ticket_update(@ticket)
+      ticket_update3 = make_ticket_update(@ticket)
+      Ticket.find(@ticket.id).get_update(2).should == ticket_update2
+    end
+
+    it 'should get nil no of ticket_update with this num' do
+      @ticket = make_ticket
+      ticket_update = make_ticket_update(@ticket)
+      ticket_update2 = make_ticket_update(@ticket)
+      ticket_update3 = make_ticket_update(@ticket)
+      Ticket.find(@ticket.id).get_update(4).should be_nil
     end
   end
 

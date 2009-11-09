@@ -193,12 +193,13 @@ class Ticket
   end
 
   ##
-  # get ticket_update with this id
+  # get ticket_update with this num
   #
-  # TODO: need test
-  def get_update(id)
+  # @params[id] number of ticket_update what you search
+  # @return[TicketUpdate] the ticket update with num define in params or nil
+  def get_update(num)
     ticket_updates.detect{ |tu|
-      tu.num = id
+      tu.num.to_i == num.to_i
     }
   end
 

@@ -56,8 +56,9 @@ def make_project(params={})
   pr
 end
 
-def make_ticket_update(params={}, ticket=Ticket.make)
-  ticket.generate_update(Ticket.make, User.make)
+def make_ticket_update(ticket, params={})
+  ticket.generate_update(Ticket.make_unsaved({:description => (1..3).of { /[:paragraph:]/.generate }.join("\n")}.merge(params)),
+                         User.make)
   ticket.ticket_updates.last
 end
 

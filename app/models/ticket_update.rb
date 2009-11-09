@@ -31,4 +31,9 @@ class TicketUpdate
     end
   end
 
+  # We use num like params
+  def to_param
+    num.to_s
+  end
+
 end

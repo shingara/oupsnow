@@ -17,7 +17,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Sample resource route with sub-resources:
   #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
+
   # Sample resource route with more complex sub-resources
   #   map.resources :products do |products|
   #     products.resources :comments
@@ -38,11 +38,11 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
-  
+
   #TODO change with authlogic
   map.devise_for :users
   map.login '/login', :controller => 'projects', :action => 'index'
-  
+
   map.admin_root '/admin', :controller => 'functions', :action => 'index'
   map.namespace :admin do |admin|
     admin.resources :functions, :collection => {:update_all => :put}
@@ -56,7 +56,7 @@ ActionController::Routing::Routes.draw do |map|
     project.resources :milestones
     project.resources :tickets, :member => {:edit_main_description => :get,
                                             :update_main_description => :put} do |ticket|
-      ticket.resources :ticket_updates
+      ticket.resources :ticket_updates, :only => [:edit, :update]
     end
     project.settings '/settings', :controller => 'project_members', :action => 'index'
     project.namespace :settings do |setting|
