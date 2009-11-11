@@ -1,35 +1,42 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe ProjectsController do
+
+  integrate_views
+
   describe "resource(:projects)" do
-    describe "GET" do
-      integrate_views
+    describe 'with anonymous user' do
 
-      before(:each) do
-        get :index
+      before do
+        login_anonymous
+      end
+      describe "GET" do
+
+        before(:each) do
+          get :index
+        end
+
+        it "responds successfully" do
+          response.should be_success
+        end
+
+        it "contains an empty list of projects" do
+          response.should_not have_tag("h2")
+        end
+
       end
 
-      it "responds successfully" do
-        response.should be_success
-      end
+      describe "GET" do
 
-      it "contains an empty list of projects" do
-        response.should_not have_tag("h2")
-      end
 
-    end
+        before(:each) do
+          2.of{ make_project }
+          get :index
+        end
 
-    describe "GET" do
-
-      integrate_views
-
-      before(:each) do
-        2.of{ make_project }
-        get :index
-      end
-
-      it "has a list of projects" do
-        response.should have_tag("h2")
+        it "has a list of projects" do
+          response.should have_tag("h2")
+        end
       end
     end
 
@@ -46,12 +53,12 @@ describe ProjectsController do
 
         it "redirects to resource(:projects)" do
           post_request
-          response.should redirect_to(project_ticket_index_url(Project.first(:conditions => {:name => 'oupsnow'})))
+          response.should redirect_to(project_tickets_url(Project.first(:conditions => {:name => 'oupsnow'})))
           flash[:notice].should == "Project was successfully created"
         end
 
         it 'should create one project' do
-          lambda do 
+          lambda do
             post_request
           end.should change(Project, :count)
         end
@@ -60,7 +67,7 @@ describe ProjectsController do
     end
   end
 
-  describe "resource(@project) DELETE" do 
+  describe "resource(@project) DELETE" do
 
     describe 'with admin user' do
       before(:each) do
@@ -108,7 +115,7 @@ describe ProjectsController do
     end
   end
 
-  describe "resource(@project) DESTROY" do 
+  describe "resource(@project) DESTROY" do
 
     describe 'with admin user' do
       before(:each) do
@@ -227,7 +234,7 @@ describe ProjectsController do
         end
 
         it "redirect to the article show action" do
-          response.should redirect_to(project_ticket_index_url(@project))
+          response.should redirect_to(project_tickets_url(@project))
         end
       end
     end
@@ -242,18 +249,19 @@ describe ProjectsController do
   end
 
   describe 'resource(@project, :overview)' do
-    def test_request
+    def req
       @project = @project || make_project
       get :overview, :id => @project.id
     end
 
     describe 'with event desapear', :shared => true do
       before :each do
+        login_anonymous
         ticket = Ticket.make
         @project = ticket.project
         ticket.write_create_event
         ticket.destroy
-        test_request
+        req
       end
 
       it 'should be successfull with event deseapear' do
@@ -263,10 +271,10 @@ describe ProjectsController do
 
     describe 'anonymous user' do
       before :each do
-        logout
+        login_anonymous
         make_project unless Project.first
         @project = Project.first
-        test_request
+        req
       end
 
       it_should_behave_like 'it should be successful'
@@ -277,7 +285,7 @@ describe ProjectsController do
       before :each do
         login_request
         @project = Project.first || make_project
-        test_request
+        req
       end
 
       it_should_behave_like 'it should be successful'
@@ -288,7 +296,7 @@ describe ProjectsController do
       before :each do
         login_admin
         @project = Project.first || make_project
-        test_request
+        req
       end
 
       it_should_behave_like 'it should be successful'

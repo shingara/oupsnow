@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
- 
+
   before_filter :authenticate_user!, :except => [:index, :show, :overview]
   before_filter :need_admin, :except => [:index, :show, :overview, :edit, :update]
   before_filter :load_project, :only => [:edit, :update, :delete, :destroy]
@@ -39,7 +39,7 @@ class ProjectsController < ApplicationController
     @project = Project.new_with_admin_member(params[:project], current_user)
     if @project.save
       flash[:notice] = "Project was successfully created"
-      redirect_to project_ticket_index_url(@project)
+      redirect_to project_tickets_url(@project)
     else
       flash[:error] = "Project failed to be created"
       render :new
@@ -50,7 +50,7 @@ class ProjectsController < ApplicationController
     @project.user_creator = current_user
     if @project.update_attributes(params[:project])
       flash[:notice] = 'Project is update'
-      redirect_to project_ticket_index_url(@project)
+      redirect_to project_tickets_url(@project)
     else
       render :edit
     end

@@ -11,7 +11,7 @@
               %span= time_overview(event.created_at)
             .item
               = event.eventable_type
-              = link_to event.short_description, (event.eventable_type == 'Project' ? resource(event.eventable) : resource(@project, event.eventable))
+              = link_to event.short_description, (event.eventable_type == 'Project' ? {:controller => event.eventable_pluralize, :action => :show, :id => event.eventable.to_param} : { :controller => event.eventable_pluralize, :action => :show, :project_id => @project.to_param, :id => event.eventable.to_param} )
               was
               = event.event_type
               by

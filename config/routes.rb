@@ -52,7 +52,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :users
-  map.resources :projects, :member => {:overview => :get} do |project|
+  map.resources :projects, :member => {:delete => :get, :overview => :get} do |project|
     project.resources :milestones
     project.resources :tickets, :member => {:edit_main_description => :get,
                                             :update_main_description => :put} do |ticket|

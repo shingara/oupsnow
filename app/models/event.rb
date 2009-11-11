@@ -3,12 +3,12 @@ class Event
   include MongoMapper::Document
 
   ### PROPERTY ###
-  
+
   key :user_name, String
   key :event_type, String
-  
+
   ### Association ###
-  
+
   key :user_id, String
   key :project_id, String
 
@@ -25,6 +25,12 @@ class Event
 
   def short_description
     eventable.title
+  end
+
+  ##
+  # get the class eventable in string pluralize
+  def eventable_pluralize
+    eventable.class.to_s.pluralize.downcase
   end
 
 
