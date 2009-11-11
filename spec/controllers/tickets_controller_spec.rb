@@ -186,7 +186,7 @@ describe TicketsController do
         get :edit_main_description, :project_id => @project.id,
           :id => make_ticket(:project => @project).num
       end
-      it { response.should redirect_to(login_url) }
+      it { response.should redirect_to(new_user_session_url) }
     end
     describe 'Update main description' do
       before do
@@ -196,7 +196,7 @@ describe TicketsController do
           :ticket => {:description => 'yahoo',
             :title => ticket.title}
       end
-      it { response.should redirect_to(login_url) }
+      it { response.should redirect_to(new_user_session_url) }
     end
     describe 'PUT' do
       it_should_behave_like 'update ticket'

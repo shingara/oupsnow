@@ -48,7 +48,7 @@ describe TicketUpdatesController do
         get :edit, :project_id => @project.id, :ticket_id => @ticket.num,
           :id => @ticket.ticket_updates.first.num
       end
-      it { response.should redirect_to(login_url) }
+      it { response.should redirect_to(new_user_session_url) }
 
     end
 
@@ -60,7 +60,7 @@ describe TicketUpdatesController do
           :ticket_update => {:description => 'yahoo',
             :state_id => State.first.id}
       end
-      it { response.should redirect_to(login_url) }
+      it { response.should redirect_to(new_user_session_url) }
       it 'should not update ticket_update' do
         Ticket.find(@ticket.id).ticket_updates.first.description.should_not == 'yahoo'
       end

@@ -25,7 +25,7 @@ describe Settings::ProjectMembersController do
       before do
         get :show, :project_id => @project.id, :id => @project.project_members.first.user_name
       end
-      it {response.should redirect_to(login_url) }
+      it {response.should redirect_to(new_user_session_url) }
     end
 
   end

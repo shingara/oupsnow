@@ -7,15 +7,18 @@ class ApplicationController < ActionController::Base
   private
 
   def need_admin
-    unless current_user.global_admin?
-      redirect_to login_url
-    end
+    need_logged unless current_user.global_admin?
   end
 
   def admin_project
-    unless current_user.global_admin? || current_user.admin?(@project)
-      redirect_to login_url
-    end
+    need_logged unless current_user.global_admin? || current_user.admin?(@project)
+  end
+
+  ##
+  # redirect to login form
+  #
+  def need_logged
+    redirect_to new_user_session_url
   end
 
   def projects

@@ -95,7 +95,7 @@ describe ProjectsController do
       end
 
       it "should define like not authorized" do
-        response.should redirect_to(login_url)
+        response.should redirect_to(new_user_session_url)
       end
 
     end
@@ -109,7 +109,7 @@ describe ProjectsController do
       end
 
       it "should define like not authorized" do
-        response.should redirect_to(login_url)
+        response.should redirect_to(new_user_session_url)
       end
 
     end
@@ -143,7 +143,7 @@ describe ProjectsController do
       end
 
       it "should define like not authorized" do
-        response.should redirect_to(login_url)
+        response.should redirect_to(new_user_session_url)
       end
 
     end
@@ -157,7 +157,7 @@ describe ProjectsController do
       end
 
       it "should define like not authorized" do
-        response.should redirect_to(login_url)
+        response.should redirect_to(new_user_session_url)
       end
 
     end
@@ -171,7 +171,7 @@ describe ProjectsController do
       end
 
       it "responds successfully" do
-        response.should redirect_to(login_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
 
@@ -195,7 +195,7 @@ describe ProjectsController do
       end
 
       it "responds successfully" do
-        response.should redirect_to(login_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
 

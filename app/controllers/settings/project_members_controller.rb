@@ -63,11 +63,11 @@ module Settings
 
     def project_admin_authenticated
       @project = Project.find(params[:project_id])
-      redirect_to(login_url) and return unless current_user
+      need_logged and return unless current_user
       return true if current_user.global_admin?
       member = @project.project_members.detect{|pm| pm.user_id.to_s == current_user.id.to_s}
-      redirect_to(login_url) and return unless member
-      redirect_to(login_url) and return unless member.project_admin?
+      need_logged and return unless member
+      need_logged and return unless member.project_admin?
     end
 
   end # Members
