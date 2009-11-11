@@ -31,7 +31,7 @@ Then /^the request should be success$/ do
 end
 
 When /^logged with "([^\"]*)" with password "([^\"]*)"$/ do |login, password|
-  When %{I go to /login}
+  When %{I go to login}
   And %{I fill in "login" with "#{login}"}
   And %{I fill in "password" with "#{password}"}
   And %{I press "Log In"}
