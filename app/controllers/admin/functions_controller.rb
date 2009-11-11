@@ -3,23 +3,23 @@ module Admin
 
     before_filter :authenticate_user!
     before_filter :need_admin
-  
+
     def index
       @functions = Function.all
       @title = "Administration : Functions"
     end
-  
+
     def show
       @function = Function.get(params[:id])
-      return return_404 unless @function
+      return_404 unless @function
       @title = "Administration : Function #{@function.name}"
     end
-  
+
     def new
       @function = Function.new
       @title = "Administration : new function"
     end
-  
+
     def create
       @function = Function.new(params[:function])
       if @function.save
@@ -30,7 +30,7 @@ module Admin
         render :new
       end
     end
-  
+
     def update_all
       params[:project_admin].each do |k, v|
         f = Function.get(k)
@@ -40,16 +40,16 @@ module Admin
       flash[:notice] = 'All functions updated'
       redirect_to admin_functions
     end
-  
+
     def destroy
       @function = Function.get(params[:id])
-      return return_404 unless @function
+      return_404 unless @function
       if @function.destroy
         redirect_to admin_functions_url
       else
         raise InternalServerError
       end
     end
-  
+
   end # Functions
 end # Admin
