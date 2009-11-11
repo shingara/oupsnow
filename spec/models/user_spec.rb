@@ -2,14 +2,10 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 
 describe User do
 
-  before :each do
-    User.collection.clear()
-  end
-
   it "should be valid if admin global" do
     User.make(:admin).should be_valid
   end
-  
+
   it 'should not valid if global_admin is false but no user global_admin' do
     u = User.make(:admin)
     u.global_admin = false

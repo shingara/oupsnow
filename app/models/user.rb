@@ -1,4 +1,4 @@
-# This is a default user class used to activate merb-auth.  Feel free to change from a User to 
+# This is a default user class used to activate merb-auth.  Feel free to change from a User to
 # Some other class, or to remove it altogether.  If removed, merb-auth may not work by default.
 #
 # Don't forget that by default the salted_user mixin is used from merb-more
@@ -6,36 +6,15 @@
 # To use :password, and :password_confirmation when creating a user
 #
 # see merb/merb-auth/setup.rb to see how to disable the salted_user mixin
-# 
+#
 # You will need to setup your database and create a user.
 
 class User
 
   include MongoMapper::Document
-  #extend Devise::ActiveRecord
-  #extend Devise::Models::ClassMethods
 
   devise
 
-  ## Devise key
-  # authenticable
-  #key :email, String
-  #key :encrypted_password, String
-  #key :password_salt, String
-
-  ## confirmable
-  #key :confirmation_token, String
-  #key :confirmed_at, DateTime
-  #key :confirmation_sent_at, DateTime
-
-  ## recoverable
-  #key :reset_password_token, String
-
-  ## rememberable
-  #key :remember_token, String
-  #key :remember_created_at, DateTime
-
-  
   key :login,  String , :unique => true
   key :email,  String
   key :firstname, String
@@ -43,7 +22,7 @@ class User
   key :global_admin, Boolean
   key :deleted_at, DateTime
 
-  validates_true_for :global_admin, 
+  validates_true_for :global_admin,
     :logic => lambda { allways_one_global_admin },
     :message => 'need a global admin'
 
@@ -91,7 +70,7 @@ class User
       return true
     end
     unless self.global_admin
-      if User.first(:conditions => {:_id => {'$ne' => self.id}, 
+      if User.first(:conditions => {:_id => {'$ne' => self.id},
                                     :global_admin => true}) == nil
         return false
       end

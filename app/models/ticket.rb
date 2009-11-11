@@ -122,7 +122,7 @@ class Ticket
   #
   # @params[q] the string with search
   # @params[conditions] conditions with pagination options
-  def self.paginate_by_search(q,  conditions={})
+  def self.paginate_by_search(q, conditions={})
     query_conditions ||={}
     unless q.empty?
       query_conditions = {}
@@ -131,7 +131,7 @@ class Ticket
         if v.include?(':')
           s = v.split(':')
           if s[0] == 'state'
-            query_conditions['state_name'] = s[1]
+            query_conditions[:state_name] = s[1]
           elsif s[0] == 'tagged'
             query_conditions['tags'] ||= []
             query_conditions['tags'] << s[1]
@@ -146,7 +146,7 @@ class Ticket
     if query_conditions['tags'] && query_conditions['tags'].size > 1
       query_conditions['tags'] = {'$all' => query_conditions['tags']}
     end
-    conditions[:conditions] = query_conditions
+    conditions.merge!(query_conditions)
     conditions[:order] = 'num'
     Ticket.paginate(conditions)
   end
