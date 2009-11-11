@@ -1,7 +1,7 @@
 .group
   %label.label{:for => 'project[name]'} Name
-  = text_field :name, :class => 'text_field'
+  = f.text_field :name, :class => 'text_field'
 
 .group
   %label.label{:for => 'project[description]'} Description
-  = text_area  :description, :cols => 40, :rows => 15, :class => 'text_area'
+  = f.text_area  :description, :cols => 40, :rows => 15, :class => 'text_area'
