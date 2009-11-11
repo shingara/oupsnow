@@ -3,13 +3,13 @@
 
   .inner
     .flash
-      = error_messages_for @state
+      = error_messages_for :state
 
-    = form_for(@state, :action => resource(:admin, :states), :class => 'form') do
+    - form_for([:admin, @state], :class => 'form') do |f|
       .group
         %label.label{:for => 'state[name]'} Name
-        = text_field :name, :class => 'text_field'
+        = f.text_field :name, :class => 'text_field'
       %div{:class => 'group navform'}
-        = submit "Create", :class => 'button'
+        = submit_tag "Create", :class => 'button'
         or
-        = link_to 'Back', resource(:admin, :states)
+        = link_to 'Back', admin_states_url
