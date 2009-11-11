@@ -20,6 +20,7 @@ Spec::Runner.configure do |config|
     User.collection.remove
     State.collection.remove
     Event.collection.remove
+    Priority.collection.remove
   end
 end
 

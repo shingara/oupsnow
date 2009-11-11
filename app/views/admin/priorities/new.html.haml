@@ -4,13 +4,13 @@
   .inner
     .flash
 
-      = error_messages_for @priority
+      = error_messages_for :priority
 
-    = form_for(@priority, :action => resource(:admin, :priorities), :class => 'form') do
+    - form_for([:admin, @priority], :class => 'form') do |f|
       .group
         %label.label{:for => 'priority[name]'} Name
-        = text_field :name, :class => 'text_field'
+        = f.text_field :name, :class => 'text_field'
       %div{:class => 'group navform'}
-        = submit "Create", :class => 'button'
+        = submit_tag "Create", :class => 'button'
         or
-        = link_to 'Back', resource(:admin, :priorities)
+        = link_to 'Back', admin_priorities_url

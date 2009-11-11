@@ -3,17 +3,17 @@ module Admin
 
     before_filter :authenticate_user!
     before_filter :need_admin
-  
+
     def index
       @priorities = Priority.all
       @title = "Administration : Priorities"
     end
-  
+
     def new
       @priority = Priority.new
       @title = "Administration : new priority"
     end
-  
+
     def create
       @priority = Priority.new(params[:priority])
       if @priority.save
@@ -24,6 +24,6 @@ module Admin
         render :new
       end
     end
-  
+
   end # Priorities
 end # Admin
