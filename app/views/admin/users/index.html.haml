@@ -4,10 +4,10 @@
 
   .inner
     .flash
-      =message
+      = flash[:notice]
 
-    
-    = form :action => resource(:admin, :users, :update_all), :method => 'PUT', :class => 'form' do
+
+    - form_tag update_all_admin_users_url, :method => :put, :class => 'form' do
       %table.table
         %thead
           %tr
@@ -19,12 +19,12 @@
         %tbody
           - for user in @users
             %tr{:class => cycle('odd', 'even')}
-              %td= link_to user.login, resource(:admin, user)
+              %td= link_to user.login, admin_user_url(user)
               %td= user.firstname
               %td= user.lastname
               %td= user.email
-              %td= check_box :name => "user_admin[#{user.id}]", :boolean => true, :checked => user.global_admin
+              %td= check_box_tag "user_admin[#{user.id}]", 1, user.global_admin?
       .actions-bar
         .actions
-          =submit "Update all users", :class=> 'button'
+          = submit_tag "Update all users", :class=> 'button'
         .clear
