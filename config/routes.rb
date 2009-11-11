@@ -58,7 +58,7 @@ ActionController::Routing::Routes.draw do |map|
                                             :update_main_description => :put} do |ticket|
       ticket.resources :ticket_updates, :only => [:edit, :update]
     end
-    project.settings '/settings', :controller => 'project_members', :action => 'index'
+    #project.settings '/settings', :controller => 'project_members', :action => 'index'
     project.namespace :settings do |setting|
       setting.resources :project_members, :collection => {:update_all => :put}
     end

@@ -1,9 +1,9 @@
 class Project
 
   include MongoMapper::Document
-  
+
   ### PROPERTY ###
-  
+
   key :name, String, :unique => true
   alias_method :title, :name
   key :description, String
@@ -13,19 +13,19 @@ class Project
   timestamps!
 
   ### EmbeddedDocument ###
-  
+
   many :project_members, :dependent => :destroy
 
   ### Other Documents ###
-  
+
   many :milestones, :dependent => :destroy
   many :tickets, :dependent => :destroy
   many :events, :dependent => :destroy
 
   ### VALIDATIONS ###
 
-  validates_true_for :project_members, 
-    :logic => lambda { have_one_admin }, 
+  validates_true_for :project_members,
+    :logic => lambda { have_one_admin },
     :message => 'need an admin'
   validates_presence_of :name
 
@@ -52,7 +52,7 @@ class Project
   ##
   # Return the next num ticket.
   # Update the num save in this project
-  # 
+  #
   # TODO: Need test
   def new_num_ticket
     old_num = num_ticket
@@ -75,7 +75,7 @@ class Project
   # get project_member object where user is
   #
   # TODO: need some test
-  # 
+  #
   # @params[User] user to fetch membership
   def project_membership(user)
     project_members.detect{|member| member.user_id == user.id }
@@ -93,7 +93,7 @@ class Project
   def change_functions(member_function)
     member_function.each do |pm_id, function_id|
       project_members.detect{ |pm|
-        pm.id == pm_id
+        pm.user_id == pm_id
       }.function = Function.find(function_id)
     end
     save
@@ -103,7 +103,7 @@ class Project
   # Ad user with a define function in project
   #
   # TODO: need spec about this function
-  # 
+  #
   # @params[user] User to add to this project
   # @params[function] Function on this project to this User
   def add_member(user, function)
@@ -121,7 +121,7 @@ class Project
   # TODO: need test unit
   #
   def current_milestone
-    milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}}, 
+    milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}},
                      :order => 'expected_at ASC')
   end
 
@@ -148,7 +148,7 @@ class Project
                                     :id => {'$ne' => (current_milestone ? current_milestone.id : 0)}},
                    :order => 'expected_at ASC')
   end
-  
+
   ##
   # check all milestone without expected_at
   # No get current milestone
@@ -164,7 +164,7 @@ class Project
   # Return a Hash of tagging object
   # The key is the id number of tag and the value is an Array of Tagging
   # object. count the number of object and you know how Tag used is on a Tag
-  # 
+  #
   # TODO: need some test
   #
   # @return[Hash] Hash with name of tag in key. and number of tag use in this project in value
@@ -182,9 +182,9 @@ class Project
 
   class << self
     ##
-    # Create a project with atribute and define user 
+    # Create a project with atribute and define user
     # with function define like project_admin
-    # 
+    #
     # @params[Hash] attributes to new Prject
     # @params[User] user define like first member of this project
     # @returns[Project] project initialize with attributes and user define

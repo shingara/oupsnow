@@ -5,7 +5,7 @@
 
   .inner
 
-    = form :action => resource(@project, :settings, :project_members, :update_all), :method => 'PUT', :class => 'form' do
+    - form_for :member_function, :url => update_all_project_project_members_url(@project), :html => {:method => 'put', :class => 'form'} do |f|
 
       %table.table
         %thead
@@ -15,10 +15,10 @@
         %tbody
           - for member in @members
             %tr{:class => cycle('odd', 'even')}
-              %td=link_to(member.user.login, url(:project_settings_project_member, @project, member))
-              %td=select :name => "member_function[#{member.id}]", :collection => Function.all, :text_method => 'name', :value_method => 'id', :selected => member.function_id.to_s
+              %td= link_to(member.user.login, project_project_member_url(@project, member))
+              %td= f.collection_select "member_function[]", Function.all, :id, :name
       .actions-bar
         .actions
-          =link_to 'Add member', url(:new_project_settings_project_member, @project)
-          =submit "Update all", :class=> 'button'
+          =link_to 'Add member', new_project_project_member_url(@project)
+          =submit_tag "Update all", :class=> 'button'
         .clear

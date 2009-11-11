@@ -1,23 +1,23 @@
 .content
   - if User.not_in_project(@project).size > 0
-    %h2 
-      Add Member to project 
+    %h2
+      Add Member to project
       = @project.name
 
     .inner
-      
-      .flash
-        = error_messages_for @member
 
-      = form_for(@member, :action => url(:project_settings_project_members, @project), :class => 'form') do
+      .flash
+        = error_messages_for :member
+
+      - form_for(@member, :url => project_project_members_url(@project), :html => {:class => 'form'}) do |f|
 
         .group
           %label.label{:for => 'member[user_id]'} User
-          =select :user_id, :collection => User.not_in_project(@project), :text_method => 'login', :value_method => 'id'
+          =f.collection_select :user_id, User.not_in_project(@project), :id, :login
 
         .clear
         %div{:class => 'group navform'}
-          = submit "Create"
+          = submit_tag "Create"
   - else
     .inner
       %p There are no more user not already in your. So you can't add member to project

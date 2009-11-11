@@ -48,4 +48,8 @@ class ProjectMember
     end
   end
 
+  def to_param
+    user_name
+  end
+
 end
