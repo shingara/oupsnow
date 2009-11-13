@@ -38,4 +38,13 @@ describe User do
     User.make_unsaved(:login => u.login).should_not be_valid
   end
 
+  it 'should not valid if same email' do
+    u = User.make
+    User.make_unsaved(:email => u.email).should_not be_valid
+  end
+
+  it 'should not valid if no email' do
+    User.make_unsaved(:email => '').should_not be_valid
+  end
+
 end

@@ -102,7 +102,7 @@ describe Ticket do
     it 'should return all ticket with all tags define by tagged:xxx in query' do
       Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag}",
                                 :page => 1,
-                                  :per_page => 10).should == [@second_ticket]
+                                  :per_page => 10).sort_by(&:id).should == [@second_ticket, @four_ticket].sort_by(&:id)
     end
 
     it 'should return all ticket with all tags define by tagged:xxx and state:xxx in query' do

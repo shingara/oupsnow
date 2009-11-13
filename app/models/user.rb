@@ -25,6 +25,8 @@ class User
   validates_true_for :global_admin,
     :logic => lambda { allways_one_global_admin },
     :message => 'need a global admin'
+  validates_presence_of :email
+  validates_uniqueness_of :email
 
   ##
   # Check if this user is admin of this project

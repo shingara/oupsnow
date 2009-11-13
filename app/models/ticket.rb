@@ -133,13 +133,13 @@ class Ticket
           if s[0] == 'state'
             query_conditions[:state_name] = s[1]
           elsif s[0] == 'tagged'
-            query_conditions['tags'] ||= []
-            query_conditions['tags'] << s[1]
+            query_conditions[:tags] ||= []
+            query_conditions[:tags] << s[1]
           else
             p 'no what'
           end
         else
-          query_conditions['_keywords'] = v
+          query_conditions[:_keywords] = v
         end
       }
     end
