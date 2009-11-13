@@ -45,5 +45,5 @@ Rails::Initializer.run do |config|
   config.gem 'RedCloth', :version => '4.2.2', :lib => 'redcloth'
   config.gem 'haml', :version => '2.2.13'
   config.gem 'warden', :version => '0.5.2'
-  config.gem 'shingara-devise', :lib => 'devise', :version => '0.4.3'
+  config.gem 'shingara-devise', :lib => 'devise', :version => '0.4.3.1'
 end

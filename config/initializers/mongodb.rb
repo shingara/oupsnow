@@ -6,5 +6,3 @@ if db_config[Rails.env] && db_config[Rails.env]['adapter'] == 'mongodb'
                                                  mongo['port'] || 27017)
   MongoMapper.database = mongo['database']
 end
-Devise.orm = 'MongoMapper'
-
