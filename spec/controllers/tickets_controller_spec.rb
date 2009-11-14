@@ -48,27 +48,44 @@ describe TicketsController do
   end
 
   describe 'create ticket', :shared => true do
-    before do
-      @nb_tickets = @project.tickets.size
-      post :create, :project_id => @project.id,
-        :ticket => ({ :title => 'a new ticket',
-                    :state_id => State.first.id})
-      @project = Project.find(@project.id)
-    end
-    it 'should create ticket' do
-      @project.tickets.should_not be_empty
+    describe 'valid creation of ticket' do
+      before do
+        @nb_tickets = @project.tickets.size
+        post :create, :project_id => @project.id,
+          :ticket => ({ :title => 'a new ticket',
+                      :state_id => State.first.id})
+        @project = Project.find(@project.id)
+      end
+      it 'should create ticket' do
+        @project.tickets.should_not be_empty
+      end
+
+      it "redirects to resource(Project.first, :tickets)" do
+        response.should redirect_to(project_ticket_url(@project, @project.tickets.last(:order => 'created_at ASC')))
+      end
+
+      it 'should have a notice' do
+        flash[:notice].should == "Ticket was successfully created"
+      end
+
+      it 'project should have one ticket' do
+        @project.tickets.should have(@nb_tickets + 1).items
+      end
     end
 
-    it "redirects to resource(Project.first, :tickets)" do
-      response.should redirect_to(project_ticket_url(@project, @project.tickets.last(:order => 'created_at ASC')))
-    end
-
-    it 'should have a notice' do
-      flash[:notice].should == "Ticket was successfully created"
-    end
-
-    it 'project should have one ticket' do
-      @project.tickets.should have(@nb_tickets + 1).items
+    describe 'failed creation of ticket' do
+      before do
+        @nb_tickets = @project.tickets.size
+        post :create, :project_id => @project.id,
+          :ticket => ({ :title => '', # We need a title
+                      :state_id => State.first.id})
+        @project = Project.find(@project.id)
+      end
+      it { response.should render_template(:new) }
+      it 'should no creation of ticket' do
+        @project.tickets.size.should == @nb_tickets
+      end
+      it { flash[:error].should == 'Ticket failed to be created' }
     end
   end
 

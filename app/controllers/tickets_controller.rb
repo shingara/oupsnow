@@ -55,6 +55,10 @@ class TicketsController < ApplicationController
     end
   end
 
+  ##
+  # Create the ticket
+  # Only a member logged can create a ticket
+  #
   def create
     @ticket = Ticket.new_by_params(params[:ticket], @project, current_user)
     if params[:submit] == 'Preview'
@@ -67,7 +71,7 @@ class TicketsController < ApplicationController
         flash[:notice] = "Ticket was successfully created"
         redirect_to project_ticket_url(@project, @ticket)
       else
-        falsh[:error] = "Ticket failed to be created"
+        flash[:error] = "Ticket failed to be created"
         render :new
       end
     end
