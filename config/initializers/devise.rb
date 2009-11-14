@@ -44,5 +44,5 @@ Devise.setup do |config|
   # config.default_url_options do
   #   { :locale => I18n.locale }
   # end
-  config.orm = 'mongo_mapper'
+  config.orm = :mongo_mapper
 end
