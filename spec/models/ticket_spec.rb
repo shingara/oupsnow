@@ -296,4 +296,23 @@ describe Ticket do
     end
   end
 
+  describe 'self#new_by_params' do
+    it 'should create ticket complete' do
+      state = State.make
+      project = make_project
+      user = User.make
+      ticket = Ticket.new_by_params({:title => 'new issue',
+                           :description => "it's a big issue",
+                           :state_id => state.id},
+                           project,
+                           user)
+      ticket.description.should == "it's a big issue"
+      ticket.state_id.should == state.id
+      ticket.title.should == 'new issue'
+      ticket.project_id = project.id
+      ticket.user_creator = user
+      ticket.should be_new_record
+    end
+  end
+
 end

@@ -61,7 +61,7 @@ class TicketsController < ApplicationController
   #
   def create
     @ticket = Ticket.new_by_params(params[:ticket], @project, current_user)
-    if params[:submit] == 'Preview'
+    if params[:commit] == 'Preview'
       @preview = true
       @ticket_new = true
       render :new
@@ -80,11 +80,11 @@ class TicketsController < ApplicationController
   def update
     return return_404 unless @ticket
     @ticket_change = @ticket.dup
-    if params[:submit] != 'Preview' &&
+    if params[:commit] != 'Preview' &&
       @ticket.generate_update(params[:ticket], current_user)
       redirect_to project_ticket_url(@project, @ticket)
     else
-      if params[:submit] == 'Preview'
+      if params[:commit] == 'Preview'
         @preview_description = params[:ticket][:description]
       else
         flash[:error] = 'No new update added'

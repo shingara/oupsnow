@@ -14,7 +14,7 @@
         = flash[:error]
         = error_messages_for :ticket
 
-      - form_for([@project, @ticket], :id => 'ticket_form' , :class => 'form') do |f|
+      - form_for([@project, @ticket], :html => {:id => 'ticket_form' , :class => 'form'}) do |f|
         .columns
           %div{:class => 'column left'}
             .group

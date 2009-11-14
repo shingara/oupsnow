@@ -42,7 +42,7 @@ ActionController::Routing::Routes.draw do |map|
   #TODO change with authlogic
   map.devise_for :users
 
-  map.admin_root '/admin', :controller => 'functions', :action => 'index'
+  map.admin_root '/admin', :controller => 'admin/functions', :action => 'index'
   map.namespace :admin do |admin|
     admin.resources :functions, :collection => {:update_all => :put}
     admin.resources :priorities

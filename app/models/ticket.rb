@@ -226,7 +226,7 @@ class Ticket
   end
 
   def users_in_members
-    return true unless user_assigned_id
+    return true if user_assigned_id.blank?
     project.has_member?(user_assigned)
   end
 

@@ -1,11 +1,3 @@
-Then /^I should see "(.*)"$/ do |text|
-  webrat_session.response.body.to_s.should =~ /#{text}/m
-end
-
-Then /^I should not see "([^\"]*)"$/ do |text|
-  webrat_session.response.body.to_s.should_not =~ /#{text}/m
-end
-
 Then /^I should see an? (\w+) message$/ do |message_type|
   webrat_session.response.should have_xpath("//*[@class='#{message_type}']")
 end
@@ -45,10 +37,10 @@ Then /^"([^\"]*)" "([^\"]*)" "([^\"]*)" doesn't exist$/ do |klass, attribute, va
     Object.const_get(klass).send(:first, {attribute.to_sym => value}).should be_nil
 end
 
-Given /^"([^\"]*)" not admin on project "([^\"]*)"$/ do |login, project_name|
+Given /^"([^\"]*)" not admin on project "([^\"]*)"$/ do |email, project_name|
     project = Project.first(:conditions => {:name => project_name})
     project.project_members.each {|pm|
-      if pm.user.login == login
+      if pm.user.email == email
         pm.function = Function.not_admin
       end
     }

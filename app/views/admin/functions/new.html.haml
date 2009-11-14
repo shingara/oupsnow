@@ -3,17 +3,17 @@
 
   .inner
     .flash
-      = error_messages_for @function
+      = error_messages_for :function
 
 
-    = form_for(@function, :action => resource(:admin, :functions), :class => 'form') do
+    - form_for([:admin, @function], :html => {:class => 'form'}) do |f|
       .group
         %label.label{:for => 'function[name]'} Name
-        = text_field :name, :class => 'text_field'
+        = f.text_field :name, :class => 'text_field'
       .group
         %label.checkbox{:for => 'function[project_admin]'} Project admin?
-        = check_box :name => "function[project_admin]", :value => true, :checked => @function.project_admin, :class => 'checkbox'
+        = f.check_box :project_admin, :class => 'checkbox'
       %div{:class => 'group navform'}
-        = submit "Create", :class => 'button'
+        = submit_tag "Create", :class => 'button'
         or
-        = link_to 'Back', resource(:admin, :functions)
+        = link_to 'Back', admin_functions_url

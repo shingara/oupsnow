@@ -187,3 +187,10 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
+
+When /^I select "([^\"]*)" from "member_function" of "([^\"]*)" from "([^\"]*)" project$/ do |value, user_name, project_name|
+  field = "member_function[#{Project.first({:name => project_name}).project_members.detect{ |pm|
+    pm.user_name == user_name
+  }.id}]"
+  select(value, :from => field)
+end

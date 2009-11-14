@@ -4,9 +4,9 @@
 
   .inner
     .flash
-      = message
+      = flash
 
-    = form :action => resource(:admin, :functions, :update_all), :method => 'PUT', :class => 'form' do
+    - form_tag update_all_admin_functions_url, :method => 'PUT', :class => 'form' do
       %table.table
         %thead
           %tr
@@ -16,10 +16,10 @@
           - for function in @functions
             %tr
               %td= function.name
-              %td=check_box :name => "project_admin[#{function.id}]", :boolean => true, :checked => function.project_admin
+              %td= check_box_tag "project_admin[#{function.id}]", 1, function.project_admin?
       .actions-bar
         .actions
-          =link_to 'Add function', resource(:admin, :functions, :new)
-          =submit "Update all functions", :class=> 'button'
+          =link_to 'Add function', new_admin_function_url
+          = submit_tag "Update all functions", :class=> 'button'
         .clear
 

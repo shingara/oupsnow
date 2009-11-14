@@ -33,9 +33,9 @@
               - if admin? @project
                 %li{:class => settings_current}= link_to 'Settings', project_project_members_url(@project)
           .clear
-        - if flash[:notice]
-          .notice
-            %p.notice{:class => 'flash'}= flash[:notice]
+        - flash.keys.each do |k|
+          %div{:class => k}
+            %p{:class => "flash #{k}"}= flash[k]
     #wrapper
       #main
         .block

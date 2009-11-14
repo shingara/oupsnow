@@ -51,7 +51,7 @@
 
         #ticket_update_form
           %h3 Update this ticket
-          - form_for([@project, @ticket], :class => 'form') do |f|
+          - form_for([@project, @ticket_change], :html => {:class => 'form'}) do |f|
             .columns
               %div{:class => 'column left'}
                 -# TODO: extract this node in partial with same part in tickets/new
