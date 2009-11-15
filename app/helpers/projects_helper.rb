@@ -1,12 +1,5 @@
 module ProjectsHelper
 
-  include Settings::BaseHelper
-
-  def sub_menu
-    if @project
-      render(:partial => 'settings/sub_menu') if params[:action] == "edit" || params[:action] == "delete"
-    end
-  end
 
   def time_overview(date)
     if @previous_date.nil? || date.day != @previous_date.day

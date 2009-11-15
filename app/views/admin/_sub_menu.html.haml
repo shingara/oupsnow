@@ -1,7 +1,7 @@
 .secondary-navigation
   %ul
-    %li.first{:class => functions_active}= link_to('Functions', resource(:admin, :functions))
-    %li{:class => priorities_active}= link_to('Priorities', resource(:admin, :priorities))
-    %li{:class => states_active}= link_to('States', resource(:admin, :states))
-    %li.last{:class => users_active}= link_to('Users', resource(:admin, :users))
+    %li.first{:class => functions_active}= link_to('Functions', admin_functions_url)
+    %li{:class => priorities_active}= link_to('Priorities', admin_priorities_url)
+    %li{:class => states_active}= link_to('States', admin_states_url)
+    %li.last{:class => users_active}= link_to('Users', admin_users_url)
   .clear

@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
 
-  helper :all
   helper_method :tag_cloud_part
   layout 'application'
 

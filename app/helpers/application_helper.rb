@@ -1,7 +1,10 @@
 module ApplicationHelper
 
+  def sub_menu
+  end
+
   def title_project
-    ret = "Oupsnow" 
+    ret = "Oupsnow"
     ret += " : #{@project.name}" if @project && !@project.name.blank?
     ret
   end
@@ -22,8 +25,6 @@ module ApplicationHelper
     user_signed_in? && current_user.global_admin?
   end
 
-  def sub_menu
-  end
 
   def current_or_not(bool)
     bool ? "active" : ""
