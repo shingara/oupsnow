@@ -47,4 +47,27 @@ describe User do
     User.make_unsaved(:email => '').should_not be_valid
   end
 
+  describe 'self#update_all_global_admin' do
+    before do
+      @admin = User.make(:global_admin => true)
+      @dev = User.make(:global_admin => false)
+    end
+    it 'should change project admin flag to User' do
+      User.update_all_global_admin([@dev.id, @admin.id])
+      User.find(@dev.id).global_admin.should be_true
+    end
+
+    it 'no change if no change needed' do
+      User.update_all_global_admin([@admin.id])
+      User.find(@dev.id).global_admin.should be_false
+    end
+
+    it 'can change several Users' do
+      User.update_all_global_admin([@dev.id])
+      User.find(@dev.id).global_admin.should be_true
+      User.find(@admin.id).global_admin.should be_false
+    end
+
+  end
+
 end

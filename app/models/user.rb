@@ -41,14 +41,34 @@ class User
     }
   end
 
-  ##
-  # Get all user not in this project
-  #
-  # TODO: need some test
-  #
-  # @params[Project] project to test
-  def self.not_in_project(project)
-    all(:conditions => {:_id => {'$nin' => project.project_members.map(&:user_id)}})
+  class << self
+
+    ##
+    # Get all user not in this project
+    #
+    # TODO: need some test
+    #
+    # @params[Project] project to test
+    def not_in_project(project)
+      all(:id => {'$nin' => project.project_members.map(&:user_id)})
+    end
+
+    ##
+    # Change all user and define all user_id like global_admin
+    # other become no global_admin
+    #
+    # @params[Array] All user global_admin
+    def update_all_global_admin(user_ids)
+      User.all(:id => user_ids).each do |user|
+        user.global_admin = true
+        user.save
+      end
+      User.all(:id => { '$nin' => user_ids }).each do |user|
+        user.global_admin = false
+        user.save
+      end
+    end
+
   end
 
   ##

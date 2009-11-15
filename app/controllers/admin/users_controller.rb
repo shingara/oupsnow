@@ -24,12 +24,12 @@ class Admin::UsersController < Admin::BaseController
     end
   end
 
+  ##
+  # Mass change about global_admin user
+  # All key on user_admin params are now global
+  # other are no global_admin
   def update_all
-    params[:user_admin].each do |k, v|
-      f = User.find(k)
-      f.global_admin = (v == "1".to_s)
-      f.save
-    end
+    User.update_all_global_admin(params[:user_admin].keys)
     flash[:notice] = 'All users updated'
     redirect_to admin_users_url
   end

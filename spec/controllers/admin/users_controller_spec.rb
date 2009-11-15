@@ -36,7 +36,11 @@ describe Admin::UsersController do
     end
 
     describe 'update_all' do
-      it 'need spec and see what happen'
+      before do
+        put :update_all, :user_admin => {User.make.id => "1"}
+      end
+      it { response.should redirect_to(admin_users_url) }
+      it { flash[:notice].should == 'All users updated' }
     end
   end
 end
