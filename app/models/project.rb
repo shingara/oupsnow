@@ -85,16 +85,15 @@ class Project
   # change function of som user in this project.
   # This change save project
   #
-  # TODO: need some test
-  #
   # @params[Hash] hash with project_member.id and new function
-  #               {project_member.id => function_id}
+  #               {project_member_id => function_id}
   # @returns[Boolean] true if change works false instead of
   def change_functions(member_function)
+    return false unless Function.exists?(:project_admin => true, :id => member_function.values)
     member_function.each do |pm_id, function_id|
       project_members.detect{ |pm|
-        pm.user_id == pm_id
-      }.function = Function.find(function_id)
+        pm.id == pm_id
+      }.function_id = Function.find(function_id).id
     end
     save
   end

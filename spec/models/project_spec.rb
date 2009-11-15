@@ -27,7 +27,7 @@ describe Project do
   end
 
   it "should not valid project without admin member" do
-    project_member = ProjectMember.make(:user => nil, 
+    project_member = ProjectMember.make(:user => nil,
                                         :function => (Function.not_admin || Function.make))
     make_project(:project_members => [project_member]).should_not be_valid
   end
@@ -48,7 +48,6 @@ describe Project do
   end
 
   describe 'destroy project' do
-
     before :each do
       @project = make_project
       Ticket.make(:project => @project)
@@ -105,7 +104,6 @@ describe Project do
   end
 
   describe 'Project#new_with_admin_member' do
-
     before :each do
       Function.destroy_all
       @function = Function.make(:admin)
@@ -121,6 +119,40 @@ describe Project do
       pr.project_members.should have(1).items
       pr.project_members.first.function_id.should == Function.admin.id
       pr.project_members.first.user_id.should == @user.id
+    end
+  end
+
+  describe "change_functions" do
+
+    before do
+      @project = make_project # there are 1 user by default
+      @function = Function.make
+      @admin_member = @project.project_members.first
+      @user_member =  ProjectMember.make(:function => @function)
+      @project.project_members << @user_member
+      @project.save
+      @project.reload
+    end
+
+    it 'should made nothing if no change' do
+      @project.change_functions({@admin_member.id => Function.admin.id,
+                                @user_member.id => @function.id}).should be_true
+      @project.project_members.first.function_id.should == Function.admin.id
+      @project.project_members.second.function_id.should == @function.id
+    end
+
+    it 'should change if change needed' do
+      @project.change_functions({@admin_member.id => Function.admin.id,
+                                @user_member.id => Function.admin.id}).should be_true
+      @project.project_members.first.function_id.should == Function.admin.id
+      @project.project_members.second.function_id.should == Function.admin.id
+    end
+
+    it 'should made nothing if no admin define' do
+      @project.change_functions({@admin_member.id => @function.id,
+                                @user_member.id => Function.make}).should be_false
+      @project.project_members.first.function_id.should == Function.admin.id
+      @project.project_members.second.function_id.should == @function.id
     end
   end
 

@@ -67,7 +67,6 @@ describe User do
       User.find(@dev.id).global_admin.should be_true
       User.find(@admin.id).global_admin.should be_false
     end
-
   end
 
 end

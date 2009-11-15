@@ -5,7 +5,7 @@
 
   .inner
 
-    - form_for :member_function, :url => update_all_project_project_members_url(@project), :html => {:method => 'put', :class => 'form'} do |f|
+    - form_tag update_all_project_project_members_url(@project), :method => 'put', :class => 'form' do
 
       %table.table
         %thead
@@ -16,7 +16,7 @@
           - for member in @members
             %tr{:class => cycle('odd', 'even')}
               %td= link_to(member.user.login, project_project_member_url(@project, member))
-              %td= f.collection_select "member_function[]", Function.all, :id, :name
+              %td= select_tag "member_function[#{member.id}]", (options_from_collection_for_select Function.all, :id, :name, member.function_id)
       .actions-bar
         .actions
           =link_to 'Add member', new_project_project_member_url(@project)

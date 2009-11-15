@@ -38,6 +38,11 @@ class Settings::ProjectMembersController < Settings::BaseController
     end
   end
 
+  ##
+  # Change all function of all member
+  #
+  # send a params in member_function. This params is a Hash
+  # all keys are member.id and all values are function.id
   def update_all
     member_function = params[:member_function] || {}
     notice = ""
