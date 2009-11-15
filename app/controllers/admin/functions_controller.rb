@@ -31,14 +31,14 @@ module Admin
       end
     end
 
+    ##
+    # update all function with project_admin define.
+    # params[:project_admin] is an Array with all function.id
+    # are now project_admin
     def update_all
-      params[:project_admin].each do |k, v|
-        f = Function.get(k)
-        f.project_admin = (v == "1".to_s)
-        f.save
-      end
+      Function.update_project_admin(params[:project_admin])
       flash[:notice] = 'All functions updated'
-      redirect_to admin_functions
+      redirect_to admin_functions_url
     end
 
     def destroy

@@ -37,5 +37,15 @@ describe Admin::FunctionsController do
 
       it {response.should be_success}
     end
+
+    describe 'update_all' do
+      before do
+        dev = Function.make
+        put :update_all,
+          :project_admin => {dev => 1}
+      end
+      it { response.should redirect_to(admin_functions_url) }
+      it { flash[:notice].should == 'All functions updated' }
+    end
   end
 end

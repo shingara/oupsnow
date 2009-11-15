@@ -15,7 +15,7 @@ class Function
   # TODO: when a function is delete
   # check all association about this function in all project
   # and delete all id. Change all user with another function
-  
+
   # TODO: test mandatory of On function when you want delete all function by example
 
   ##
@@ -41,6 +41,18 @@ class Function
     # @returns[Function]
     def not_admin
       Function.first(:conditions => {:project_admin => false})
+    end
+
+    ##
+    # Update all function and change information if there are or not
+    # project_admin.
+    #
+    # @params[Array] List of function key are project_admin. Other are no project_admin
+    def update_project_admin(functions)
+      Function.all.each do |function|
+        function.project_admin = functions.include?(function.id)
+        function.save
+      end
     end
   end
 
