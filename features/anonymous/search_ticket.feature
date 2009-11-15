@@ -9,7 +9,7 @@ Feature: Search Ticket
     And 1 tickets with state "fixed" on project "yahoo"
     And 1 tickets with state "fixed" and tag "bug, feature" on project "yahoo"
     And 1 tickets with state "fixed" and tag "feature" on project "yahoo"
-    When I go to /
+    When I go to the homepage
     And I follow "yahoo"
     And I follow "Tickets"
     Then I should see 3 "td" tag with content "new"
@@ -24,7 +24,7 @@ Feature: Search Ticket
     And I should not see "td" tag with content "new"
     When I fill in "q" with "state:fixed state:new"
     And I submit "ticket_search"
-    # The filter active is only last about state 
+    # The filter active is only last about state
     Then I should not see "td" tag with content "fixed"
     And I should see 3 "td" tag with content "new"
     When I fill in "q" with "tagged:feature"

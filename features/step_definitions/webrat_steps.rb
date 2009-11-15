@@ -194,3 +194,8 @@ When /^I select "([^\"]*)" from "member_function" of "([^\"]*)" from "([^\"]*)" 
   }.id}]"
   select(value, :from => field)
 end
+
+When /^I submit "(.*)"$/ do |form_id|
+  submit_form(form_id)
+end
+

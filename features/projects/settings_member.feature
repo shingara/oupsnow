@@ -3,18 +3,18 @@ Feature: Changing function of project's member
   An A admin project user
   Must define all function member by member
 
-  Scenario:
-    Given I have one admin user "shingara" with password "tintinpouet"
+  Scenario: Setting project with global_admin user
+    Given I have one admin user "shingara@gmail.com" with password "tintinpouet" and login "shingara"
     And I have a project "yahoo"
     And "shingara" not admin on project "yahoo"
     And I have user "clown" with function "admin" on project "yahoo" and no other user
     And I have user "zapata" with function "developper" on project "yahoo"
-    When logged with "shingara" with password "tintinpouet"
+    When logged with "shingara@gmail.com" with password "tintinpouet"
     And I follow "yahoo"
     And I follow "Settings"
     Then I should see "Member on project"
-    And I should see 1 "tr" tag with content "clown" 
-    And I should see 1 "tr" tag with content "zapata" 
+    And I should see 1 "tr" tag with content "clown"
+    And I should see 1 "tr" tag with content "zapata"
     When I select "admin" from "member_function" of "zapata" from "yahoo" project
     And I press "Update all"
     Then the member "zapata" has function "admin" in project "yahoo"
@@ -33,18 +33,18 @@ Feature: Changing function of project's member
     And the member "clown" has function "developper" in project "yahoo"
     And I should see "You can't have no admin in a project"
 
-  Scenario:
-    Given I have one user "shingara" with password "tintinpouet"
+  Scenario: Setting project with project_admin user
+    Given I have one user "shingara@gmail.com" with password "tintinpouet" and login "shingara"
     And I have a project "yahoo" without members
-    And "shingara" is project admin of "yahoo" project
+    And "shingara@gmail.com" is project admin of "yahoo" project
     And I have user "clown" with function "admin" on project "yahoo"
     And I have user "zapata" with function "developper" on project "yahoo"
-    When logged with "shingara" with password "tintinpouet"
+    When logged with "shingara@gmail.com" with password "tintinpouet"
     And I follow "yahoo"
     And I follow "Settings"
     Then I should see "Member on project"
-    And I should see 1 "tr" tag with content "clown" 
-    And I should see 1 "tr" tag with content "zapata" 
+    And I should see 1 "tr" tag with content "clown"
+    And I should see 1 "tr" tag with content "zapata"
     When I select "admin" from "member_function" of "zapata" from "yahoo" project
     And I press "Update all"
     Then the member "zapata" has function "admin" in project "yahoo"
