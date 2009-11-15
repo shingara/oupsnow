@@ -46,5 +46,13 @@ describe Admin::StatesController do
 
       it { response.should be_success }
     end
+
+    describe 'update_all' do
+      before do
+        put :update_all, :closed => {State.new.id => "1"}
+      end
+      it { response.should redirect_to(admin_states_url) }
+      it { flash[:notice].should == 'All states updated' }
+    end
   end
 end

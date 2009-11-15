@@ -1,5 +1,8 @@
 module Settings::BaseHelper
 
+  def sub_menu
+    render(:partial => 'settings/sub_menu') if @project
+  end
 
   def active_or_not(bool)
     bool ? "active" : ""

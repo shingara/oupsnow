@@ -25,11 +25,7 @@ class Admin::StatesController < Admin::BaseController
   end
 
   def update_all
-    params[:closed].each do |k, v|
-      s = State.get(k)
-      s.closed = (v == "1".to_s)
-      s.save
-    end
+    State.update_all_closed(params[:closed].keys)
     flash[:notice] = 'All states updated'
     redirect_to admin_states_url
   end

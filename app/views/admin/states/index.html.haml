@@ -6,7 +6,7 @@
     .flash
       = flash[:notice]
 
-    - form_for [:admin, :state], :url => update_all_admin_states_url, :html => { :method => :put, :class => 'form'} do |f|
+    - form_tag update_all_admin_states_url, :method => :put, :class => 'form' do
       %table.table
         %thead
           %tr
@@ -16,9 +16,9 @@
           - for state in @states
             %tr{:class => cycle('even', 'odd')}
               %td= state.name
-              %td= f.check_box :closed, :name => "closed[#{state.id}]", :boolean => true, :checked => state.closed, :class => 'checkbox'
+              %td= check_box_tag "closed[#{state.id}]", 1, state.closed, :class => 'checkbox'
       .actions-bar
         .actions
-          =link_to 'Add states', new_admin_state_url
-          =submit_tag "Update all states", :class => 'button'
+          = link_to 'Add states', new_admin_state_url
+          = submit_tag "Update all states", :class => 'button'
         .clear
