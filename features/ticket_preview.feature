@@ -6,9 +6,9 @@ Feature: ticket preview
   Scenario: Can see preview on ticket creation
     Given I have a project "yahoo"
     And I have state "new"
-    And I have one user "shingara" with password "tintinpouet"
+    And I have one user "shingara@gmail.com" with password "tintinpouet" and login "shingara"
     And "shingara" not admin on project "yahoo"
-    When logged with "shingara" with password "tintinpouet"
+    When logged with "shingara@gmail.com" with password "tintinpouet"
     And I follow "yahoo"
     And I follow "Add new ticket"
     And I fill in "ticket_title" with "A big new features"
@@ -25,7 +25,7 @@ Feature: ticket preview
   Scenario: Can see preview on update ticket
     Given I have a project "yahoo"
     And I have state "new"
-    And I have one user "shingara@gmail.com" with password "tintinpouet"
+    And I have one user "shingara@gmail.com" with password "tintinpouet" and login "shingara"
     And "shingara@gmail.com" not admin on project "yahoo"
     And I create 1 ticket on project "yahoo"
     When logged with "shingara@gmail.com" with password "tintinpouet"

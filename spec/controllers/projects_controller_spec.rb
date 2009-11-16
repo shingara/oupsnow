@@ -68,7 +68,6 @@ describe ProjectsController do
   end
 
   describe "resource(@project) DELETE" do
-
     describe 'with admin user' do
       before(:each) do
         login_admin
@@ -302,6 +301,18 @@ describe ProjectsController do
       it_should_behave_like 'it should be successful'
       it_should_behave_like 'with event desapear'
     end
+  end
 
+  describe 'with admin user' do
+    before do
+      login_admin
+    end
+
+    describe 'delete page' do
+      before do
+        get :delete, :id => make_project.id
+      end
+      it { response.should be_success }
+    end
   end
 end

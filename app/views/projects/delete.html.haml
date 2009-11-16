@@ -2,6 +2,6 @@
   %h2 Delete your project
 
   .inner
-    = form_for(@project, :action => resource(@project), :method => 'delete', :class => 'form') do
+    - form_for(@project, :html => {:method => 'delete', :class => 'form'}) do |f|
       %div{:class => 'group navform'}
-        =submit "Delete", :class => 'button'
+        = f.submit "Delete", :class => 'button'

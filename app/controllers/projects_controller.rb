@@ -56,6 +56,7 @@ class ProjectsController < ApplicationController
     end
   end
 
+  ## see the destroy forms
   def delete
   end
 
