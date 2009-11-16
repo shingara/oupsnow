@@ -66,6 +66,7 @@ module ApplicationHelper
     RedCloth.new(text).to_html
   end
 
+  # Generate the tag cloud
   def tag_cloud(tags, classes)
     return if tags.empty?
 

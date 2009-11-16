@@ -38,4 +38,4 @@ Feature: Search Ticket
     When I fill in "q" with "state:fixed tagged:feature tagged:bug"
     And I submit "ticket_search"
     Then I should not see "td" tag with content "new"
-    And I should see 1 "td" tag with content "fixed"
+    And I should see 2 "td" tag with content "fixed"

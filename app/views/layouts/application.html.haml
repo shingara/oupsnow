@@ -51,7 +51,6 @@
         .clear
       #sidebar
         = yield :sidebar
-        - if @cloud
-          - render :partial => 'shared/tag_cloud', :locals => {:clouds => @cloud}
+        = yield :tag_cloud_sidebar
         = yield :attachment_sidebar
       .clear

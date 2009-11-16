@@ -1,8 +1,7 @@
-- tag_cloud_part('Tickets', @ticket.id, @project.id)
 - @title = "ticket #{@ticket.title}"
 
-- content_for :attachment_sidebar do
-  = render :partial  => 'tickets/attachments'
+- content_for :tag_cloud_sidebar do
+  = render :partial => 'shared/tag_cloud', :locals => { :tags => @ticket.tags, :project => @ticket.project }
 
 #block-lists.block
   .content

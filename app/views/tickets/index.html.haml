@@ -1,8 +1,13 @@
+- content_for :tag_cloud_sidebar do
+  = render :partial => 'shared/tag_cloud', :locals => { :tags => @project.ticket_tag_counts, :project => @project }
+
 #block-tables.block
 
   #ticket_search.block
     - form_tag(project_tickets_url(@project), {:id => 'ticket_search_form', :method => 'GET'}) do
-      = text_field :q, :label => 'Find tickets :' 
+      %label{:for => 'q'}
+        Find tickets :
+      = text_field_tag :q
 
   .content
     .inner
