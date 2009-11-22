@@ -50,9 +50,9 @@ module OupsNow
     def generate_tickets(project=nil, nb_min=20, nb_max=nb_min)
       dependencies
       (nb_min.to_i..nb_max.to_i).of {
-        project = Project.all.rand if project.blank?
+        project = Project.all.rand if project.blank? || project == 'nil'
         ticket = make_ticket(:project => project,
-                    :user_creator => project.project_members.rand.user)
+                    :user_creator => User.all.rand)
         generate_tickets_update(ticket, 0, 10)
       }
     end
@@ -65,7 +65,7 @@ module OupsNow
         pr = make_project
         generate_project_member(pr, 4, 10)
         pr.reload
-        generate_milestone(pr, 1,3)
+        generate_milestone(pr, 1, 3)
         pr.reload
         generate_tickets(pr, 20, 40)
       }
