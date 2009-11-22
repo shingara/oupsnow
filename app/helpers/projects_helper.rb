@@ -1,6 +1,5 @@
 module ProjectsHelper
 
-
   def time_overview(date)
     if @previous_date.nil? || date.day != @previous_date.day
       @previous_date = date

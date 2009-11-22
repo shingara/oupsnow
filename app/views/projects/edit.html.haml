@@ -1,3 +1,5 @@
+- content_for :sub_menu do
+  = render :partial => 'settings/sub_menu'
 .content
   %h2 Edit your project
 
@@ -5,7 +7,7 @@
     .flash
       = error_messages_for :project
 
-    - form_for(@project, :class => 'form') do |f|
+    - form_for(@project, :html => {:class => 'form'}) do |f|
       = render :partial => 'form', :locals => {:f => f}
       %div{:class => 'group navform'}
         = submit_tag "Update", :class => 'button'
