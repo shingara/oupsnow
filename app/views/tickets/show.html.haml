@@ -1,7 +1,7 @@
 - @title = "ticket #{@ticket.title}"
 
 - content_for :tag_cloud_sidebar do
-  = render :partial => 'shared/tag_cloud', :locals => { :tags => @ticket.tags, :project => @ticket.project }
+  = render :partial => 'shared/tag_cloud', :locals => { :tags => @ticket.tag_counts, :project => @ticket.project }
 
 #block-lists.block
   .content

@@ -62,9 +62,18 @@ def make_ticket_update(ticket, params={}, user=User.make)
 end
 
 
+def make_word
+  /\w+/.gen
+end
+
+def make_tag_list
+  (1..6).of { /\w+/.gen }.join(",")
+end
+
 Ticket.blueprint do
-  title { /\w+/.gen }
+  title { make_word }
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
+  tag_list { 'foo,bar' }
   project { make_project }
   user_creator { self.project.project_members.first.user }
   state { State.first(:conditions => {:name => 'new'}) || State.make(:name => 'new') }
@@ -72,7 +81,7 @@ Ticket.blueprint do
 end
 
 def make_ticket(opts={})
-  ticket = Ticket.make(opts)
+  ticket = Ticket.make(opts.merge(:tag_list => make_tag_list))
   ticket.write_create_event
   ticket
 end
