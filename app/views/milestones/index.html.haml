@@ -1,7 +1,7 @@
 - if admin? @project
   .secondary-navigation
     %ul
-      %li.first= link_to('New milestone',resource(@project, :milestones, :new))
+      %li.first= link_to('New milestone',new_project_milestone_url(@project))
     .clear
 
 #block-lists.block
@@ -18,7 +18,7 @@
           - @upcoming_milestones.each do |milestone|
             %li.milestone
               = render :partial => milestone
-        
+
 
       - unless @no_date_milestones.empty?
         %h3 No date milestones

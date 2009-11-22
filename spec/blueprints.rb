@@ -91,6 +91,12 @@ Milestone.blueprint do
   description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
 end
 
+def need_a_milestone(project=nil)
+  make_project unless Project.first
+  pr = project || Project.first
+  Milestone.make(:project => pr)
+end
+
 State.blueprint do
   name { /\w+/.gen }
 end

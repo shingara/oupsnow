@@ -48,11 +48,6 @@ def delete_default_member_from_project(project)
   project.save
 end
 
-def need_a_milestone
-  make_project unless Project.first
-  pr = Project.first
-  Milestone.make(:project => pr) if pr.milestones.empty?
-end
 
 def create_default_data
   create_default_user
