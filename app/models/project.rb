@@ -15,6 +15,7 @@ class Project
   ### EmbeddedDocument ###
 
   many :project_members, :dependent => :destroy
+  include_errors_from :project_members
 
   ### Other Documents ###
 
@@ -27,6 +28,11 @@ class Project
   validates_true_for :project_members,
     :logic => lambda { have_one_admin },
     :message => 'need an admin'
+
+  validates_true_for :same_project_members,
+    :logic => lambda { only_once_each_member },
+    :message => 'not several same member in project'
+
   validates_presence_of :name
 
   # TODO: avoid 2 users members of this project
@@ -237,6 +243,10 @@ class Project
     project_members.each do |pr|
       pr.user_name = pr.user.login
     end
+  end
+
+  def only_once_each_member
+    project_members.map(&:user_id).uniq!.nil?
   end
 
 end

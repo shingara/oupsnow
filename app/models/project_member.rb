@@ -14,6 +14,9 @@ class ProjectMember
   belongs_to :user
   belongs_to :function
 
+  validates_presence_of :function_id
+  validates_presence_of :user_id
+
   def self.change_functions(member_function)
     return true if member_function.empty?
     project = nil

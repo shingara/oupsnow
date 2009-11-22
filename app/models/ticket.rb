@@ -95,7 +95,7 @@ class Ticket
       t.add_update(:tag_list,
                    Ticket.list_tag(self.tag_list),
                    Ticket.list_tag(ticket[:tag_list]))
-      self.tag_list = ticket[tag_list]
+      self.tag_list = ticket[:tag_list]
     end
 
     [:state_id, :milestone_id, :user_assigned_id].each do |property|
@@ -221,7 +221,7 @@ class Ticket
   end
 
   def milestone_in_same_project
-    return true unless milestone_id?
+    return true unless milestone_id
     not project_id != milestone.project_id
   end
 

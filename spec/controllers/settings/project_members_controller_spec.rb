@@ -66,7 +66,7 @@ describe Settings::ProjectMembersController do
       before do
         @nb_members = Project.find(@project.id).project_members.size
         post :create, :project_id => @project.id,
-          :project_members => {:user_id => User.make.id}
+          :project_member => {:user_id => User.make.id}
       end
       it { response.should redirect_to(project_project_members_url(@project)) }
       it { flash[:notice].should == "Member was successfully created" }

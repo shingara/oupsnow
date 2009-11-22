@@ -56,9 +56,8 @@ def make_project(params={})
   pr
 end
 
-def make_ticket_update(ticket, params={})
-  ticket.generate_update(Ticket.make_unsaved({:description => (1..3).of { /[:paragraph:]/.generate }.join("\n")}.merge(params)),
-                         User.make)
+def make_ticket_update(ticket, params={}, user=User.make)
+  ticket.generate_update(Ticket.make_unsaved({:description => (1..3).of { /[:paragraph:]/.generate }.join("\n")}.merge(params)),user)
   ticket.ticket_updates.last
 end
 
@@ -69,6 +68,7 @@ Ticket.blueprint do
   project { make_project }
   user_creator { self.project.project_members.first.user }
   state { State.first(:conditions => {:name => 'new'}) || State.make(:name => 'new') }
+  milestone { Milestone.first(:project => self.project) || Milestone.make(:project => self.project) }
 end
 
 def make_ticket(opts={})
