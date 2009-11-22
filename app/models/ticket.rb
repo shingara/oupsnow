@@ -155,6 +155,7 @@ class Ticket
     ticket = Ticket.new(params)
     ticket.project_id = project.id
     ticket.user_creator = user
+    ticket.milestone_id = nil if params[:milestone_id].blank?
     ticket
   end
 

@@ -297,38 +297,43 @@ describe Ticket do
   end
 
   describe 'self#new_by_params' do
-    it 'should create ticket complete' do
-      state = State.make
-      project = make_project
-      user = User.make
-      ticket = Ticket.new_by_params({:title => 'new issue',
+    before do
+      @state = State.make
+      @project = make_project
+      @user = User.make
+    end
+
+    def new_by_params(args={})
+      Ticket.new_by_params({:title => 'new issue',
                            :description => "it's a big issue",
-                           :state_id => state.id},
-                           project,
-                           user)
+                           :state_id => @state.id}.merge(args),
+                           @project,
+                           @user)
+    end
+
+    it 'should create ticket complete' do
+      ticket = new_by_params
       ticket.description.should == "it's a big issue"
-      ticket.state_id.should == state.id
+      ticket.state_id.should == @state.id
       ticket.title.should == 'new issue'
-      ticket.project_id = project.id
-      ticket.user_creator = user
+      ticket.project_id = @project.id
+      ticket.user_creator = @user
       ticket.should be_new_record
     end
 
     it 'should create ticket complete with no data' do
-      state = State.make
-      project = make_project
-      user = User.make
-      ticket = Ticket.new_by_params({:title => 'new issue',
-                           :description => "it's a big issue",
-                           :state_id => state.id},
-                           project,
-                           user)
+      ticket = new_by_params
       ticket.description.should == "it's a big issue"
-      ticket.state_id.should == state.id
+      ticket.state_id.should == @state.id
       ticket.title.should == 'new issue'
-      ticket.project_id = project.id
-      ticket.user_creator = user
+      ticket.project_id = @project.id
+      ticket.user_creator = @user
       ticket.should be_new_record
+    end
+
+    it 'should not define Milestone if params[:milestone_id] is empty' do
+      ticket = new_by_params(:milestone_id => '')
+      ticket.milestone_id.should be_nil
     end
   end
 
