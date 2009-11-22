@@ -4,11 +4,11 @@
 
     .inner
       .flash
-        = error_messages_for @milestone
+        = error_messages_for :milestone
 
-      = form_for(@milestone, :action => resource(@project, :milestones), :class => 'form') do
-        = partial :form
+      - form_for([@project,@milestone], :html => {:class => 'form'}) do |f|
+        = render :partial => 'form', :locals => {:f => f}
         %div{:class => 'group navform'}
-          = submit "Create", :class => 'button'
+          = f.submit "Create", :class => 'button'
           or
-          = link_to 'Cancel', resource(@project, :milestones)
+          = link_to 'Cancel', project_milestones_url(@project)

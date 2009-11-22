@@ -1,11 +1,11 @@
 .group
   %label.label{:for => 'milestone[name]'} Name
-  = text_field :name, :class => 'text_field'
+  = f.text_field :name, :class => 'text_field'
 
 .group
   %label.label{:for => 'milestone[expected_at]'} Excepted at ?
-  = text_field :expected_at, :class => 'text_field'
+  = f.text_field :expected_at, :class => 'text_field'
 
 .group
   %label.label{:for => 'milestone[description]'} Description
-  = text_area :description, :class => 'text_area'
+  = f.text_area :description, :class => 'text_area'

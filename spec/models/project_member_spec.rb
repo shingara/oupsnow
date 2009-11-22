@@ -20,10 +20,6 @@ describe ProjectMember do
       project_member = ProjectMember.make(:function => nil)
       @project.project_members << project_member
       @project.valid?
-      p @project.save
-      p Project.find(@project.id).project_members
-      p project_member.errors.full_messages
-      p @project.project_members
       @project.should_not be_valid
     end
 

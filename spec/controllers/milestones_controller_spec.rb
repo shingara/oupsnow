@@ -1,9 +1,11 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe MilestonesController do
+
+  integrate_views
+
   describe "resource(:milestones)" do
     describe "GET" do
-      integrate_views
 
       before(:each) do
         login_request
@@ -21,7 +23,6 @@ describe MilestonesController do
     end
 
     describe "GET" do
-      integrate_views
       before(:each) do
         login_request
         need_a_milestone
@@ -51,7 +52,7 @@ describe MilestonesController do
     end
   end
 
-  describe "resource(@milestone)" do 
+  describe "resource(@milestone)" do
     describe "a successful DELETE" do
       before(:each) do
         login_admin
@@ -94,19 +95,20 @@ describe MilestonesController do
     describe "GET" do
       before(:each) do
         need_a_milestone
+        login_request
       end
 
       it 'responses successfully even if ticket has no tag' do
         pr = Project.first
         ml = pr.milestones.first
         Ticket.make(:tag_list => '', :project => pr, :milestone => ml)
-        get :show, :project_id => pr.id, 
+        get :show, :project_id => pr.id,
           :id => ml.id
         response.should be_success
       end
 
       it "responds successfully" do
-        get :show, :project_id => Project.first.id, 
+        get :show, :project_id => Project.first.id,
           :id => Project.first.milestones.first.id
         response.should be_success
       end

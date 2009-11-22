@@ -1,6 +1,6 @@
 #block-text.block
   .content
-    %h2 
+    %h2
       = @milestone.name
     .inner
       %p.first
@@ -9,7 +9,7 @@
         = @milestone.tickets.count
         Tickets total.
 
-      = partial :pbar, :milestone => @milestone
+      = render :partial => 'pbar', :locals => {:milestone => @milestone}
 
       %p
         = textilized @milestone.description
@@ -18,5 +18,5 @@
         - @milestone.ticket_open.each do |ticket|
           %li
             %span="##{ticket.num}"
-            = link_to ticket.title, resource(@project, ticket)
+            = link_to ticket.title, project_ticket_url(@project, ticket)
             = ticket.tag_list
