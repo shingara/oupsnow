@@ -6,11 +6,13 @@ class Event
 
   key :user_name, String
   key :event_type, String
+  key :event_title, String
 
   ### Association ###
 
   key :user_id, ObjectId
   key :project_id, ObjectId
+  ensure_index :project_id
 
   # Polymorphic event
   key :eventable_type, String
@@ -20,17 +22,21 @@ class Event
   belongs_to :project
   belongs_to :eventable, :polymorphic => true, :dependent => :destroy
 
+  before_save :update_event_title
+
   # TODO: need test about created_at/updated_at needed
   timestamps!
-
-  def short_description
-    eventable.title
-  end
 
   ##
   # get the class eventable in string pluralize
   def eventable_pluralize
-    eventable.class.to_s.pluralize.downcase
+    eventable_type.pluralize.downcase
+  end
+
+  private
+
+  def update_event_title
+    self.event_title = eventable.title
   end
 
 

@@ -1,4 +1,10 @@
+- @title = "New Project"
 
+- content_for :milestone_sidebar do
+  = render :partial => 'shared/milestone_sidebar', :locals => {:project => @project, :milestone => @project.current_milestone}
+
+- content_for :tag_cloud_sidebar do
+  = render :partial => 'shared/tag_cloud', :locals => {:tags => @project.ticket_tag_counts, :project => @project}
 
 #block-lists.block
   .content
@@ -11,11 +17,11 @@
               %span= time_overview(event.created_at)
             .item
               = event.eventable_type
-              = link_to event.short_description, (event.eventable_type == 'Project' ? {:controller => event.eventable_pluralize, :action => :show, :id => event.eventable.to_param} : { :controller => event.eventable_pluralize, :action => :show, :project_id => @project.to_param, :id => event.eventable.to_param} )
+              = link_to event.event_title, (event.eventable_type == 'Project' ? {:controller => event.eventable_pluralize, :action => :show, :id => event.eventable_id} : { :controller => event.eventable_pluralize, :action => :show, :project_id => @project.to_param, :id => event.eventable_id} )
               was
               = event.event_type
               by
-              = event.user.login
+              = event.user_name
 
       .actions-bar
         = will_paginate @events

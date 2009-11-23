@@ -21,9 +21,6 @@ class ProjectsController < ApplicationController
                                        :page => params[:page],
                                        :per_page => 20)
     return return_404 unless @project
-    milestone_part(@project.id)
-    tag_cloud_part('Projects', @project.id)
-    @title = "overview"
   end
 
   def new

@@ -106,6 +106,8 @@ class Project
   # Ad user with a define function in project
   #
   # TODO: need spec about this function
+  # We need a current milestone. See if we can define a milestone like current
+  # it's made in lighthouse
   #
   # @params[user] User to add to this project
   # @params[function] Function on this project to this User
@@ -125,7 +127,7 @@ class Project
   #
   def current_milestone
     milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}},
-                     :order => 'expected_at ASC')
+                     :order => 'expected_at ASC') || milestones.first
   end
 
   ##
