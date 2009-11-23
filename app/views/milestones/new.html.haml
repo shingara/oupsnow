@@ -6,7 +6,7 @@
       .flash
         = error_messages_for :milestone
 
-      - form_for([@project,@milestone], :html => {:class => 'form'}) do |f|
+      - form_for([@project, @milestone], :html => {:class => 'form'}) do |f|
         = render :partial => 'form', :locals => {:f => f}
         %div{:class => 'group navform'}
           = f.submit "Create", :class => 'button'

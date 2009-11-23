@@ -6,6 +6,7 @@ class TicketsController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :show]
   before_filter :admin_project, :only => [:edit_main_description,
                                     :update_main_description]
+  before_filter :clean_params_ticket, :only => [:create, :update]
 
   # TODO change and report it on model because not params_accessible in Rails
   #params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id, :priority_id, :milestone_id, :attachments]
@@ -80,6 +81,7 @@ class TicketsController < ApplicationController
   def update
     return return_404 unless @ticket
     @ticket_change = @ticket.dup
+    # if value is blank, use default value
     if params[:commit] != 'Preview' &&
       @ticket.generate_update(params[:ticket], current_user)
       redirect_to project_ticket_url(@project, @ticket)
@@ -89,9 +91,7 @@ class TicketsController < ApplicationController
       else
         flash[:error] = 'No new update added'
       end
-      [:title, :description, :user_assigned_id, :state_id, :priority_id, :milestone_id, :tag_list].each do |u|
-        @ticket_change.send("#{u}=", params[:ticket][u])
-      end
+      @ticket_change.attributes = params[:ticket]
       render :show
     end
   end
@@ -103,6 +103,10 @@ class TicketsController < ApplicationController
     @ticket = Ticket.get_by_permalink(params[:project_id],
                                       params[:id])
     return return_404 unless @ticket
+  end
+
+  def clean_params_ticket
+    params[:ticket].each { |k,v| params[:ticket][k] = nil if v.blank? }
   end
 
 end # Tickets

@@ -82,7 +82,7 @@ describe MilestonesController do
 
     describe 'create' do
       before do
-        post :create, :project_id => @project,
+        post :create, :project_id => @project.id,
                       :milestone => { :name => 'foo milestone' }
       end
 
@@ -105,7 +105,7 @@ describe MilestonesController do
 
     describe 'new' do
       before do
-        get :new, :project_id => Project.first
+        get :new, :project_id => Project.first.id
       end
 
       it "responds successfully" do

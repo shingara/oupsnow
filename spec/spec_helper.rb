@@ -24,8 +24,8 @@ Spec::Runner.configure do |config|
   end
 end
 
-class Unauthorized < Exception
-
+class ActionController::TestCase
+  include Devise::TestHelpers
 end
 
 def list_mock_project
@@ -80,17 +80,19 @@ end
 
 
 def login_anonymous
-  request.env['warden'] = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable],:silence_missing_strategies => true})
-  Rack::Request.any_instance.stubs(:request_uri).returns('/projects/new')
+  #request.env['warden'] = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable],:silence_missing_strategies => true})
+  #Rack::Request.any_instance.stubs(:request_uri).returns('/projects/new')
+
 end
 
 def login_request(user = nil)
   create_default_user
-  user = User.first(:conditions => {:login => 'shingara'}) unless user
+  user = User.first({:login => 'shingara'}) unless user
 
-  proxy = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable], :silence_missing_strategies => true})
-  proxy.set_user(user, :store => true, :scope => :user)
-  request.env['warden'] = proxy
+  #proxy = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable], :silence_missing_strategies => true})
+  #proxy.set_user(user, :store => true, :scope => :user)
+  #request.env['warden'] = proxy
+  sign_in user
 
   # if user is admin of this project. He becomes not admin
   Project.all(:conditions => {'project_members.user_id' => user.id,

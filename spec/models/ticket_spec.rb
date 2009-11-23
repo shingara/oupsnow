@@ -193,7 +193,7 @@ describe Ticket do
       end
 
       it 'should update state of ticket' do
-        @t.state_id.should == State.first(:conditions => {:name => 'check'}).id
+        @t.state_id.should == State.first({:name => 'check'})._id
       end
 
       it 'should not update description ticket' do
@@ -259,22 +259,22 @@ describe Ticket do
     end
 
     it 'should get ticket with this project_id and permlink in string' do
-      Ticket.get_by_permalink(@pr.id.to_s, @t1.num.to_s).should == @t1
+      Ticket.get_by_permalink(@pr._id.to_s, @t1.num.to_s).should == @t1
     end
 
     it 'should get ticket with this project_id and permalink' do
-      Ticket.get_by_permalink(@pr.id, @t1.num).should == @t1
+      Ticket.get_by_permalink(@pr._id, @t1.num).should == @t1
     end
 
     it 'should return nil because no ticket with this bad permalink but good project_id' do
-      Ticket.get_by_permalink(@pr.id, (@t2.num + 10)).should be_nil
+      Ticket.get_by_permalink(@pr._id, (@t2.num + 10)).should be_nil
     end
 
     it 'should return nil because no ticket with existing permalink but bad project_id' do
-      Ticket.get_by_permalink((@pr.id.succ), @t1.num).should be_nil
+      Ticket.get_by_permalink(@t1._id, @t1.num).should be_nil
     end
     it 'should return nil because no ticket with bad permalink and project_id' do
-      Ticket.get_by_permalink((@pr.id.succ), (@t2.num + 10)).should be_nil
+      Ticket.get_by_permalink(@t1._id, (@t2.num + 10)).should be_nil
     end
   end
 
@@ -306,7 +306,7 @@ describe Ticket do
     def new_by_params(args={})
       Ticket.new_by_params({:title => 'new issue',
                            :description => "it's a big issue",
-                           :state_id => @state.id}.merge(args),
+                           :state_id => @state._id}.merge(args),
                            @project,
                            @user)
     end
@@ -314,9 +314,9 @@ describe Ticket do
     it 'should create ticket complete' do
       ticket = new_by_params
       ticket.description.should == "it's a big issue"
-      ticket.state_id.should == @state.id
+      ticket.state_id.should == @state._id
       ticket.title.should == 'new issue'
-      ticket.project_id = @project.id
+      ticket.project_id = @project._id
       ticket.user_creator = @user
       ticket.should be_new_record
     end
@@ -324,9 +324,9 @@ describe Ticket do
     it 'should create ticket complete with no data' do
       ticket = new_by_params
       ticket.description.should == "it's a big issue"
-      ticket.state_id.should == @state.id
+      ticket.state_id.should == @state._id
       ticket.title.should == 'new issue'
-      ticket.project_id = @project.id
+      ticket.project_id = @project._id
       ticket.user_creator = @user
       ticket.should be_new_record
     end

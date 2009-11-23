@@ -31,13 +31,11 @@ class User
   ##
   # Check if this user is admin of this project
   #
-  # TODO: need test
-  #
   # @params[Project] project to test
   # @preturn[Boolean] if or not project_admin of this project
   def admin?(project)
     project.project_members.any? {|pm|
-      pm.user_id == self.id && pm.project_admin?
+      pm.user_id == self._id && pm.project_admin?
     }
   end
 
@@ -59,11 +57,11 @@ class User
     #
     # @params[Array] All user global_admin
     def update_all_global_admin(user_ids)
-      User.all(:id => user_ids).each do |user|
+      User.all(:_id => user_ids.map{|i| ObjectId.to_mongo(i)}).each do |user|
         user.global_admin = true
         user.save
       end
-      User.all(:id => { '$nin' => user_ids }).each do |user|
+      User.all(:_id => { '$nin' => user_ids.map{|i| ObjectId.to_mongo(i)} }).each do |user|
         user.global_admin = false
         user.save
       end
@@ -92,7 +90,7 @@ class User
       return true
     end
     unless self.global_admin
-      if User.first(:conditions => {:_id => {'$ne' => self.id},
+      if User.first(:conditions => {:_id => {'$ne' => self._id},
                                     :global_admin => true}) == nil
         return false
       end

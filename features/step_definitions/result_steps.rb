@@ -102,7 +102,7 @@ Given /^I have user "([^\"]*)" with function "([^\"]*)" on project "([^\"]*)" an
 
   user = user_with_name(user_name)
   project = project_with_name(project_name)
-  project.project_members.delete_if{ |pm| pm.user_id != user.id }
+  project.project_members.delete_if{ |pm| pm.user_id != user._id }
   project.save!
 end
 

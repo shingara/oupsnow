@@ -91,9 +91,8 @@ describe TicketsController do
 
   describe 'not access', :shared => true do
     it 'should not access' do
-      lambda do
-        req
-      end.should throw_symbol(:warden)
+      req
+      response.should redirect_to(new_user_session_url(:unauthenticated=>true))
     end
   end
 

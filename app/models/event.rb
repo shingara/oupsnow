@@ -9,12 +9,12 @@ class Event
 
   ### Association ###
 
-  key :user_id, String
-  key :project_id, String
+  key :user_id, ObjectId
+  key :project_id, ObjectId
 
   # Polymorphic event
   key :eventable_type, String
-  key :eventable_id, String
+  key :eventable_id, ObjectId
 
   belongs_to :user
   belongs_to :project

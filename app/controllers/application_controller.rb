@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   def projects
-    @project = Project.get(params[:project_id])
+    @project = Project.find(params[:project_id])
   end
 
   # attach to sidebar the part Milestone with project id define in argument

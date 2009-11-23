@@ -73,18 +73,16 @@ class Project
   # @param[user] The user to test
   # @return[Boolean] member is or not on this project
   def has_member?(user)
-    project_members.any? {|member| member.user_id == user.id }
+    project_members.any? {|member| member.user_id == user._id }
   end
 
 
   ##
   # get project_member object where user is
   #
-  # TODO: need some test
-  #
   # @params[User] user to fetch membership
   def project_membership(user)
-    project_members.detect{|member| member.user_id == user.id }
+    project_members.detect{|member| member.user_id == user._id }
   end
 
   ##

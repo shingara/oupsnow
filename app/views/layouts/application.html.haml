@@ -24,7 +24,7 @@
         #main-navigation
           %ul
             %li.first{:class => projects_current}= link_to 'Projects', projects_url
-            - unless @project.nil? || @project.id.nil?
+            - unless @project.nil? || @project._id.nil?
               %li{:class => overview_current}=link_to 'Overview', overview_project_url(@project)
               %li{:class => milestone_current}=link_to 'Milestones', project_milestones_url(@project)
               %li{:class => tickets_current}= link_to 'Tickets', project_tickets_url(@project)

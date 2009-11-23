@@ -1,3 +1,4 @@
+
 User.blueprint {
   login { /\w+/.gen }
   email { "#{/\w+/.gen}.#{/\w+/.gen}@gmail.com"}

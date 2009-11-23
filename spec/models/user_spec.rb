@@ -69,4 +69,26 @@ describe User do
     end
   end
 
+  describe '#admin?' do
+    before do
+      @project = make_project
+      @user = User.make
+    end
+    it 'should true if user is admin of this project' do
+      @project.project_members.build(:user => @user, :function => Function.make(:project_admin => true))
+      @project.save! && @user.reload
+      @user.should be_admin(@project)
+    end
+
+    it 'should false if user is not admin of this project but member of this project' do
+      @project.project_members.build(:user => @user, :function => Function.make(:project_admin => false))
+      @project.save! && @user.reload
+      @user.should_not be_admin(@project)
+    end
+    it 'should false if user is not member of this project' do
+      @user.should_not be_admin(@project)
+    end
+  end
+
+
 end

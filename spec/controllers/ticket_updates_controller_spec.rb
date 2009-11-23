@@ -17,22 +17,20 @@ describe TicketUpdatesController do
 
     describe 'edit' do
       it 'should not access' do
-        lambda do
-          get :edit, :project_id => @project.id, :ticket_id => @ticket.num,
-            :id => @ticket.ticket_updates.first.num
-        end.should throw_symbol(:warden)
+        get :edit, :project_id => @project.id, :ticket_id => @ticket.num,
+          :id => @ticket.ticket_updates.first.num
+        response.should redirect_to(new_user_session_url(:unauthenticated=>true))
       end
     end
 
     describe 'update' do
       it 'should not access' do
-        lambda do
-          put :update, :project_id => @project.id,
-            :ticket_id => @ticket.num,
-            :id => @ticket.ticket_updates.first.num,
-            :ticket_update => {:description => 'yahoo',
-              :state_id => State.first.id}
-        end.should throw_symbol(:warden)
+        put :update, :project_id => @project.id,
+          :ticket_id => @ticket.num,
+          :id => @ticket.ticket_updates.first.num,
+          :ticket_update => {:description => 'yahoo',
+            :state_id => State.first.id}
+        response.should redirect_to(new_user_session_url(:unauthenticated=>true))
       end
     end
 

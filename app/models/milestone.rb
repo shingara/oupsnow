@@ -1,14 +1,14 @@
 class Milestone
-  
+
   include MongoMapper::Document
-  
+
   key :name, String
   key :description, String
   key :expected_at, Date
 
   many :tickets
 
-  key :project_id, String
+  key :project_id, ObjectId
   belongs_to :project
 
   ##
@@ -56,7 +56,7 @@ class Milestone
   # number of ticket closed in this milestone
   #
   # TODO: need test
-  # 
+  #
   # @return[Integer] number of ticket closed on this milestone
   def ticket_closed_count
     tickets.count( :conditions => {:closed => true})
@@ -66,7 +66,7 @@ class Milestone
   # Return a Hash of tagging object
   # The key is the id number of tag and the value is an Array of Tagging
   # object. count the number of object and you know how Tag used is on a Tag
-  # 
+  #
   # TODO: need some test
   # TODO: see refactoring because same code of Project#ticket_tag_counts
   #

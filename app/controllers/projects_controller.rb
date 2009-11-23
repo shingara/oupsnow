@@ -72,7 +72,7 @@ class ProjectsController < ApplicationController
   private
 
   def load_project
-    @project = Project.find(params[:id])
+    @project = Project.find(ObjectId.to_mongo(params[:id]))
   end
 
 end # Projects

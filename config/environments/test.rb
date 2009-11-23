@@ -28,7 +28,7 @@ config.action_mailer.delivery_method = :test
 # config.active_record.schema_format = :sql
 
 config.gem 'webrat', :version => '0.5.3'
-config.gem 'cucumber', :version => '0.4.2'
+config.gem 'cucumber', :version => '0.4.4'
 config.gem 'machinist', :version => '1.0.5'
-config.gem 'machinist_mongomapper', :version => '0.9.6', :lib => 'machinist/mongomapper'
+config.gem 'machinist_mongomapper', :version => '0.9.7', :lib => 'machinist/mongomapper'
 config.gem 'randexp'

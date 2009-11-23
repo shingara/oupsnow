@@ -8,7 +8,7 @@ class TicketUpdate
   key :creator_user_name, String, :required => true
   key :num, Integer, :required => true
 
-  key :user_id, String
+  key :user_id, ObjectId
   belongs_to :user
 
   def write_event(ticket)

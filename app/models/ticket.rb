@@ -21,12 +21,12 @@ class Ticket
   many :attachments
 
 
-  key :user_creator_id, String, :required => true
-  key :project_id, String
-  key :state_id, String
-  key :user_assigned_id, String
-  key :milestone_id, String
-  key :priority_id, String
+  key :user_creator_id, ObjectId, :required => true
+  key :project_id, ObjectId
+  key :state_id, ObjectId
+  key :user_assigned_id, ObjectId
+  key :milestone_id, ObjectId
+  key :priority_id, ObjectId
 
   timestamps!
 
@@ -101,7 +101,7 @@ class Ticket
     [:state_id, :milestone_id, :user_assigned_id].each do |property|
       if ticket[property] != self.send(property)
         t.add_update(property,
-                     send(property),
+                     send(property).to_s,
                      ticket[property])
         self.send("#{property}=", ticket[property])
       end
@@ -152,10 +152,10 @@ class Ticket
   end
 
   def self.new_by_params(params, project, user)
+    params.delete(:milestone_id) if params[:milestone_id].blank?
     ticket = Ticket.new(params)
-    ticket.project_id = project.id
+    ticket.project_id = project._id
     ticket.user_creator = user
-    ticket.milestone_id = nil if params[:milestone_id].blank?
     ticket
   end
 
@@ -175,7 +175,7 @@ class Ticket
   # @params[String] project_id where find this ticket
   # @params[String] permalink of this ticket (number of this ticket) in this project
   def self.get_by_permalink(project_id, permalink)
-    Ticket.first(:conditions => {:num => permalink.to_i, :project_id => project_id})
+    Ticket.first({:num => permalink.to_i, :project_id => project_id})
   end
 
   ##
@@ -253,7 +253,7 @@ class Ticket
   def num_already_used_in_same_project
     Ticket.first(:conditions => {:project_id => self.project_id,
                  :num => self.num,
-                  :_id => {'$ne' => self.id}}).nil?
+                  :_id => {'$ne' => self._id}}).nil?
   end
 
   ##

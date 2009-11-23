@@ -6,8 +6,8 @@ class ProjectMember
   key :user_name, String, :required => true
   key :function_name, String, :required => true
   key :project_admin, Boolean
-  key :user_id, String
-  key :function_id, String
+  key :user_id, ObjectId
+  key :function_id, ObjectId
 
   # Update field is made on master document
 

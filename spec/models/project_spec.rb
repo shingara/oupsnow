@@ -117,8 +117,8 @@ describe Project do
                                     @user)
       pr.should be_new
       pr.project_members.should have(1).items
-      pr.project_members.first.function_id.should == Function.admin.id
-      pr.project_members.first.user_id.should == @user.id
+      pr.project_members.first.function_id.should == Function.admin._id
+      pr.project_members.first.user_id.should == @user._id
     end
   end
 
@@ -135,24 +135,40 @@ describe Project do
     end
 
     it 'should made nothing if no change' do
-      @project.change_functions({@admin_member.id => Function.admin.id,
+      @project.change_functions({@admin_member.id => Function.admin._id,
                                 @user_member.id => @function.id}).should be_true
-      @project.project_members.first.function_id.should == Function.admin.id
-      @project.project_members.second.function_id.should == @function.id
+      @project.project_members.first.function_id.should == Function.admin._id
+      @project.project_members.second.function_id.should == @function._id
     end
 
     it 'should change if change needed' do
-      @project.change_functions({@admin_member.id => Function.admin.id,
+      @project.change_functions({@admin_member.id => Function.admin._id,
                                 @user_member.id => Function.admin.id}).should be_true
-      @project.project_members.first.function_id.should == Function.admin.id
-      @project.project_members.second.function_id.should == Function.admin.id
+      @project.project_members.first.function_id.should == Function.admin._id
+      @project.project_members.second.function_id.should == Function.admin._id
     end
 
     it 'should made nothing if no admin define' do
       @project.change_functions({@admin_member.id => @function.id,
                                 @user_member.id => Function.make}).should be_false
-      @project.project_members.first.function_id.should == Function.admin.id
-      @project.project_members.second.function_id.should == @function.id
+      @project.project_members.first.function_id.should == Function.admin._id
+      @project.project_members.second.function_id.should == @function._id
+    end
+  end
+
+  describe '#project_membership(user)' do
+    before do
+      @project = make_project
+      @user = User.make
+    end
+    it 'should return project_member with this user if user member of this project' do
+      @member = @project.project_members.build(:user => @user, :function => Function.make)
+      @project.save! && @user.reload
+      @project.project_membership(@user).should == @member
+    end
+
+    it 'should return nil if user no member of this project' do
+      @project.project_membership(@user).should be_nil
     end
   end
 

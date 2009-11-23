@@ -47,9 +47,9 @@ class Settings::ProjectMembersController < Settings::BaseController
     member_function = params[:member_function] || {}
     notice = ""
     # You can't change your own function
-    member = @project.project_membership current_user
+    member = @project.project_membership(current_user)
     if member &&
-      member.function_id.to_s != member_function[member.id.to_s]
+      ObjectId.from_mongo(member.function_id).to_s != member_function[member.id]
       notice += "You can't update your own function to become a non admin"
       member_function[member.id.to_s] = member.function.id.to_s
     end
