@@ -16,7 +16,7 @@
           - for member in @members
             %tr{:class => cycle('odd', 'even')}
               %td= link_to(member.user.login, project_project_member_url(@project, member))
-              %td= select_tag "member_function[#{member.id}]", (options_from_collection_for_select Function.all, :id, :name, member.function_id)
+              %td= select_tag "member_function[#{member.id}]", (options_from_collection_for_select Function.all, :id, :name, member.function_id.to_s)
       .actions-bar
         .actions
           =link_to 'Add member', new_project_project_member_url(@project)
