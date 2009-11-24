@@ -70,16 +70,15 @@ module ApplicationHelper
   def tag_cloud(tags, classes)
     return if tags.empty?
 
-    max_count = 0
-    tags.each { |key, value| max_count = value.size if value.size > max_count }
+    max_count = tags.values.sort.reverse.first
 
-    tags.each do |tag_id, tagging|
+    tags.each do |tag, nb|
       if max_count > 1
-        index = ((tagging.size / max_count) * (classes.size - 1)).round
+        index = ((nb / max_count) * (classes.size - 1)).round
       else
         index = 0
       end
-      yield tag_id, classes[index]
+      yield tag, classes[index]
     end
   end
 
