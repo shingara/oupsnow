@@ -79,6 +79,7 @@ Ticket.blueprint do
   user_creator { self.project.project_members.first.user }
   state { State.first(:conditions => {:name => 'new'}) || State.make(:name => 'new') }
   milestone { Milestone.first(:project_id => self.project.id) || Milestone.make(:project => self.project) }
+  user_assigned_id {nil}
 end
 
 def make_ticket(opts={})

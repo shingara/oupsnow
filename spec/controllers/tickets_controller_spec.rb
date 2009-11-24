@@ -23,6 +23,11 @@ describe TicketsController do
   describe 'success show', :shared => true do
     before do
       @ticket = make_ticket(:project => @project)
+      make_ticket_update(@ticket, {:user_assigned_id => nil})
+      @ticket = Ticket.find(@ticket.id)
+      make_ticket_update(@ticket, {:user_assigned_id => @project.project_members.first.user_id,
+                         :project => @project})
+      @ticket = Ticket.find(@ticket.id)
     end
 
     def success_request

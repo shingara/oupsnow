@@ -18,7 +18,7 @@ module TicketsHelper
       "Status"
     when :tag_list
       "Tag"
-    when :member_assigned_id
+    when :user_assigned_id
       "Responsible"
     when :title
       "Title"
@@ -26,6 +26,8 @@ module TicketsHelper
       "Priority"
     when :milestone_id
       "Milestone"
+    else
+      prop[0]
     end
   end
 
@@ -38,22 +40,22 @@ module TicketsHelper
   end
 
   def transform_field(state, field)
-    return "" if field.nil?
+    return "" if field.blank?
     case state
     when :state_id
-      State.find_by__id(field).name
+      State.find(field).name
     when :tag_list
-      field
+      field.join(',')
     when :user_assigned_id
-      m = User.find_by__id(field)
+      m = User.find(field)
       m ? m.login : ""
     when :title
       field
     when :priority_id
-      p = Priority.find_by__id(field)
+      p = Priority.find(field)
       p ? p.name : ""
     when :milestone_id
-      m = Milestone.find_by__id(field)
+      m = Milestone.find(field)
       m ? m.name : ""
     end
   end
