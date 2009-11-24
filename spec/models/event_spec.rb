@@ -19,4 +19,18 @@ describe Event do
     end
   end
 
+  describe 'update event_user' do
+    it 'should update event_user' do
+      project = make_project
+      user = User.make
+      event = Event.new(:user => user,
+                        :eventable => project,
+                        :event_type => :created,
+                        :project => project)
+      event.user_name.should be_blank
+      event.save!
+      event.user_name.should == user.login
+    end
+  end
+
 end

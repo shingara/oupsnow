@@ -23,6 +23,7 @@ class Event
   belongs_to :eventable, :polymorphic => true, :dependent => :destroy
 
   before_save :update_event_title
+  before_save :update_user_name
 
   # TODO: need test about created_at/updated_at needed
   timestamps!
@@ -37,6 +38,10 @@ class Event
 
   def update_event_title
     self.event_title = eventable.title
+  end
+
+  def update_user_name
+    self.user_name = user.login
   end
 
 
