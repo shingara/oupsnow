@@ -62,6 +62,8 @@ class Ticket
   before_validation :update_priority
   before_validation :update_num_of_ticket_updates
 
+  after_save :update_project_tag_counts
+
   attr_accessor :comment
 
   def open
@@ -210,6 +212,7 @@ class Ticket
 
   private
 
+  # get number of this ticket in project model
   def define_num_ticket
     self.num ||= project.new_num_ticket
   end
@@ -262,6 +265,13 @@ class Ticket
     ticket_updates.each_with_index do |tu, i|
       tu.num ||= (i+1)
     end
+  end
+
+  ##
+  # Update tag_counts on project where is this ticket
+  #
+  def update_project_tag_counts
+    project.update_tag_counts
   end
 
 

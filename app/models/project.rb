@@ -7,7 +7,8 @@ class Project
   key :name, String, :unique => true
   alias_method :title, :name
   key :description, String
-  key :num_ticket, Integer, :default => 1
+  key :num_ticket, Integer
+  key :tag_counts, Hash
 
   # TODO: need test about created_at and updated_at needed
   timestamps!
@@ -59,11 +60,10 @@ class Project
   # Return the next num ticket.
   # Update the num save in this project
   #
-  # TODO: Need test
   def new_num_ticket
-    old_num = num_ticket
-    self.num_ticket = self.num_ticket.next
-    save
+    old_num = num_ticket || 1
+    self.num_ticket = old_num + 1
+    save!
     old_num
   end
 
@@ -166,23 +166,23 @@ class Project
   end
 
   ##
-  # Return a Hash of tagging object
-  # The key is the id number of tag and the value is an Array of Tagging
-  # object. count the number of object and you know how Tag used is on a Tag
+  # check all tag of all tickets on this project.
+  # Generate the tag_counts field
   #
-  # TODO: need some test
+  # This method is used in callback after ticket update.
+  # Can be push in queue
   #
-  # @return[Hash] Hash with name of tag in key. and number of tag use in this project in value
-  def ticket_tag_counts
-    tag_list = []
-    tickets.all.each do |t|
-      tag_list = t.tags
+  def update_tag_counts
+    tag_counts = {}
+    tickets.all.map{|t| t.tags.to_a }.flatten.each do |tag|
+      if tag_counts[tag]
+        tag_counts[tag] += 1
+      else
+        tag_counts[tag] = 1
+      end
     end
-    res = {}
-    tag_list.each do |v|
-      res[v] = res[v] ? res[v].inc : 1
-    end
-    res
+    self.tag_counts = tag_counts
+    save!
   end
 
   class << self

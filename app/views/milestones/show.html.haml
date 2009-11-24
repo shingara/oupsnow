@@ -1,3 +1,8 @@
+- @title = "Milestone #{@milestone.name}"
+
+- content_for :tag_cloud_sidebar do
+  = render :partial => 'shared/tag_cloud', :locals => {:tags => @milestone.tag_counts, :project => @project}
+
 #block-text.block
   .content
     %h2

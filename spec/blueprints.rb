@@ -82,7 +82,10 @@ Ticket.blueprint do
 end
 
 def make_ticket(opts={})
-  ticket = Ticket.make(opts.merge(:tag_list => make_tag_list))
+  unless opts[:tag_list]
+    opts = opts.merge(:tag_list => make_tag_list)
+  end
+  ticket = Ticket.make(opts)
   ticket.write_create_event
   ticket
 end

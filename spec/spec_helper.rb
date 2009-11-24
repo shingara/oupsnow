@@ -78,20 +78,14 @@ def create_default_admin
   user
 end
 
-
 def login_anonymous
-  #request.env['warden'] = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable],:silence_missing_strategies => true})
-  #Rack::Request.any_instance.stubs(:request_uri).returns('/projects/new')
-
+  #nothing need to made
 end
 
 def login_request(user = nil)
   create_default_user
   user = User.first({:login => 'shingara'}) unless user
 
-  #proxy = Warden::Proxy.new(request.env, {:default_strategies => [:rememberable, :authenticable], :silence_missing_strategies => true})
-  #proxy.set_user(user, :store => true, :scope => :user)
-  #request.env['warden'] = proxy
   sign_in user
 
   # if user is admin of this project. He becomes not admin

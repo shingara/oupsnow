@@ -19,9 +19,6 @@ class TicketsController < ApplicationController
                                :order => "#{sort_by} #{order}",
                                :page => params[:page],
                                :per_page => 20)
-    milestone_part(@project.id)
-    tag_cloud_part('Projects', @project.id)
-    @title = "Tickets"
   end
 
   ##

@@ -172,4 +172,60 @@ describe Project do
     end
   end
 
+  describe '#update_tag_counts' do
+    before do
+      @project = make_project
+      @project.tickets.should be_empty
+      @project.update_tag_counts
+      @project.tag_counts.should be_empty
+    end
+    it 'should update tag_counts to empty if no tag in tickets' do
+      make_ticket(:project => @project, :tag_list => '')
+      @project.update_tag_counts
+      @project.tag_counts.should be_empty
+    end
+
+    it 'should update tag_counts if ticket contains tags' do
+      make_ticket(:project => @project, :tag_list => 'foo')
+      @project = Project.find(@project._id)
+      @project.update_tag_counts
+      @project.tag_counts.should == {'foo' => 1}
+
+      make_ticket(:project => @project, :tag_list => 'foo,bar')
+      @project = Project.find(@project._id)
+      @project.update_tag_counts
+      @project.tag_counts.should == {'foo' => 2, 'bar' => 1}
+
+      make_ticket(:project => @project, :tag_list => 'bar')
+      @project = Project.find(@project._id)
+      @project.update_tag_counts
+      @project.tag_counts.should == {'foo' => 2, 'bar' => 2}
+
+      make_ticket(:project => @project, :tag_list => 'foo,bar,baz')
+      @project = Project.find(@project._id)
+      @project.update_tag_counts
+      @project.tag_counts.should == {'foo' => 3, 'bar' => 3, 'baz' => 1}
+    end
+  end
+
+  describe '#new_num_ticket' do
+    before do
+      @project = make_project
+    end
+    it 'should be nil if no ticket' do
+      @project.num_ticket.should be_nil
+    end
+
+    it 'should be 2 if one new_num ask' do
+      @project.new_num_ticket.should == 1
+      @project.num_ticket.should == 2
+    end
+
+    it 'should be 3 if two ticket' do
+      @project.new_num_ticket.should == 1
+      @project.new_num_ticket.should == 2
+      @project.num_ticket.should == 3
+    end
+  end
+
 end

@@ -337,4 +337,14 @@ describe Ticket do
     end
   end
 
+  describe '#update_project_tag_count' do
+    it 'should update project_tag_counts after save' do
+      @project = make_project
+      @project.tag_counts.should be_empty
+      make_ticket(:project => @project, :tag_list => 'foo,bar')
+      @project = Project.find(@project._id)
+      @project.tag_counts.should == {'foo' => 1, 'bar' => 1}
+    end
+  end
+
 end

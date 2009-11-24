@@ -1,3 +1,8 @@
+- @title = "Milestones"
+
+- content_for :tag_cloud_sidebar do
+  = render :partial => 'shared/tag_cloud', :locals => {:tags => @project.tag_counts, :project => @project}
+
 - if admin? @project
   .secondary-navigation
     %ul

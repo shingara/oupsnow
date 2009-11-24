@@ -4,7 +4,7 @@
   = render :partial => 'shared/milestone_sidebar', :locals => {:project => @project, :milestone => @project.current_milestone}
 
 - content_for :tag_cloud_sidebar do
-  = render :partial => 'shared/tag_cloud', :locals => {:tags => @project.ticket_tag_counts, :project => @project}
+  = render :partial => 'shared/tag_cloud', :locals => {:tags => @project.tag_counts, :project => @project}
 
 #block-lists.block
   .content

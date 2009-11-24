@@ -9,15 +9,11 @@ class MilestonesController < ApplicationController
     @upcoming_milestones = @project.upcoming_milestones
     @no_date_milestones = @project.no_date_milestones
     @outdated_milestones = @project.outdated_milestones
-    @title = "Milestones"
-    tag_cloud_part('Projects', @project.id)
   end
 
   def show
     @milestone = Milestone.find(params[:id])
     return return_404 unless @milestone
-    @title = "Milestone #{@milestone.name}"
-    tag_cloud_part('Milestones', @milestone.id, @project.id)
   end
 
   def new
