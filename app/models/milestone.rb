@@ -6,6 +6,12 @@ class Milestone
   key :description, String
   key :expected_at, Date
 
+
+  # denormalisation
+  key :nb_tickets_open, Integer, :default => 1 # TODO: need callback to update it
+  key :nb_tickets_closed, Integer, :default => 1 # TODO: need callback to update it
+  key :nb_tickets, Integer, :default => 1 # TODO: need callback to update it
+
   many :tickets
 
   key :project_id, ObjectId
@@ -27,19 +33,20 @@ class Milestone
   alias_method :title, :name
 
   def percent_complete
-    return 0 if tickets.empty?
-    100.0 * ticket_closed_count / tickets.size
+    return 0 if nb_tickets == 0
+    100.0 * nb_tickets_closed / nb_tickets
   end
 
 
   ##
   # Number of ticket allways open
   #
-  # TODO: need test
+  # TODO: use only in callback
+  # TODO: need some test
   #
   # return[Integer] number of ticket open
   def ticket_open_count
-    tickets.count( :conditions => {:closed => false})
+    tickets.count(:conditions => {:closed => false})
   end
 
   ##

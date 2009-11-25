@@ -1,6 +1,7 @@
 class Project
 
   include MongoMapper::Document
+  extend ActiveSupport::Memoizable
 
   ### PROPERTY ###
 
@@ -129,6 +130,7 @@ class Project
     milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}},
                      :order => 'expected_at ASC') || milestones.first
   end
+  memoize :current_milestone
 
   ##
   # check all milestone with expected_at in past.

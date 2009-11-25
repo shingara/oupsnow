@@ -9,9 +9,9 @@
       = @milestone.name
     .inner
       %p.first
-        = @milestone.ticket_open_count
+        = @milestone.nb_tickets_open
         Tickets remain,
-        = @milestone.tickets.count
+        = @milestone.nb_tickets
         Tickets total.
 
       = render :partial => 'pbar', :locals => {:milestone => @milestone}
