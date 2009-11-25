@@ -149,7 +149,6 @@ class Ticket
       query_conditions['tags'] = {'$all' => query_conditions['tags']}
     end
     conditions.merge!(query_conditions)
-    conditions[:order] = 'num'
     Ticket.paginate(conditions)
   end
 

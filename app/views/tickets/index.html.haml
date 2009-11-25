@@ -19,7 +19,7 @@
       %table.table
         %thead
           %tr
-            %th.first= link_to 'id', project_tickets_url(@project, sort_by('id').merge(:q => params[:q]))
+            %th.first= link_to 'id', project_tickets_url(@project, sort_by('num').merge(:q => params[:q]))
             %th= link_to 'name', project_tickets_url(@project, sort_by('title').merge(:q => params[:q]))
             %th responsible
             %th status

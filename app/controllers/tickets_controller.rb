@@ -12,7 +12,7 @@ class TicketsController < ApplicationController
   #params_accessible :ticket => [:title, :description, :tag_list, :member_assigned_id, :state_id, :priority_id, :milestone_id, :attachments]
 
   def index
-    sort_by = params[:sort_by] || 'id'
+    sort_by = params[:sort_by] || 'num'
     order = params[:order] || 'DESC'
     q = params[:q] || ''
     @tickets = Ticket.paginate_by_search(q, :project_id => @project.id,
