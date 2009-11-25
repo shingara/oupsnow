@@ -46,4 +46,7 @@ Rails::Initializer.run do |config|
   config.gem 'haml', :version => '2.2.14'
   config.gem 'warden', :version => '0.6.4'
   config.gem 'devise', :version => '0.5.6'
+
+  # gem generate from will_paginate agnostic branch. change it when it's possible
+  config.gem 'agnostic-will_paginate', :version => '3.0.0', :lib => 'will_paginate'
 end

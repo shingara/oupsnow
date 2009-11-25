@@ -9,7 +9,7 @@ class Ticket
   key :tag_list, String, :default => ''
   key :closed, Boolean, :default => false
 
-  key :_keywords, Array, :required => true #It's all words in ticket. Usefull to full text search
+  key :_keywords, Array, :required => true #It's all words in ticket. Usefull to full text search TODO: need made callback to fill it
 
 
   ## denormalisation
