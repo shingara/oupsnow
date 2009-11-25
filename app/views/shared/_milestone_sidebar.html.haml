@@ -1,6 +1,7 @@
 - if milestone
+  - sidebar_title ||=  "Current milestone"
   .block
-    %h3 Current milestone
+    %h3= sidebar_title
     .content
       %p
         = link_to milestone.name, project_milestone_url(project, milestone)
