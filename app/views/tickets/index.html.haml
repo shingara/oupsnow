@@ -30,10 +30,10 @@
             %tr{:class => "#{cycle('odd','even')} ticket" }
               %td= link_to "##{ticket.num}", project_ticket_url(@project, ticket)
               %td= ticket.title
-              %td= ticket.user_assigned ? ticket.user_assigned.login : ""
-              %td= ticket.state.name
-              %td= ticket.priority ? ticket.priority.name : ""
-              %td= ticket.milestone ? ticket.milestone.name : ""
+              %td= ticket.user_assigned_name
+              %td= ticket.state_name
+              %td= ticket.priority_name
+              %td= ticket.milestone_name
 
       .actions-bar
         = will_paginate @tickets

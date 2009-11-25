@@ -7,15 +7,17 @@ class Ticket
   key :num, Integer, :required => true
   key :tags, Set
   key :tag_list, String, :default => ''
-  key :state_name, String, :required => true
   key :closed, Boolean, :default => false
 
   key :_keywords, Array, :required => true #It's all words in ticket. Usefull to full text search
 
-  key :creator_user_name, String, :required => true
 
+  ## denormalisation
   key :priority_name, String
-  key :milestone_name, String
+  key :milestone_name, String #TODO: need callback
+  key :creator_user_name, String, :required => true
+  key :state_name, String, :required => true
+  key :user_assigned_name, String # TODO: need callback
 
   many :ticket_updates
   many :attachments
