@@ -12,7 +12,7 @@
     - form_tag(project_tickets_url(@project), {:id => 'ticket_search_form', :method => 'GET'}) do
       %label{:for => 'q'}
         Find tickets :
-      = text_field_tag :q
+      = text_field_tag :q, params[:q]
 
   .content
     .inner
