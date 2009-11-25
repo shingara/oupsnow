@@ -14,7 +14,7 @@ class Ticket
 
   ## denormalisation
   key :priority_name, String
-  key :milestone_name, String #TODO: need callback
+  key :milestone_name, String
   key :creator_user_name, String, :required => true
   key :state_name, String, :required => true
   key :user_assigned_name, String # TODO: need callback
@@ -63,6 +63,8 @@ class Ticket
   before_validation :update_tags
   before_validation :update_priority
   before_validation :update_num_of_ticket_updates
+
+  before_save :update_milestone_name
 
   after_save :update_project_tag_counts
 
@@ -274,6 +276,18 @@ class Ticket
   #
   def update_project_tag_counts
     project.update_tag_counts
+  end
+
+  ##
+  # Update the milestone_name field with milestone name if
+  # milestone is define
+  #
+  def update_milestone_name
+    if self.milestone || self.milestone_id
+      self.milestone_name = self.milestone.name
+    else
+      self.milestone_name = ''
+    end
   end
 
 

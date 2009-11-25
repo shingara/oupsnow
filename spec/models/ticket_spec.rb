@@ -364,6 +364,33 @@ describe Ticket do
         @ticket.state_name.should == new_state.name
       end
     end
+
+    describe '#update_milestone_name' do
+      it 'should update milestone_name if milestone define' do
+        @ticket = make_ticket
+        @ticket.milestone_name.should_not be_blank
+        new_milestone = Milestone.make(:project => @ticket.project)
+        @ticket.milestone = new_milestone
+        @ticket.save!
+        @ticket.milestone_name.should == new_milestone.name
+
+        @ticket = Ticket.find(@ticket.id)
+        @ticket.milestone_id = nil
+        @ticket.save!
+        @ticket.milestone_name.should be_blank
+
+        @ticket = Ticket.find(@ticket.id)
+        other_milestone = Milestone.make(:project => @ticket.project)
+        @ticket.milestone_id = other_milestone.id
+        @ticket.save!
+        @ticket.milestone_name.should == other_milestone.name
+
+        @ticket = Ticket.find(@ticket.id)
+        @ticket.milestone = nil
+        @ticket.save!
+        @ticket.milestone_name.should be_blank
+      end
+    end
   end
 
 end
