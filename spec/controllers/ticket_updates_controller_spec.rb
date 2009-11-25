@@ -2,6 +2,8 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe TicketUpdatesController do
 
+  integrate_views
+
   before do
     @project = make_project
     State.make

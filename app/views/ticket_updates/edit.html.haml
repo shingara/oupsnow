@@ -4,14 +4,14 @@
 
     .inner
       .flash
-        = error_messages_for @ticket_update
+        = error_messages_for :ticket_update
 
-      = form_for(@ticket_update, :action => resource(@project, @ticket, @ticket_update), :class => 'form') do
+      - form_for([@project, @ticket, @ticket_update], :html => { :class => 'form' }) do |f|
         .group
           %label.label{:for => 'ticket_update[description]'} Description
-          = text_area  @ticket_update.description, :name => 'ticket_update[description]', :class => 'text_area', :cols => 40, :rows => 15
+          = f.text_area  :description, :class => 'text_area', :cols => 40, :rows => 15
         .clear
         %div{:class => 'group navform'}
-          = submit "Update", :class => 'button'
+          = f.submit "Update", :class => 'button'
           or
-          = link_to 'Cancel', resource(@project, @ticket)
+          = link_to 'Cancel', project_ticket_url(@project, @ticket)

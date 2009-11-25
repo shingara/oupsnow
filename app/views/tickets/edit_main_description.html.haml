@@ -6,7 +6,7 @@
       .flash
         = error_messages_for :ticket
 
-      - form_for(@ticket, :url => update_main_description_project_ticket_url(@project, @ticket), :class => 'form') do |f|
+      - form_for(@ticket, :url => update_main_description_project_ticket_url(@project, @ticket), :html => {:class => 'form'}) do |f|
         .group
           %label.label{:for => 'ticket[title]'} Title
           = f.text_field :title, :size => 40, :class => 'text_field'

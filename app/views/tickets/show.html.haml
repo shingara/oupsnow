@@ -36,7 +36,7 @@
               - up.properties_update.each do |prop|
                 %li= update_field(prop)
             %p= textilized up.description
-            .edit=link_to 'edit', edit_project_ticket_url(@project, @ticket) if admin?(@project)
+            .edit=link_to 'edit', edit_project_ticket_ticket_update_url(@project, @ticket,up) if admin?(@project)
 
       - if user_signed_in?
 
