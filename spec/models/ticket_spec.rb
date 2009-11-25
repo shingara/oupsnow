@@ -391,6 +391,39 @@ describe Ticket do
         @ticket.milestone_name.should be_blank
       end
     end
+
+    describe '#update_user_assigned_name' do
+      it 'should update user_assigned_name if user_assigned define' do
+        @ticket = make_ticket
+        @ticket.user_assigned_name.should be_blank
+        new_user = User.make
+        @ticket.project.project_members << ProjectMember.make(:user => new_user,
+                                                  :function => Function.make)
+        @ticket.project.save!
+        @ticket.user_assigned = new_user
+        @ticket.save!
+        @ticket.user_assigned_name.should == new_user.login
+
+        @ticket = Ticket.find(@ticket.id)
+        @ticket.user_assigned_id = nil
+        @ticket.save!
+        @ticket.user_assigned_name.should be_blank
+
+        @ticket = Ticket.find(@ticket.id)
+        other_user = User.make
+        @ticket.project.project_members << ProjectMember.make(:user => other_user,
+                                                  :function => Function.make)
+        @ticket.project.save!
+        @ticket.user_assigned_id = other_user.id
+        @ticket.save!
+        @ticket.user_assigned_name.should == other_user.login
+
+        @ticket = Ticket.find(@ticket.id)
+        @ticket.user_assigned = nil
+        @ticket.save!
+        @ticket.user_assigned_name.should be_blank
+      end
+    end
   end
 
 end

@@ -17,7 +17,7 @@ class Ticket
   key :milestone_name, String
   key :creator_user_name, String, :required => true
   key :state_name, String, :required => true
-  key :user_assigned_name, String # TODO: need callback
+  key :user_assigned_name, String
 
   many :ticket_updates
   many :attachments
@@ -65,6 +65,7 @@ class Ticket
   before_validation :update_num_of_ticket_updates
 
   before_save :update_milestone_name
+  before_save :update_user_assigned_name
 
   after_save :update_project_tag_counts
 
@@ -287,6 +288,18 @@ class Ticket
       self.milestone_name = self.milestone.name
     else
       self.milestone_name = ''
+    end
+  end
+
+  ##
+  # Update the user_assigned_name field with user_assigned name if
+  # user_assigned is define
+  #
+  def update_user_assigned_name
+    if self.user_assigned || self.user_assigned_id
+      self.user_assigned_name = self.user_assigned.login
+    else
+      self.user_assigned_name = ''
     end
   end
 
