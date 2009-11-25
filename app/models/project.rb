@@ -93,7 +93,7 @@ class Project
   #               {project_member_id => function_id}
   # @returns[Boolean] true if change works false instead of
   def change_functions(member_function)
-    return false unless Function.exists?(:project_admin => true, :id => member_function.values)
+    return false unless Function.exists?(:project_admin => true, :id => member_function.values.map{|v| ObjectId.to_mongo(v)})
     member_function.each do |pm_id, function_id|
       project_members.detect{ |pm|
         pm.id == pm_id

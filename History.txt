@@ -1,7 +1,8 @@
 == EDGE
- 
+
  * Add filter by state in search ticket
  * Add possibility to change function of all member by project
+ * Add preview in ticket and ticket updates
 
 == 0.3.0 /
 
