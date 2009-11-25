@@ -337,13 +337,32 @@ describe Ticket do
     end
   end
 
-  describe '#update_project_tag_count' do
-    it 'should update project_tag_counts after save' do
-      @project = make_project
-      @project.tag_counts.should be_empty
-      make_ticket(:project => @project, :tag_list => 'foo,bar')
-      @project = Project.find(@project._id)
-      @project.tag_counts.should == {'foo' => 1, 'bar' => 1}
+  describe 'Callback' do
+    describe '#update_project_tag_count' do
+      it 'should update project_tag_counts after save' do
+        @project = make_project
+        @project.tag_counts.should be_empty
+        make_ticket(:project => @project, :tag_list => 'foo,bar')
+        @project = Project.find(@project._id)
+        @project.tag_counts.should == {'foo' => 1, 'bar' => 1}
+      end
+    end
+
+    describe '#update_state_name' do
+      it 'should update state_name after each state change' do
+        @ticket = make_ticket
+        @ticket.state_name.should == 'new'
+        new_state = State.make
+        @ticket.state_id = new_state.id
+        @ticket.save!
+        @ticket = Ticket.find(@ticket.id)
+        @ticket.state_name.should == new_state.name
+        new_state = State.make
+        @ticket.state = new_state
+        @ticket.save!
+        @ticket = Ticket.find(@ticket.id)
+        @ticket.state_name.should == new_state.name
+      end
     end
   end
 

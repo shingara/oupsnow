@@ -218,7 +218,8 @@ class Ticket
   end
 
   def define_state_new
-    self.state ||= State.first(:conditions => {:name => 'new'})
+    self.state_id ||= State.first(:conditions => {:name => 'new'}).id
+    self.state = State.find(self.state_id)
     self.state_name = self.state.name
     self.closed = self.state.closed
     true
