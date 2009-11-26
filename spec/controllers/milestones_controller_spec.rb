@@ -94,12 +94,16 @@ describe MilestonesController do
 
     describe 'destroy' do
       before do
-        delete :destroy, :project_id => Project.first.id,
-          :id => Project.first.milestones.first
+        delete :destroy, :project_id => @project.id,
+          :id => @milestone.id
       end
 
       it "should redirect to the index action" do
-        response.should redirect_to(project_milestones_url(Project.first))
+        response.should redirect_to(project_milestones_url(@project))
+      end
+
+      it 'should delete milestone' do
+        Milestone.find(@milestone.id).should be_nil
       end
     end
 
