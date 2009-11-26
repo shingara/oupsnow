@@ -36,6 +36,38 @@ describe Milestone do
         @milestone.nb_tickets_open.should == 1
       end
     end
+    describe '#nb_tickets_closed' do
+      it 'should change with ticket change' do
+        @milestone.nb_tickets_closed.should == 0
+        new_ticket = make_ticket(:project => @milestone.project,
+                                 :state => State.make(:closed => true))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets_closed.should == 1
+        other_ticket = make_ticket(:project => @milestone.project,
+                                   :state => State.make(:closed => true))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets_closed.should == 2
+
+        make_ticket_update(new_ticket, :state => State.make(:closed => false))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets_closed.should == 1
+      end
+    end
+
+    describe '#nb_tickets' do
+      it 'should change with ticket change' do
+        @milestone.nb_tickets.should == 0
+        new_ticket = make_ticket(:project => @milestone.project,
+                                 :state => State.make(:closed => true))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets.should == 1
+        other_ticket = make_ticket(:project => @milestone.project,
+                                   :state => State.make(:closed => false))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets.should == 2
+      end
+
+    end
   end
 
 end

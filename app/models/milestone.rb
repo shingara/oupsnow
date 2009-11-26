@@ -8,9 +8,9 @@ class Milestone
 
 
   # denormalisation
-  key :nb_tickets_open, Integer, :default => 0 # TODO: need callback to update it
-  key :nb_tickets_closed, Integer, :default => 0 # TODO: need callback to update it
-  key :nb_tickets, Integer, :default => 0 # TODO: need callback to update it
+  key :nb_tickets_open, Integer, :default => 0
+  key :nb_tickets_closed, Integer, :default => 0
+  key :nb_tickets, Integer, :default => 0
 
   many :tickets
 
@@ -80,6 +80,8 @@ class Milestone
 
   def update_nb_tickets_count
     self.nb_tickets_open = tickets.count(:conditions => {:closed => false})
+    self.nb_tickets_closed = tickets.count(:conditions => {:closed => true})
+    self.nb_tickets = self.nb_tickets_open + self.nb_tickets_closed
     self.save!
   end
 
