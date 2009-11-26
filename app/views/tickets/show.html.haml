@@ -1,7 +1,8 @@
 - @title = "ticket #{@ticket.title}"
 
 - content_for :milestone_sidebar do
-  = render :partial => 'shared/milestone_sidebar', :locals => {:project => @project, :milestone => @ticket.milestone, :sidebar_title => 'Ticket milestone'}
+  - if @ticket.milestone_id
+    = render :partial => 'shared/milestone_sidebar', :locals => {:project => @project, :milestone => @ticket.milestone, :sidebar_title => 'Ticket milestone'}
 
 - content_for :tag_cloud_sidebar do
   = render :partial => 'shared/tag_cloud', :locals => { :tags => @ticket.tag_counts, :project => @ticket.project }
