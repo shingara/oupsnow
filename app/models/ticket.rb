@@ -68,6 +68,7 @@ class Ticket
   before_save :update_user_assigned_name
 
   after_save :update_project_tag_counts
+  after_save :update_milestone_tickets_count
 
   attr_accessor :comment
 
@@ -301,6 +302,12 @@ class Ticket
     else
       self.user_assigned_name = ''
     end
+  end
+
+  # update milestone information about this ticket
+  # TODO: what's happen if milestone change ?
+  def update_milestone_tickets_count
+    self.milestone.update_nb_tickets_count
   end
 
 

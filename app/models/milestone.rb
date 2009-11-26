@@ -2,19 +2,19 @@ class Milestone
 
   include MongoMapper::Document
 
-  key :name, String
+  key :name, String, :required => true
   key :description, String
   key :expected_at, Date
 
 
   # denormalisation
-  key :nb_tickets_open, Integer, :default => 1 # TODO: need callback to update it
-  key :nb_tickets_closed, Integer, :default => 1 # TODO: need callback to update it
-  key :nb_tickets, Integer, :default => 1 # TODO: need callback to update it
+  key :nb_tickets_open, Integer, :default => 0 # TODO: need callback to update it
+  key :nb_tickets_closed, Integer, :default => 0 # TODO: need callback to update it
+  key :nb_tickets, Integer, :default => 0 # TODO: need callback to update it
 
   many :tickets
 
-  key :project_id, ObjectId
+  key :project_id, ObjectId, :required => true
   belongs_to :project
 
   ##
@@ -35,18 +35,6 @@ class Milestone
   def percent_complete
     return 0 if nb_tickets == 0
     100.0 * nb_tickets_closed / nb_tickets
-  end
-
-
-  ##
-  # Number of ticket allways open
-  #
-  # TODO: use only in callback
-  # TODO: need some test
-  #
-  # return[Integer] number of ticket open
-  def ticket_open_count
-    tickets.count(:conditions => {:closed => false})
   end
 
   ##
@@ -88,6 +76,11 @@ class Milestone
       res[v] = res[v] ? res[v].inc : 1
     end
     res
+  end
+
+  def update_nb_tickets_count
+    self.nb_tickets_open = tickets.count(:conditions => {:closed => false})
+    self.save!
   end
 
 end

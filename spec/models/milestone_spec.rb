@@ -6,4 +6,36 @@ describe Milestone do
     Milestone.make.should be_valid
   end
 
+  describe 'validation' do
+    it 'should not valid if no project_id' do
+      Milestone.make_unsaved(:project => nil).should_not be_valid
+    end
+
+    it 'should not valid if no name' do
+      project = make_project
+      Milestone.make_unsaved(:name => '', :project => project).should_not be_valid
+    end
+  end
+
+  describe 'callback' do
+    before do
+      @milestone = Milestone.make
+    end
+    describe '#nb_tickets_open' do
+      it 'should change with ticket change' do
+        @milestone.nb_tickets_open.should == 0
+        new_ticket = make_ticket(:project => @milestone.project, :state => State.make(:closed => false))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets_open.should == 1
+        other_ticket = make_ticket(:project => @milestone.project, :state => State.make(:closed => false))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets_open.should == 2
+
+        make_ticket_update(new_ticket, :state => State.make(:closed => true))
+        @milestone = Milestone.find(@milestone.id)
+        @milestone.nb_tickets_open.should == 1
+      end
+    end
+  end
+
 end
