@@ -424,6 +424,20 @@ describe Ticket do
         @ticket.user_assigned_name.should be_blank
       end
     end
+
+    describe '#update _keywords' do
+      it 'should update _keywords before save' do
+        @ticket = make_ticket
+        @ticket._keywords.should_not be_empty
+        @ticket._keywords.uniq!.should be_nil
+        keys = [@ticket.title.split(/\W+/),
+          @ticket.description.split(/\W+/),
+          @ticket.tag_list.split(',')].flatten.uniq.sort
+        @ticket._keywords.should == keys
+        desc = make_ticket_update(@ticket, :tag_list => @ticket.tag_list).description
+        @ticket._keywords.should == (keys + desc.split(/\W+/)).flatten.uniq.sort
+      end
+    end
   end
 
 end
