@@ -31,7 +31,7 @@ describe Milestone do
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_open.should == 2
 
-        make_ticket_update(new_ticket, :state => State.make(:closed => true))
+        make_ticket_update(new_ticket, :state_id => State.make(:closed => true).id)
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_open.should == 1
       end
@@ -48,7 +48,7 @@ describe Milestone do
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_closed.should == 2
 
-        make_ticket_update(new_ticket, :state => State.make(:closed => false))
+        make_ticket_update(new_ticket, :state_id => State.make(:closed => false).id)
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_closed.should == 1
       end

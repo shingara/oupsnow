@@ -58,7 +58,12 @@ def make_project(params={})
 end
 
 def make_ticket_update(ticket, params={}, user=User.make)
-  ticket.generate_update(Ticket.make_unsaved({:description => (1..3).of { /[:paragraph:]/.generate }.join("\n")}.merge(params)),user)
+  ticket.generate_update(
+    ({:tag_list => ticket.tag_list,
+     :state_id => ticket.state_id.to_s,
+     :milestone_id => ticket.milestone_id.to_s,
+     :user_assigned_id => ticket.user_assigned_id.to_s,
+    :description => (1..3).of { /[:paragraph:]/.generate }.join("\n")}.merge(params)),user)
   ticket.ticket_updates.last
 end
 

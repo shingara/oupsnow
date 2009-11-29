@@ -34,7 +34,7 @@ describe TicketsController do
       get :show, :project_id => @project.id, :id => @ticket.num
     end
     def failed_request
-      get :show, :project_id => @project.id, :id => @ticket.id
+      get :show, :project_id => @project.id, :id => 'sjlmdfqsjdmf'
     end
     it 'should success with a success request' do
       success_request
@@ -255,8 +255,8 @@ describe TicketsController do
 
       describe 'with bad num ticket' do
         before do
-          get :edit_main_description, :project_id => @project.id,
-            :id => make_ticket(:project => @project).id
+          get :edit_main_description, :project_id => @project.id.to_s,
+            :id => make_ticket(:project => @project).id.to_s
         end
         it { response.code.should == '404'  }
         it { response.should render_template('public/404.html') }
@@ -288,8 +288,8 @@ describe TicketsController do
       describe 'not exist' do
         before do
           @ticket = make_ticket(:project => @project)
-          put :update_main_description, :project_id => @project.id,
-            :id => @ticket.id,
+          put :update_main_description, :project_id => @project.id.to_s,
+            :id => @ticket.id.to_s,
             :ticket => {:description => 'yahoo',
               :title => ''}
         end

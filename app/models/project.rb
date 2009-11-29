@@ -97,7 +97,7 @@ class Project
     return false unless Function.exists?(:project_admin => true, :id => member_function.values.map{|v| ObjectId.to_mongo(v)})
     member_function.each do |pm_id, function_id|
       project_members.detect{ |pm|
-        pm.id == pm_id
+        pm.id.to_s == pm_id.to_s
       }.function_id = Function.find(function_id).id
     end
     save

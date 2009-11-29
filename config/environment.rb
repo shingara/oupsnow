@@ -39,9 +39,9 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 
-  config.gem 'mongo', :version => '0.17.1'
-  config.gem 'mongo_ext', :version => '0.17.1', :lib => false
-  config.gem 'mongo_mapper', :version => '0.6.1'
+  config.gem 'mongo', :version => '0.18'
+  config.gem 'mongo_ext', :version => '0.18', :lib => false
+  config.gem 'mongo_mapper', :version => '0.6.4'
   config.gem 'RedCloth', :version => '4.2.2', :lib => 'redcloth'
   config.gem 'haml', :version => '2.2.14'
   config.gem 'warden', :version => '0.6.4'

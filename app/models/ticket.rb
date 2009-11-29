@@ -108,12 +108,16 @@ class Ticket
       self.tag_list = ticket[:tag_list]
     end
 
-    [:state_id, :milestone_id, :user_assigned_id].each do |property|
-      if ticket[property] != self.send(property)
-        t.add_update(property,
-                     send(property).to_s,
-                     ticket[property])
-        self.send("#{property}=", ticket[property])
+    [[:state_id, State],
+      [:milestone_id, Milestone],
+      [:user_assigned_id, User]].each do |property|
+      if ticket[property[0]].to_s != self.send(property[0]).to_s
+        property_klass = property[0].to_s.gsub('_id', '')
+        new_value = property[1].find(ticket[property[0]])
+        t.add_update(property_klass.to_sym,
+                     send(property_klass) ? send(property_klass).name : '',
+                     new_value ? new_value.name : '')
+        self.send("#{property[0]}=", ticket[property[0]])
       end
     end
 
@@ -149,7 +153,8 @@ class Ticket
             p 'no what'
           end
         else
-          query_conditions[:_keywords] = v
+          query_conditions[:_keywords] ||= {'$all' => []}
+          query_conditions[:_keywords]['$all'] <<  v
         end
       }
     end

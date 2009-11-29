@@ -16,6 +16,7 @@ class User
   devise
 
   key :login,  String , :unique => true
+  alias :name :login
   key :email,  String
   key :firstname, String
   key :lastname, String

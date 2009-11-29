@@ -53,11 +53,16 @@ describe Ticket do
       @first_ticket = Ticket.make(:state => @state,
                                  :tag_list => @first_tag)
       @second_ticket = Ticket.make(:state => @state,
+                                   :title => 'foo',
                                  :tag_list => "#{@second_tag},#{@third_tag}")
       @third_ticket = Ticket.make(:state => @state_2,
                                  :tag_list => @first_tag)
       @four_ticket = Ticket.make(:state => @state_2,
                                  :tag_list => @second_tag)
+      make_ticket_update(@four_ticket, {:description => 'bar',
+                         :state => @state_2,
+                         :tag_list => @second_tag})
+      @four_ticket = Ticket.find(@four_ticket.id)
       @ticket_with_first_state = [@first_ticket,@second_ticket]
       @ticket_with_second_state = [@third_ticket, @four_ticket]
     end
@@ -72,7 +77,7 @@ describe Ticket do
     it 'should return all ticket with state information' do
       Ticket.paginate_by_search("state:#{@state.name}",
                                 :page => 1,
-                                  :per_page => 10).sort_by(&:id).should == @ticket_with_first_state.sort_by(&:id)
+                                  :per_page => 10).sort_by(&:title).should == @ticket_with_first_state.sort_by(&:title)
     end
 
     it 'should return no ticket if no ticket with state' do
@@ -84,13 +89,13 @@ describe Ticket do
     it 'should return all ticket with last state define in query if several state' do
       Ticket.paginate_by_search("state:#{@state.name} state:#{@state_2.name}",
                                 :page => 1,
-                                :per_page => 10).sort_by(&:id).should == @ticket_with_second_state.sort_by(&:id)
+                                :per_page => 10).sort_by(&:title).should == @ticket_with_second_state.sort_by(&:title)
     end
 
     it 'should return all ticket with tag define by tagged:xxx in query' do
       Ticket.paginate_by_search("tagged:#{@first_tag}",
                                 :page => 1,
-                                  :per_page => 10).sort_by(&:id).should == [@first_ticket, @third_ticket].sort_by(&:id)
+                                  :per_page => 10).sort_by(&:title).should == [@first_ticket, @third_ticket].sort_by(&:title)
     end
 
     it 'should return no ticket with tag define by tagged:xxx in query but no ticket tagged with that' do
@@ -102,7 +107,7 @@ describe Ticket do
     it 'should return all ticket with all tags define by tagged:xxx in query' do
       Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag}",
                                 :page => 1,
-                                  :per_page => 10).sort_by(&:id).should == [@second_ticket, @four_ticket].sort_by(&:id)
+                                  :per_page => 10).sort_by(&:title).should == [@second_ticket, @four_ticket].sort_by(&:title)
     end
 
     it 'should return all ticket with all tags define by tagged:xxx and state:xxx in query' do
@@ -115,6 +120,23 @@ describe Ticket do
       Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag} state:a bad_state",
                                 :page => 1,
                                   :per_page => 10).should be_empty
+    end
+
+    it 'should search in keywords if no prefix in search' do
+      Ticket.paginate_by_search("#{@first_tag}",
+                                      :page => 1,
+                                      :per_page => 10).should == [@first_ticket, @third_ticket]
+     Ticket.paginate_by_search("foo #{@third_tag}",
+                                      :page => 1,
+                                      :per_page => 10).should == [@second_ticket]
+
+     Ticket.paginate_by_search("bar #{@second_tag}",
+                                      :page => 1,
+                                      :per_page => 10).should == [@four_ticket]
+
+      Ticket.paginate_by_search("#{@first_tag} #{@third_tag}",
+                                      :page => 1,
+                                      :per_page => 10).should be_empty
     end
   end
 
@@ -209,9 +231,9 @@ describe Ticket do
       end
 
       it 'should have properties_update with state change' do
-        @t.ticket_updates[0].properties_update.should be_include([:state_id,
-                                                                 State.first(:conditions => {:name => 'new'}).id,
-                                                                 State.first(:conditions => {:name => 'check'}).id])
+        @t.ticket_updates[0].properties_update.should be_include([:state,
+                                                                 'new',
+                                                                 'check'])
       end
     end
 
