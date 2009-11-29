@@ -40,7 +40,7 @@ module ApplicationHelper
   end
 
   def tickets_current
-    current_or_not((params[:controller] == 'tickets' && params[:action] != 'new' && !@new_ticket) ||
+    current_or_not((params[:controller] == 'tickets' && params[:action] != 'new' && params[:action] != 'create' && !@new_ticket) ||
                    params[:controller] == 'ticket_updates')
   end
 
