@@ -90,8 +90,6 @@ class Ticket
   # with a ticket and a user, check difference between ticket send by params
   # and this ticket. If there are difference, generate a ticket_updates to this ticket
   #
-  # TODO: need test with all change possibility. BIG BIG issue
-  #
   # @params[Hash] a hash with new value to see difference between this
   # @params[User] user submit new change
   # @return[Boolean] true if ticket_update created. False
@@ -109,6 +107,7 @@ class Ticket
     end
 
     [[:state_id, State],
+      [:priority_id, Priority],
       [:milestone_id, Milestone],
       [:user_assigned_id, User]].each do |property|
       if ticket[property[0]].to_s != self.send(property[0]).to_s

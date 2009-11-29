@@ -307,6 +307,30 @@ describe Ticket do
       end
     end
 
+    describe 'change priority' do
+      before(:each) do
+        @priority = Priority.make
+        generate_ticket({:description => '',
+                        :priority_id => @priority.id.to_s,
+                        :tag_list => TAG_LIST})
+      end
+
+      it 'should update priority of ticket' do
+        @t.priority_id.should == @priority.id
+      end
+
+      it 'should generate ticket update' do
+        @t.ticket_updates.should have(1).items
+      end
+
+      it 'should have properties_update with priority change' do
+        @t.ticket_updates[0].properties_update.should be_include([:priority,
+                                                                 nil,
+                                                                 @priority.name])
+      end
+
+    end
+
     describe 'about tag change' do
       it 'should not see change if only space' do
         generate_ticket({'tag_list' => TAG_LIST.split(',').map{|t| t + ' '}.join(','), :description => ''})
@@ -338,7 +362,6 @@ describe Ticket do
         end.should change(Event, :count).by(-2)
         # there are 2 events. One after creation one after update
       end
-
     end
 
   end
