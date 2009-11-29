@@ -49,11 +49,11 @@
 
 #ticket_update_form, #ticket_form {
   display: block; }
-  #ticket_update_form select,   #ticket_form select {
+  #ticket_update_form select, #ticket_form select {
     width: 100%; }
-  #ticket_update_form .taggings,   #ticket_form .taggings {
+  #ticket_update_form .taggings, #ticket_form .taggings {
     clear: both; }
-    #ticket_update_form .taggings input,     #ticket_form .taggings input {
+    #ticket_update_form .taggings input, #ticket_form .taggings input {
       width: 98%; }
 
 #milestones ul {
@@ -73,6 +73,9 @@
       padding-left: 10px; }
     #milestones li .milestone-information .last {
       border-right: 0px none; }
+
+#events li {
+  padding: 12px; }
 
 .pagination em {
   padding: 2px 5px;
