@@ -4,6 +4,7 @@
  * Add possibility to change function of all member by project
  * Add preview in ticket and ticket updates
  * Add ticket's milestone information in ticket show
+ * Add ordering to all column in ticket search
 
 == 0.3.0 /
 
