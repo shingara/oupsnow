@@ -51,13 +51,15 @@ describe Ticket do
       @second_tag = /\w+/.generate
       @third_tag = /\w+/.generate
       @first_ticket = Ticket.make(:state => @state,
-                                 :tag_list => @first_tag)
+                                 :tag_list => @first_tag,
+                                 :priority => Priority.make)
 
       @second_ticket = Ticket.make(:state => @state,
                                    :title => 'foo',
-                                 :tag_list => "#{@second_tag},#{@third_tag}")
+                                   :tag_list => "#{@second_tag},#{@third_tag}")
       @third_ticket = Ticket.make(:state => @state_2,
-                                 :tag_list => @first_tag)
+                                 :tag_list => @first_tag,
+                                  :priority => Priority.make)
       @four_ticket = Ticket.make(:state => @state_2,
                                  :tag_list => @second_tag)
       second_project = @second_ticket.project
@@ -192,6 +194,19 @@ describe Ticket do
       Ticket.paginate_by_search(@first_tag,:order => 'state_name desc',
                                 :page => 1,
                                 :per_page => 10).should ==[@first_ticket, @third_ticket].sort_by(&:state_name).reverse
+    end
+
+    it 'should order by priority_name' do
+      Ticket.paginate_by_search(@first_tag,:order => 'priority_name',
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket].sort_by(&:priority_name)
+      Ticket.paginate_by_search(@first_tag,:order => 'priority_name asc',
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket].sort_by(&:priority_name)
+
+      Ticket.paginate_by_search(@first_tag,:order => 'priority_name desc',
+                                :page => 1,
+                                :per_page => 10).should ==[@first_ticket, @third_ticket].sort_by(&:priority_name).reverse
     end
   end
 
