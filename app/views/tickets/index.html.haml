@@ -22,7 +22,7 @@
             %th.first= link_to 'id', project_tickets_url(@project, sort_by('num').merge(:q => params[:q]))
             %th= link_to 'name', project_tickets_url(@project, sort_by('title').merge(:q => params[:q]))
             %th= link_to 'responsable', project_tickets_url(@project, sort_by('user_assigned_name').merge(:q => params[:q]))
-            %th status
+            %th= link_to 'status', project_tickets_url(@project, sort_by('state_name').merge(:q => params[:q]))
             %th priority
             %th.last milestone
         %tbody

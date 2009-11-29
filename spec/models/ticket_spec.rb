@@ -89,6 +89,7 @@ describe Ticket do
                          :state => @state_2,
                          :tag_list => @second_tag,
                          :user_assigned_id => user_four.id})
+      @second_ticket = Ticket.find(@second_ticket.id)
       @four_ticket = Ticket.find(@four_ticket.id)
       @third_ticket = Ticket.find(@third_ticket.id)
       @ticket_with_first_state = [@first_ticket,@second_ticket]
@@ -178,6 +179,19 @@ describe Ticket do
       Ticket.paginate_by_search('',:order => 'user_assigned_name desc',
                                 :page => 1,
                                 :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name).reverse
+    end
+
+    it 'should order by state_name' do
+      Ticket.paginate_by_search(@first_tag,:order => 'state_name',
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket].sort_by(&:state_name)
+      Ticket.paginate_by_search(@first_tag,:order => 'state_name asc',
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket].sort_by(&:state_name)
+
+      Ticket.paginate_by_search(@first_tag,:order => 'state_name desc',
+                                :page => 1,
+                                :per_page => 10).should ==[@first_ticket, @third_ticket].sort_by(&:state_name).reverse
     end
   end
 
