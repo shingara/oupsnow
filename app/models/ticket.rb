@@ -18,7 +18,7 @@ class Ticket
   key :milestone_name, String
   key :creator_user_name, String, :required => true
   key :state_name, String, :required => true
-  key :user_assigned_name, String
+  key :user_assigned_name, String, :default => ''
 
   many :ticket_updates
   many :attachments

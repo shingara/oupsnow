@@ -52,6 +52,7 @@ describe Ticket do
       @third_tag = /\w+/.generate
       @first_ticket = Ticket.make(:state => @state,
                                  :tag_list => @first_tag)
+
       @second_ticket = Ticket.make(:state => @state,
                                    :title => 'foo',
                                  :tag_list => "#{@second_tag},#{@third_tag}")
@@ -59,10 +60,37 @@ describe Ticket do
                                  :tag_list => @first_tag)
       @four_ticket = Ticket.make(:state => @state_2,
                                  :tag_list => @second_tag)
+      second_project = @second_ticket.project
+      second_user = User.make
+      second_project.project_members.build(:user => second_user,
+                                          :function => Function.make)
+      second_project.save!
+      make_ticket_update(@second_ticket, {:description => '',
+                         :state => @state,
+                         :tag_list => "#{@second_tag},#{@third_tag}",
+                         :user_assigned_id => second_user.id})
+
+      third_project = @third_ticket.project
+      third_user = User.make
+      third_project.project_members.build(:user => third_user,
+                                          :function => Function.make)
+      third_project.save!
+      make_ticket_update(@third_ticket, {:description => '',
+                         :state => @state_2,
+                         :tag_list => @first_tag,
+                         :user_assigned_id => third_user.id})
+
+      four_project = @four_ticket.project
+      user_four = User.make
+      four_project.project_members.build(:user => user_four,
+                                          :function => Function.make)
+      four_project.save!
       make_ticket_update(@four_ticket, {:description => 'bar',
                          :state => @state_2,
-                         :tag_list => @second_tag})
+                         :tag_list => @second_tag,
+                         :user_assigned_id => user_four.id})
       @four_ticket = Ticket.find(@four_ticket.id)
+      @third_ticket = Ticket.find(@third_ticket.id)
       @ticket_with_first_state = [@first_ticket,@second_ticket]
       @ticket_with_second_state = [@third_ticket, @four_ticket]
     end
@@ -137,6 +165,19 @@ describe Ticket do
       Ticket.paginate_by_search("#{@first_tag} #{@third_tag}",
                                       :page => 1,
                                       :per_page => 10).should be_empty
+    end
+
+    it 'should order by responsabile' do
+      Ticket.paginate_by_search('',:order => 'user_assigned_name',
+                                :page => 1,
+                                :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name)
+      Ticket.paginate_by_search('',:order => 'user_assigned_name asc',
+                                :page => 1,
+                                :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name)
+
+      Ticket.paginate_by_search('',:order => 'user_assigned_name desc',
+                                :page => 1,
+                                :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name).reverse
     end
   end
 
