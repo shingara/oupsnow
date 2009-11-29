@@ -13,7 +13,8 @@ class User
 
   include MongoMapper::Document
 
-  devise
+  devise :authenticatable
+
 
   key :login,  String , :unique => true
   alias :name :login
