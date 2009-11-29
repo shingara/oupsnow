@@ -208,6 +208,19 @@ describe Ticket do
                                 :page => 1,
                                 :per_page => 10).should ==[@first_ticket, @third_ticket].sort_by(&:priority_name).reverse
     end
+
+    it 'should order by milestone_name' do
+      Ticket.paginate_by_search(@first_tag,:order => 'milestone_name',
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket].sort_by(&:milestone_name)
+      Ticket.paginate_by_search(@first_tag,:order => 'milestone_name asc',
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket].sort_by(&:milestone_name)
+
+      Ticket.paginate_by_search(@first_tag,:order => 'milestone_name desc',
+                                :page => 1,
+                                :per_page => 10).should ==[@first_ticket, @third_ticket].sort_by(&:milestone_name).reverse
+    end
   end
 
   describe '#generate_update' do
