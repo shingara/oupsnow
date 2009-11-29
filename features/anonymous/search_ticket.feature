@@ -39,3 +39,16 @@ Feature: Search Ticket
     And I submit "ticket_search"
     Then I should not see "td" tag with content "new"
     And I should see 2 "td" tag with content "fixed"
+    When I follow "id"
+    Then the request should be success
+    When I follow "name"
+    Then the request should be success
+    When I follow "responsable"
+    Then the request should be success
+    When I follow "status"
+    Then the request should be success
+    When I follow "priority"
+    Then the request should be success
+    When I follow "milestone"
+    Then the request should be success
+
