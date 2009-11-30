@@ -19,12 +19,12 @@
       %table.table
         %thead
           %tr
-            %th.first= link_to 'id', project_tickets_url(@project, sort_by('num').merge(:q => params[:q]))
-            %th= link_to 'name', project_tickets_url(@project, sort_by('title').merge(:q => params[:q]))
-            %th= link_to 'responsable', project_tickets_url(@project, sort_by('user_assigned_name').merge(:q => params[:q]))
-            %th= link_to 'status', project_tickets_url(@project, sort_by('state_name').merge(:q => params[:q]))
-            %th= link_to 'priority', project_tickets_url(@project, sort_by('priority_name').merge(:q => params[:q]))
-            %th.last= link_to 'milestone', project_tickets_url(@project, sort_by('milestone_name').merge(:q => params[:q]))
+            %th.first= link_to 'Id', project_tickets_url(@project, sort_by('num').merge(:q => params[:q]))
+            %th= link_to 'Name', project_tickets_url(@project, sort_by('title').merge(:q => params[:q]))
+            %th= link_to 'Responsable', project_tickets_url(@project, sort_by('user_assigned_name').merge(:q => params[:q]))
+            %th= link_to 'Status', project_tickets_url(@project, sort_by('state_name').merge(:q => params[:q]))
+            %th= link_to 'Priority', project_tickets_url(@project, sort_by('priority_name').merge(:q => params[:q]))
+            %th.last= link_to 'Milestone', project_tickets_url(@project, sort_by('milestone_name').merge(:q => params[:q]))
         %tbody
           - for ticket in @tickets
             %tr{:class => "#{cycle('odd','even')} ticket" }

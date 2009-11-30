@@ -28,7 +28,7 @@ In each project, you can choose all member.
 
 ### Add member
 
-You can add several members to your project. A member add to this project, can 
+You can add several members to your project. A member add to this project, can
 create and update all tickets. All functions are define by global administration.
 There are only 2 differents roles. An admin role and a basic role. An admin can change
 all settings of this projects and create/update milestone.
@@ -58,38 +58,43 @@ Only a global admin can delete projects, simple users or project admins can't.
 
 # Ticket searching
 
-Project by project, you can list all tickets on this project. To see all tickets 
-you can go to "Tickets" tab. On this page, all tickets are see by default. A 
-pagination is active. So you can see only 20 tickets per page. It's order by default 
+Project by project, you can list all tickets on this project. To see all tickets
+you can go to "Tickets" tab. On this page, all tickets are see by default. A
+pagination is active. So you can see only 20 tickets per page. It's order by default
 with last ticket created in first.
 
 ## Ordering
 
-You can order the Ticket list by 2 parameters :
+You can order the Ticket list by all parameters :
+
 * Id (the ticket id)
 * Name (the ticket title)
+* Responsabile (the responsabile to this ticket)
+* Status (the ticket's status)
+* Priority (the ticket's priority)
+* Milestone (The ticket's milestone)
 
 ## Searching
 
-You can limit the number of ticket view with the ticket searching. If you want find 
-some ticket by restriction, you can. All filter describe after can be use in same 
+You can limit the number of ticket view with the ticket searching. If you want find
+some ticket by restriction, you can. All filter describe after can be use in same
 search. All are combinate. The possibility of search is :
 
 ### Searching by ticket name
 
-If you want search a ticket by this name or with some information on is description, 
-you can just fill some word. If you separate by space several word. All words are 
+If you want search a ticket by this name or with some information on is description,
+you can just fill some word. If you separate by space several word. All words are
 needed in ticket title or description. The search is not made in ticket comment. It's
 just on ticket title and description
 
 ### Searching by tag
 
-All tickets in Oupsnow can have some tag. You can filtering by this tag. If you want 
+All tickets in Oupsnow can have some tag. You can filtering by this tag. If you want
 search the tag "feature" by example you need fill search by :
 
  * "tagged:feature"
 
-If you want filtering by several tickets, you need add several tagged:xxx pattern. By 
+If you want filtering by several tickets, you need add several tagged:xxx pattern. By
 example if you want search all ticket with tag "feature" and "admin", you can fill by
 
  * "tagged:feature tagged:admin"
@@ -101,8 +106,13 @@ by this state. If you want filtering use, the fill by :
 
  * "state:new"
 
-IN case of state, a ticket can't be have several state. So if you fill by several state 
+In case of state, a ticket can't be have several state. So if you fill by several state
 statement, only the last is use in filtering. By example :
 
  * "state:new state:assigned" return only ticket with state assigned
+
+### Searching by keywords
+
+If you send any words in ticket searching, the filtering is about all words on you tickets
+and updates. This words can be in description, title or tag.
 
