@@ -9,7 +9,7 @@ class Ticket
   key :tag_list, String, :default => ''
   key :closed, Boolean, :default => false
 
-  #It's all words in ticket. Usefull to full text search
+  #It's all words in ticket. Useful to full text search
   key :_keywords, Array, :required => true
 
 
@@ -67,7 +67,7 @@ class Ticket
 
   before_save :update_milestone_name
   before_save :update_user_assigned_name
-  before_save :update_keyworkds
+  before_save :update_keywords
 
   after_save :update_project_tag_counts
   after_save :update_milestone_tickets_count
@@ -316,7 +316,7 @@ class Ticket
     self.milestone.update_nb_tickets_count
   end
 
-  def update_keyworkds
+  def update_keywords
     self._keywords = self.title.split(/\W+/)
     self._keywords += self.description.split(/\W+/) unless self.description.blank?
     self._keywords += self.tag_list.split(',') unless self.tag_list.blank?
