@@ -13,21 +13,19 @@ h2. Requirements
 
 Currently you need all of those things to get Oupsnow to run:
 
- * Merb 1.0.8
- * DataMapper 0.9.9
  * Ruby of 1.8.6 or greater
- * A database supported by DataMapper (MySQL, SQLite3, PostgreSQL ...)
+ * Rails 2.3.5
+ * MongoMapper 0.6.4
+ * A MongoDB 1.0.1 or greater
 
 h2. Installing
 
 With the tar.gz or any other archive:
 
  * Extract sources to a folder
- * Create a database.yml file in the config directory. Generate by example by <kbd>rake db:database_yaml</kbd>. 
- * Create your database with tool on your database
- * Generate the good schema in your database: <kbd>MERB_ENV="production" rake db:automigrate</kbd>
- * Add first data in your database: <kbd>MERB_ENV="production" thor oups_now:bootstrap:first_value </kbd>
- * Start the server in production mode : <kbd>merb -e production</kbd>
+ * Create a database.yml file in the config directory. You can copy database file from config/database.yml.sample
+ * Add first data in your database: <kbd>RAILS_ENV="production" rake db:seed</kbd>
+ * Start the server in production mode : <kbd>ruby script/server -e production</kbd>
 
 h2. Demo Website
 
@@ -39,24 +37,35 @@ h2. Information about this project
 
 Oupsnow is actually consider like an Beta version, and is under development.
 
-All contributions are welcome. 
+All contributions are welcome.
 
 I suck in design, I know it and I am sorry but I will really be happy if anyone could
 help me.
 
-If you want to contribute, all work is made under a git repository. You can clone the 
+If you want to contribute, all work is made under a git repository. You can clone the
 source with the following command :
 
 <kbd>git clone git://github.com/shingara/oupsnow.git</kbd>
 
-After a clone you need update the submodule :
+A "oupsnow development platform":http://dev.shingara.fr/projects/5/overview is
+used. Feel free to post your feature requests and defects report.
 
-<kbd>git submodule init && git submodule update</kbd>
+h2. Upgrading
 
-A "redmine development platform":http://dev.shingara.fr/projects/show/oupsnow is
-used. Feel free to post your feature requests and defects report. I use
-Oupsnow soon as possible after create a converter Redmine -> Oupsnow
+All version before 0.4.0 of oupsnow use a Sql database. Now with using MongoDB, the schema has big changement. There are no currently tool to convert your old oupsnow instance.
 
 h2. License
 
-This code is free to use under the terms of the MIT license (provided with sources).
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.fsf.org/licensing/licenses/agpl-3.0.html>.
+
