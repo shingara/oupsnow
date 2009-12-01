@@ -45,9 +45,6 @@
           %label.label{:for => 'ticket[tag_list]'} Choose some tags
           = f.text_field :tag_list, :value => @ticket.tag_list, :class => 'text_field'
         .clear
-        .group
-          %label.label{:for => 'ticket[attachment]'} Attach a file [500MB limit]
-          = f.file_field :attachment, :class => 'text_field'
 
         %div{:class => 'group navform'}
           = submit_tag "Create", :class => 'button'
