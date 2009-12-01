@@ -101,8 +101,8 @@ class Ticket
 
     if Ticket.list_tag(ticket[:tag_list]) != Ticket.list_tag(self.tag_list)
       t.add_update(:tag_list,
-                   Ticket.list_tag(self.tag_list),
-                   Ticket.list_tag(ticket[:tag_list]))
+                   Ticket.list_tag(self.tag_list).join(','),
+                   Ticket.list_tag(ticket[:tag_list]).join(','))
       self.tag_list = ticket[:tag_list]
     end
 

@@ -354,6 +354,11 @@ describe Ticket do
         generate_ticket({'tag_list' => TAG_LIST.split(',').map{|t| t + ' '}.reverse.join(','), :description => ''})
         @t.ticket_updates.should be_empty
       end
+
+      it 'should save chance like string' do
+        generate_ticket({'tag_list' => 'hello, all', :description => ''})
+        @t.ticket_updates.first.properties_update.should == [[:tag_list, TAG_LIST, 'all,hello']]
+      end
     end
 
     describe 'destroy' do
