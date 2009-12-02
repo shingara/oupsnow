@@ -3,26 +3,26 @@ require 'rake/contrib/rubyforgepublisher'
 
 namespace :release do
   PKG_NAME = "oupsnow"
-  PKG_VERSION = "0.2.0"
+  PKG_VERSION = "0.4.0"
   PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
   RUBY_FORGE_PROJECT = 'oupsnow'
   RUBY_FORGE_USER = 'shingara'
   AUTHOR = "Cyril Mougel"
   EMAIL = "cyril.mougel@gmail.com"
   HOMEPAGE = "http://oupsnow.rubyforge.org/"
-  SUMMARY = "A bugtracker in Merb/Datamapper"
-  EXCLUDE = [ /\.$/, /config\/database.yml$/, /config\/database.yml-/, 
+  SUMMARY = "A bugtracker in Rails/MongoDB"
+  EXCLUDE = [ /\.$/, /config\/database.yml$/, /config\/database.yml-/,
     /database\.sqlite/,
-    /\.log$/, /^pkg/, /\.git/, /^vendor\/rails/, 
-    /^public\/(files|xml|articles|pages|index.html)/, 
-    /^public\/(stylesheets|javascripts|images)\/theme/, /\~$/, 
-    /\/\._/, /\/#/, /^Capfile/, /config\/deploy.rb/, 
+    /\.log$/, /^pkg/, /\.git/, /^vendor\/rails/,
+    /^public\/(files|xml|articles|pages|index.html)/,
+    /^public\/(stylesheets|javascripts|images)\/theme/, /\~$/,
+    /\/\._/, /\/#/, /^Capfile/, /config\/deploy.rb/,
     /tasks\/converter/, /log\//, /^doc\//, /^lib\/tasks\/release.rake/, /\.sql/ ]
   RELEASE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 
   desc 'generate the manifest'
   task :manifest do
-    files = Dir.glob('**/*', File::FNM_DOTMATCH).reject do |f| 
+    files = Dir.glob('**/*', File::FNM_DOTMATCH).reject do |f|
       EXCLUDE.any? {|regex| f =~ regex }
     end
     files = files.sort.join "\n"
@@ -36,13 +36,13 @@ namespace :release do
     s.summary = SUMMARY
     s.has_rdoc = false
 
-    s.files = File.read('Manifest.txt').split("\n") 
+    s.files = File.read('Manifest.txt').split("\n")
     s.require_path = '.'
     s.author = AUTHOR
     s.email = EMAIL
-    s.homepage = HOMEPAGE  
+    s.homepage = HOMEPAGE
     s.rubyforge_project = RUBY_FORGE_PROJECT
-    s.platform = Gem::Platform::RUBY 
+    s.platform = Gem::Platform::RUBY
 
   end
 
@@ -56,6 +56,14 @@ namespace :release do
   task :tag_git do
     system("git tag release_#{PKG_VERSION.gsub(/\./,'_')}")
     system("git push origin --tags")
+  end
+
+  desc 'Generate the index.html of website from README'
+  task :generate_website => [:environment] do
+    require 'maruku'
+    File.open(File.join(Rails.root, 'website/index.html'), 'w+') do |f|
+      f.write(ERB.new(File.read(File.join(Rails.root, 'website/index.erb'))).result)
+    end
   end
 
   desc 'Upload website files to rubyforge'

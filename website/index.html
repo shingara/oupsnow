@@ -26,97 +26,89 @@
 </head>
 <body>
 <div id="main">
-
-    <h1>Oupsnow</h1>
     <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/oupsnow"; return false'>
       <p>Get Version</p>
-      <a href="http://rubyforge.org/projects/oupsnow" class="numbers">0.2.0</a>
+      <a href="http://rubyforge.org/projects/oupsnow" class="numbers">0.4.0</a>
     </div>
-    <p>A Bug tracker, written with Merb and using DataMapper like ORM. Oupsnow manage several project.</p>
 
+    <h1 id='oupsnow'>Oupsnow</h1>
 
-	<h2>Features</h2>
+<p>A Bug tracker multi project, simply, but completed like bug tracking.</p>
 
+<p>It&#8217;s written in Rails</p>
 
-	<ul>
-        <li>Manage Several project</li>
-        <li>Manage ticket project by project</li>
-	</ul>
+<h2 id='features'>Features</h2>
 
+<ul>
+<li>Manage Several project</li>
 
-	<h2>Requirements</h2>
+<li>Manage ticket project by project</li>
+</ul>
 
+<h2 id='requirements'>Requirements</h2>
 
-	<p>Currently you need all of those things to get Oupsnow to run:</p>
+<p>Currently you need all of those things to get Oupsnow to run:</p>
 
+<ul>
+<li>Ruby of 1.8.6 or greater</li>
 
-	<ul>
-	    <li>Merb 1.0.8</li>
-		<li>Ruby of 1.8.6</li>
-		<li>DataMapper 0.9.9</li>
-		<li>A database supported by DataMapper (MySQL, SQLite3, PostgreSQL ...)</li>
-	</ul>
+<li>Rails 2.3.5</li>
 
+<li>MongoMapper 0.6.4</li>
 
-	<h2>Installing</h2>
+<li>A MongoDB 1.0.1 or greater</li>
+</ul>
 
+<h2 id='installing'>Installing</h2>
 
-	<p>With the tar.gz or any other archive:</p>
+<p>You can download the stable version on <a href='http://rubyforge.org/projects/oupsnow'>rubyforge project</a></p>
 
+<p>With the tar.gz or any other archive:</p>
 
-	<ul>
-	    <li>Extract sources to a folder</li>
-        <li>Create a database.yml file in the config directory. Generate by example by <kbd>rake db:database_yaml</kbd></li>
-		<li>Create your database with tool on your database</li>
-		<li>Generate the good schema in your database: <kbd>MERB_ENV="production" rake db:automigrate</kbd></li>
-		<li>Add first data in your database: <kbd>MERB_ENV="production" thor oups_now:bootstrap:first_value</kbd></li>
-        <li>Start the server in production mode: <kbd>merb -e production</kbd></li>
-	</ul>
+<ul>
+<li>Extract sources to a folder</li>
 
+<li>Create a database.yml file in the config directory. You can copy database file from config/database.yml.sample</li>
 
-	<h2>Demo Website</h2>
+<li>Add first data in your database: <kbd>RAILS_ENV="production" rake db:seed</kbd></li>
 
+<li>Start the server in production mode : <kbd>ruby script/server -e production</kbd></li>
+</ul>
 
-	<p>A demo website of Oupsnow is available to the <a href="http://oupsnow.shingara.fr">demo of oupsnow</a></p>
+<h2 id='demo_website'>Demo Website</h2>
 
+<p>A demo website of Oupsnow is available to the <a href='http://oupsnow.shingara.fr'>demo of oupsnow</a></p>
 
-	<p>You can login like an admin with login/pass : admin/oupsnow</p>
+<p>An account of admin is accessible with login/pass : admin@admin.com/oupsnow</p>
 
+<h2 id='information_about_this_project'>Information about this project</h2>
 
-	<h2>Information about this project</h2>
+<p>Oupsnow is actually consider like an Beta version, and is under development.</p>
 
+<p>All contributions are welcome.</p>
 
-	<p>Oupsnow is actually consider like an Beta version, and is under development.</p>
+<p>I suck in design, I know it and I am sorry but I will really be happy if anyone could help me.</p>
 
+<p>If you want to contribute, all work is made under a git repository. You can clone the source with the following command :</p>
 
-	<p>All contributions are welcome.</p>
+<p><code>git clone git://github.com/shingara/oupsnow.git</code></p>
 
+<p>A <a href='http://dev.shingara.fr/projects/5/overview'>oupsnow development platform</a> is used. Feel free to post your feature requests and defects report.</p>
 
-	<p>I suck in design, I know it and I am sorry but I will really be happy if anyone could
-help me.</p>
+<h2 id='upgrading'>Upgrading</h2>
 
+<p>All version before 0.4.0 of oupsnow use a Sql database. Now with using MongoDB, the schema has big changement. There are no currently tool to convert your old oupsnow instance.</p>
 
-	<p>If you want to contribute, all work is made under a git repository. You can clone the 
-source with the following command :</p>
+<h2 id='license'>License</h2>
 
+<p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 
-<kbd>git clone git://github.com/shingara/oupsnow.git</kbd>
+<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 
-	<p>After a clone you need update the submodule :</p>
+<p>You should have received a copy of the GNU Affero General Public License along with this program. If not, see <a href='http://www.fsf.org/licensing/licenses/agpl-3.0.html'>http://www.fsf.org/licensing/licenses/agpl-3.0.html</a></p>
 
-
-<kbd>git submodule update --init</kbd>
-
-	<p>A <a href="http://dev.shingara.fr/projects/5/overview">oupsnow development platform</a> is
-used. Feel free to post your feature requests and defects report.</p>
-
-
-	<h2>License</h2>
-
-
-	<p>This code is free to use under the terms of the <span class="caps">MIT</span> license (provided with sources).</p>
     <p class="coda">
-      <a href="mailto:cyril.mougel@gmail.com">Cyril Mougel</a>, 1st October 2008<br/>
+      <a href="mailto:cyril.mougel@gmail.com">Cyril Mougel</a>, 1st December 2009<br/>
       Theme extended from <a href="http://rb2js.rubyforge.org/">Paul Battley</a>
     </p>
 </div>

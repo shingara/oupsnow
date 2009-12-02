@@ -1,4 +1,4 @@
-== EDGE
+== 0.4.0
 
  * Add filter by state in search ticket
  * Add possibility to change function of all member by project
