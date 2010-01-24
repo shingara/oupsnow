@@ -5,19 +5,18 @@ class Ticket
   key :title, String, :required => true, :length => 255
   key :description, String
   key :num, Integer, :required => true
-  key :tags, Set
   key :tag_list, String, :default => ''
-  key :closed, Boolean, :default => false
 
   #It's all words in ticket. Useful to full text search
   key :_keywords, Array, :required => true
-
+  key :tags, Set
 
   ## denormalisation
   key :priority_name, String
   key :milestone_name, String
   key :creator_user_name, String, :required => true
   key :state_name, String, :required => true
+  key :closed, Boolean, :default => false
   key :user_assigned_name, String, :default => ''
 
   many :ticket_updates

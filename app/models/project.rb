@@ -8,6 +8,8 @@ class Project
   key :name, String, :unique => true
   alias_method :title, :name
   key :description, String
+
+  # callbacks
   key :num_ticket, Integer
   key :tag_counts, Hash
 
@@ -16,7 +18,7 @@ class Project
 
   ### EmbeddedDocument ###
 
-  many :project_members, :dependent => :destroy
+  many :project_members
   include_errors_from :project_members
 
   ### Other Documents ###

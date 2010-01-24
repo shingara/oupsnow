@@ -3,11 +3,13 @@ class ProjectMember
   include MongoMapper::EmbeddedDocument
 
   # TODO: need test about required user_name and function_name
+  key :user_id, ObjectId
+  key :function_id, ObjectId
+
+  # update by callback
   key :user_name, String, :required => true
   key :function_name, String, :required => true
   key :project_admin, Boolean
-  key :user_id, ObjectId
-  key :function_id, ObjectId
 
   # Update field is made on master document
 
