@@ -5,4 +5,8 @@ namespace :db do
       coll.remove
     end
   end
+
+  task :insert => :environment do
+    Backup.new.insert
+  end
 end
