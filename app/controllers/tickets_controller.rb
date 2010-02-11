@@ -80,8 +80,11 @@ class TicketsController < ApplicationController
     @ticket_change = @ticket.dup
     # if value is blank, use default value
     if params[:commit] != 'Preview' &&
-      @ticket.generate_update(params[:ticket], current_user)
-      redirect_to project_ticket_url(@project, @ticket)
+      if @ticket.generate_update(params[:ticket], current_user)
+        redirect_to project_ticket_url(@project, @ticket)
+      else
+        render :show
+      end
     else
       if params[:commit] == 'Preview'
         @preview_description = params[:ticket][:description]

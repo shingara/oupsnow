@@ -117,6 +117,16 @@ describe TicketsController do
       it { Ticket.find(@ticket.id).ticket_updates.should_not be_empty }
       it { Ticket.find(@ticket.id).ticket_updates.first.description.should == 'new comment' }
     end
+
+    describe 'update failed' do
+      it 'should mark like failed' do
+        put :update, :id => @ticket.num,
+          :project_id => @project.id,
+          :ticket => {:description => 'new comment',
+            :user_assigned_id => @project.id}
+        response.should render_template(:show)
+      end
+    end
   end
 
   describe 'with a anonymous' do

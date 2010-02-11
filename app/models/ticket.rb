@@ -126,7 +126,7 @@ class Ticket
     t.created_at = Time.now
     t.write_event(self)
     ticket_updates << t
-    save!
+    save
   end
 
   ##
