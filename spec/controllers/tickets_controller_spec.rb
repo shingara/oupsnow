@@ -34,8 +34,9 @@ describe TicketsController do
       get :show, :project_id => @project.id, :id => @ticket.num
     end
     def failed_request
-      get :show, :project_id => @project.id, :id => 'sjlmdfqsjdmf'
+      get :show, :project_id => '3', :id => '6'
     end
+
     it 'should success with a success request' do
       success_request
       response.should be_success

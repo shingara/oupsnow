@@ -2,6 +2,10 @@ class ApplicationController < ActionController::Base
 
   layout 'application'
 
+  rescue_from Mongo::InvalidObjectID do
+    return_404
+  end
+
   private
 
   def need_admin
