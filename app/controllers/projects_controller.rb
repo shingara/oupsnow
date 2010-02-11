@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
 
   before_filter :authenticate_user!, :except => [:index, :show, :overview]
   before_filter :need_admin, :except => [:index, :show, :overview, :edit, :update]
-  before_filter :load_project, :only => [:edit, :update, :delete, :destroy]
+  before_filter :load_project, :only => [:edit, :update, :delete, :destroy, :show, :overview]
   before_filter :admin_project, :only => [:edit, :update]
 
   def index
@@ -10,13 +10,10 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find(params[:id])
-    return return_404 unless @project
     redirect_to overview_project_url(@project)
   end
 
   def overview
-    @project = Project.find(params[:id])
     @events = @project.events.paginate(:order => 'created_at',
                                        :page => params[:page],
                                        :per_page => 20)
@@ -69,7 +66,8 @@ class ProjectsController < ApplicationController
   private
 
   def load_project
-    @project = Project.find(ObjectId.to_mongo(params[:id]))
+    @project = Project.find(params[:id])
+    return return_404 unless @project
   end
 
 end # Projects

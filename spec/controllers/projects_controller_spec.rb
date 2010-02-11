@@ -268,6 +268,14 @@ describe ProjectsController do
       end
     end
 
+    describe 'with project unexist', :shared => true do
+      it 'should render 404' do
+        get :overview, :id => @project.id.to_s.succ
+        response.code.should == '404'
+        response.should render_template('public/404.html')
+      end
+    end
+
     describe 'anonymous user' do
       before :each do
         login_anonymous
@@ -289,6 +297,7 @@ describe ProjectsController do
 
       it_should_behave_like 'it should be successful'
       it_should_behave_like 'with event desapear'
+      it_should_behave_like 'with project unexist'
     end
 
     describe 'admin user' do
