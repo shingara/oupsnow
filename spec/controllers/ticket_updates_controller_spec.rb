@@ -9,7 +9,7 @@ describe TicketUpdatesController do
     State.make
     @ticket = make_ticket(:project => @project)
     make_ticket_update(@ticket, :project => @project, :description => 'cool')
-    @ticket = Ticket.find(@ticket.id)
+    @ticket.reload
   end
 
   describe 'anonymous user' do

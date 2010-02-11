@@ -94,7 +94,7 @@ describe Project do
     end
 
     it 'should return true if has member' do
-      @project.has_member?(@user).should be_true
+      @project.has_member?(@user.id).should be_true
     end
 
     it 'should return false if has not this member' do

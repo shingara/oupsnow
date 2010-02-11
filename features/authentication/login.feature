@@ -10,7 +10,7 @@ Feature: Login
     And I fill in "user_password" with "<password>"
     And I press "Log In"
     Then the request should be success
-    And I should see an success message
+    And I should see an notice message
     And I should not see "Administration"
 
     Examples:
@@ -25,7 +25,7 @@ Feature: Login
     And I fill in "user_password" with "<password>"
     And I press "Log In"
     #Then the login request should fail
-    Then I should see an failure message
+    Then I should see an alert message
 
     Examples:
       | mail           | password       |

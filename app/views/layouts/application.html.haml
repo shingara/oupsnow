@@ -35,7 +35,7 @@
           .clear
         - flash.keys.each do |k|
           %div{:class => k}
-            %p{:class => "flash #{k}"}= flash[k]
+            %p{:class => "#{k}"}= flash[k]
     #wrapper
       #main
         .block

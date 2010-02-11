@@ -39,13 +39,13 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
 
-  config.gem 'mongo', :version => '0.18'
-  config.gem 'mongo_ext', :version => '0.18', :lib => false
-  config.gem 'mongo_mapper', :version => '0.6.4'
+  config.gem 'mongo', :version => '0.18.3'
+  config.gem 'mongo_ext', :version => '0.18.3', :lib => false
+  config.gem 'mongo_mapper', :version => '0.7.0'
   config.gem 'RedCloth', :version => '4.2.2', :lib => 'redcloth'
-  config.gem 'haml', :version => '2.2.14'
-  config.gem 'warden', :version => '0.6.4'
-  config.gem 'devise', :version => '0.6.2'
+  config.gem 'haml', :version => '2.2.19'
+  config.gem 'warden', :version => '0.9.2'
+  config.gem 'devise', :version => '1.0.0'
 
   # gem generate from will_paginate agnostic branch. change it when it's possible
   config.gem 'agnostic-will_paginate', :version => '3.0.0', :lib => 'will_paginate'

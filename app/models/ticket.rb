@@ -47,9 +47,9 @@ class Ticket
     :foreign_key => :eventable_id,
     :dependent => :destroy
 
-  validates_true_for :created_user_ticket,
+  validates_true_for :user_assigned,
     :logic => lambda { users_in_members },
-    :message => 'The user to assigned ticket need member of project'
+    :message => 'need to be member of project'
   validates_true_for :milestone_ticket,
     :logic => lambda { milestone_in_same_project },
     :message => "The milestone need to be in same project of this ticket"
@@ -242,7 +242,7 @@ class Ticket
 
   def users_in_members
     return true if user_assigned_id.blank?
-    project.has_member?(user_assigned)
+    project.has_member?(user_assigned_id)
   end
 
   def copy_user_creator_name

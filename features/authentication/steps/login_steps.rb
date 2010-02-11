@@ -38,5 +38,5 @@ When /^logged with "([^\"]*)" with password "([^\"]*)"$/ do |email, password|
   And %{I fill in "user_password" with "#{password}"}
   And %{I press "Log In"}
   Then %{the request should be success}
-  And %{I should see an success message}
+  And %{I should see an notice message}
 end

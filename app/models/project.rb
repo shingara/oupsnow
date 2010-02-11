@@ -1,7 +1,6 @@
 class Project
 
   include MongoMapper::Document
-  extend ActiveSupport::Memoizable
 
   ### PROPERTY ###
 
@@ -75,8 +74,8 @@ class Project
   #
   # @param[user] The user to test
   # @return[Boolean] member is or not on this project
-  def has_member?(user)
-    project_members.any? {|member| member.user_id == user._id }
+  def has_member?(user_id)
+    project_members.any? {|member| member.user_id.to_s == user_id.to_s }
   end
 
 
@@ -85,7 +84,7 @@ class Project
   #
   # @params[User] user to fetch membership
   def project_membership(user)
-    project_members.detect{|member| member.user_id == user._id }
+    project_members.detect{|member| member.user_id == user.id }
   end
 
   ##
@@ -132,7 +131,6 @@ class Project
     milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}},
                      :order => 'expected_at ASC') || milestones.first
   end
-  memoize :current_milestone
 
   ##
   # check all milestone with expected_at in past.

@@ -1,3 +1,4 @@
+require 'machinist/mongo_mapper'
 
 User.blueprint {
   login { /\w+/.gen }

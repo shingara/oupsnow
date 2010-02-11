@@ -91,10 +91,11 @@ describe Ticket do
                          :state => @state_2,
                          :tag_list => @second_tag,
                          :user_assigned_id => user_four.id})
-      @second_ticket = Ticket.find(@second_ticket.id)
-      @four_ticket = Ticket.find(@four_ticket.id)
-      @third_ticket = Ticket.find(@third_ticket.id)
-      @ticket_with_first_state = [@first_ticket,@second_ticket]
+      @first_ticket.reload
+      @second_ticket.reload
+      @third_ticket.reload
+      @four_ticket.reload
+      @ticket_with_first_state = [@first_ticket, @second_ticket]
       @ticket_with_second_state = [@third_ticket, @four_ticket]
     end
 
@@ -171,16 +172,17 @@ describe Ticket do
     end
 
     it 'should order by responsabile' do
+      # TODO: test method generate Hash, not the result
       Ticket.paginate_by_search('',:order => 'user_assigned_name',
                                 :page => 1,
-                                :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name)
+                                :per_page => 10).subject.map(&:user_assigned_name).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name).map(&:user_assigned_name)
       Ticket.paginate_by_search('',:order => 'user_assigned_name asc',
                                 :page => 1,
-                                :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name)
+                                :per_page => 10).subject.map(&:user_assigned_name).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name).map(&:user_assigned_name)
 
       Ticket.paginate_by_search('',:order => 'user_assigned_name desc',
                                 :page => 1,
-                                :per_page => 10).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name).reverse
+                                :per_page => 10).subject.map(&:user_assigned_name).should == (@ticket_with_first_state | @ticket_with_second_state).sort_by(&:user_assigned_name).reverse.map(&:user_assigned_name)
     end
 
     it 'should order by state_name' do
