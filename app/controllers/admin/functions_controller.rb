@@ -35,7 +35,7 @@ class Admin::FunctionsController < Admin::BaseController
   # params[:project_admin] is an Array with all function.id
   # are now project_admin
   def update_all
-    Function.update_project_admin(params[:project_admin])
+    Function.update_project_admin(params[:project_admin].keys)
     flash[:notice] = 'All functions updated'
     redirect_to admin_functions_url
   end

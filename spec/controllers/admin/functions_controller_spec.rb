@@ -39,13 +39,18 @@ describe Admin::FunctionsController do
     end
 
     describe 'update_all' do
+
       before do
-        dev = Function.make
+        @dev = Function.make(:project_admin => false)
         put :update_all,
-          :project_admin => {dev => 1}
+          :project_admin => {@dev.id.to_s => 1}
       end
-      it { response.should redirect_to(admin_functions_url) }
-      it { flash[:notice].should == 'All functions updated' }
+      it 'should success if works' do
+        response.should redirect_to(admin_functions_url)
+        flash[:notice].should == 'All functions updated'
+        @dev.reload.project_admin.should be_true
+      end
+
     end
   end
 end

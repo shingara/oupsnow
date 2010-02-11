@@ -50,7 +50,7 @@ class Function
     # @params[Array] List of function key are project_admin. Other are no project_admin
     def update_project_admin(functions)
       Function.all.each do |function|
-        function.project_admin = functions.include?(function.id)
+        function.project_admin = functions.include?(function.id.to_s)
         function.save
       end
     end
