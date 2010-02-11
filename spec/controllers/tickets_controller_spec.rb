@@ -12,13 +12,21 @@ describe TicketsController do
   describe 'success #index', :shared => true do
 
     integrate_views
-
-    before do
-      get :index, :project_id => @project.id
+    describe '404' do
+      it 'should render 404 if project not exist' do
+        get :index, :project_id => @project.id.to_s.succ
+        response.code.should == "404"
+      end
     end
 
-    it { response.should be_success }
-    it { response.should have_tag('ul') }
+    describe 'success' do
+      before do
+        get :index, :project_id => @project.id
+      end
+
+      it { response.should be_success }
+      it { response.should have_tag('ul') }
+    end
   end
   describe 'success show', :shared => true do
     before do
