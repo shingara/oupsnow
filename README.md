@@ -15,7 +15,7 @@ Currently you need all of those things to get Oupsnow to run:
 
  - Ruby of 1.8.6 or greater
  - Rails 2.3.5
- - MongoMapper 0.6.4
+ - MongoMapper 0.7.0
  - A MongoDB 1.0.1 or greater
 
 ## Installing

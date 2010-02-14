@@ -3,7 +3,7 @@ require 'rake/contrib/rubyforgepublisher'
 
 namespace :release do
   PKG_NAME = "oupsnow"
-  PKG_VERSION = "0.4.0"
+  PKG_VERSION = "0.4.1"
   PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
   RUBY_FORGE_PROJECT = 'oupsnow'
   RUBY_FORGE_USER = 'shingara'
