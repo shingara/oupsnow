@@ -49,9 +49,9 @@ class Settings::ProjectMembersController < Settings::BaseController
     # You can't change your own function
     member = @project.project_membership(current_user)
     if member &&
-      ObjectId.from_mongo(member.function_id).to_s != member_function[member.id]
+      member.function_id.to_s != member_function[member.id.to_s]
       notice += "You can't update your own function to become a non admin"
-      member_function[member.id.to_s] = member.function.id.to_s
+      member_function[member.id.to_s] = member.function_id.to_s
     end
 
     if @project.change_functions(member_function)

@@ -135,22 +135,22 @@ describe Project do
     end
 
     it 'should made nothing if no change' do
-      @project.change_functions({@admin_member.id => Function.admin.id,
-                                @user_member.id => @function.id}).should be_true
+      @project.change_functions({@admin_member.id.to_s => Function.admin.id.to_s,
+                                @user_member.id.to_s => @function.id.to_s}).should be_true
       @project.project_members.first.function_id.should == Function.admin._id
       @project.project_members.second.function_id.should == @function._id
     end
 
     it 'should change if change needed' do
-      @project.change_functions({@admin_member.id => Function.admin.id,
-                                @user_member.id => Function.admin.id}).should be_true
-      @project.project_members.first.function_id.should == Function.admin._id
-      @project.project_members.second.function_id.should == Function.admin._id
+      @project.change_functions({@admin_member.id.to_s => Function.admin.id.to_s,
+                                @user_member.id.to_s => Function.admin.id.to_s}).should be_true
+      @project.project_members.first.function_id.should == Function.admin.id
+      @project.project_members.second.function_id.should == Function.admin.id
     end
 
     it 'should made nothing if no admin define' do
-      @project.change_functions({@admin_member.id => @function.id,
-                                @user_member.id => Function.make.id}).should be_false
+      @project.change_functions({@admin_member.id.to_s => @function.id.to_s,
+                                @user_member.id.to_s => Function.make.id.to_s}).should be_false
       @project.project_members.first.function_id.should == Function.admin._id
       @project.project_members.second.function_id.should == @function._id
     end
