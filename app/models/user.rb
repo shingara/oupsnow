@@ -11,24 +11,26 @@
 
 class User
 
-  include MongoMapper::Document
+  include Mongoid::Document
 
   devise :authenticatable
 
 
-  key :login,  String , :unique => true
+  field :login
   alias :name :login
-  key :email,  String
-  key :firstname, String
-  key :lastname, String
-  key :global_admin, Boolean
-  key :deleted_at, DateTime
+  field :email
+  field :firstname
+  field :lastname
+  field :global_admin, :type => Boolean
+  field :deleted_at, :type => DateTime
 
   validates_true_for :global_admin,
     :logic => lambda { allways_one_global_admin },
     :message => 'need a global admin'
+
   validates_presence_of :email
   validates_uniqueness_of :email
+  validates_uniqueness_of :login
 
   ##
   # Check if this user is admin of this project

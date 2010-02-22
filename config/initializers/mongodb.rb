@@ -1,9 +1,10 @@
-db_config = YAML::load(File.read(File.join(Rails.root, "/config/database.yml")))
+File.open(File.join(RAILS_ROOT, 'config/database.yml'), 'r') do |f|
+  @settings = YAML.load(f)[RAILS_ENV]
+end
 
-if db_config[Rails.env] && db_config[Rails.env]['adapter'] == 'mongodb'
-  mongo = db_config[Rails.env]
-  MongoMapper.connection = Mongo::Connection.new(mongo['hostname'],
-                                                 mongo['port'] || 27017,
-                                                :logger => Rails.logger)
-  MongoMapper.database = mongo['database']
+Mongoid.configure do |config|
+  name = @settings["database"]
+  host = @settings["host"]
+  config.master = Mongo::Connection.new.db(name,
+                                          :logger => STDOUT)
 end

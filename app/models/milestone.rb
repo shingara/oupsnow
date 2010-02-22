@@ -1,21 +1,24 @@
 class Milestone
 
-  include MongoMapper::Document
+  include Mongoid::Document
 
-  key :name, String, :required => true
-  key :description, String
-  key :expected_at, Date
+  field :name, :type => String
+  field :description, :type => String
+  field :expected_at, :type => Date
 
 
   # denormalisation
-  key :nb_tickets_open, Integer, :default => 0
-  key :nb_tickets_closed, Integer, :default => 0
-  key :nb_tickets, Integer, :default => 0
+  field :nb_tickets_open, :type => Integer, :default => 0
+  field :nb_tickets_closed, :type => Integer, :default => 0
+  field :nb_tickets, :type => Integer, :default => 0
 
-  many :tickets
+  has_many_related :tickets
+  belongs_to_related :project
 
-  key :project_id, ObjectId, :required => true
-  belongs_to :project
+  index :project_id
+
+  validates_uniqueness_of :name
+  validates_presence_of :project_id
 
   ##
   # Create a event about creation of this milestone

@@ -3,14 +3,18 @@
 #
 class Function
 
-  include MongoMapper::Document
+  include Mongoid::Document
 
   ADMIN = 'Admin'
 
   # TODO: need test validation of required name and uniqueness of name
-  key :name, String, :required => true, :unique => true
-  key :project_admin, Boolean
+  field :name, :type => String
+  field :project_admin, :type => Boolean
 
+  index :name, :unique => true
+
+  validates_presence_of :name
+  validates_uniqueness_of :name
 
   # TODO: when a function is delete
   # check all association about this function in all project

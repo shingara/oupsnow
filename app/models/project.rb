@@ -1,30 +1,31 @@
 class Project
 
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
   ### PROPERTY ###
 
-  key :name, String, :unique => true
+  field :name, :type => String
   alias_method :title, :name
-  key :description, String
+
+  validates_uniqueness_of :name
+
+  field :description, :type => String
 
   # callbacks
-  key :num_ticket, Integer
-  key :tag_counts, Hash
-
-  # TODO: need test about created_at and updated_at needed
-  timestamps!
+  field :num_ticket, :type => Integer
+  field :tag_counts, :type => Hash
 
   ### EmbeddedDocument ###
 
-  many :project_members
-  include_errors_from :project_members
+  has_many :project_members
+#  include_errors_from :project_members
 
   ### Other Documents ###
 
-  many :milestones, :dependent => :destroy
-  many :tickets, :dependent => :destroy
-  many :events, :dependent => :destroy
+  has_many_related :milestones #TODO, :dependent => :destroy
+  has_many_related :tickets #TODO, :dependent => :destroy
+  has_many_related :events #TODO , :dependent => :destroy
 
   ### VALIDATIONS ###
 
@@ -238,14 +239,13 @@ class Project
 
   def update_project_admin
     project_members.each do |pr|
-      pr.function_name = pr.function.name
-      pr.project_admin = pr.function.project_admin
+      pr.update_function
     end
   end
 
   def update_user_name
     project_members.each do |pr|
-      pr.user_name = pr.user.login
+      pr.update_user_name
     end
   end
 

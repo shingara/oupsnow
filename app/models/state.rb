@@ -1,9 +1,14 @@
 class State
 
-  include MongoMapper::Document
+  include Mongoid::Document
 
-  key :name, String, :required => true, :unique => true #, :nullable => false, :unique => true
-  key :closed, Boolean, :default => false
+  field :name
+  field :closed, :type => Boolean, :default => false
+
+  index :name
+
+  validates_uniqueness_of :name
+  validates_presence_of :name
 
   class << self
     def closed

@@ -1,8 +1,13 @@
 class Priority
 
-  include MongoMapper::Document
-  
-  key :name, String, :required => true, :unique => true
+  include Mongoid::Document
+
+  field :name, :type => String
+
+  index :name, :unique => true
+
+  validates_presence_of :name
+  validates_uniqueness_of :name
 
   before_destroy :only_without_ticket
 

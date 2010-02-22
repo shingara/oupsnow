@@ -1,51 +1,55 @@
 class Ticket
 
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  key :title, String, :required => true, :length => 255
-  key :description, String
-  key :num, Integer, :required => true
-  key :tag_list, String, :default => ''
+  field :title
+  field :description
+  field :num, :type => Integer
+  field :tag_list, :default => ''
 
   #It's all words in ticket. Useful to full text search
-  key :_keywords, Array, :required => true
-  key :tags, Set
+  field :_keywords, :type => Array
+  field :tags, :type => Set
 
   ## denormalisation
-  key :priority_name, String
-  key :milestone_name, String
-  key :creator_user_name, String, :required => true
-  key :state_name, String, :required => true
-  key :closed, Boolean, :default => false
-  key :user_assigned_name, String, :default => ''
+  field :priority_name
+  field :milestone_name
+  field :creator_user_name
+  field :state_name
+  field :closed, :type => Boolean, :default => false
+  field :user_assigned_name, :type => String, :default => ''
 
-  many :ticket_updates
-  many :attachments
+  has_many :ticket_updates
+  has_many :attachments
 
+  validates_presence_of :title
+  validates_presence_of :num
+  validates_presence_of :_keywords
+  validates_presence_of :state_name
+  validates_presence_of :creator_user_name
+  validates_length_of :title, :maximum => 255
 
-  key :user_creator_id, ObjectId, :required => true
-  key :project_id, ObjectId
-  key :state_id, ObjectId
-  key :user_assigned_id, ObjectId
-  key :milestone_id, ObjectId
-  key :priority_id, ObjectId
-
-  timestamps!
-
-  belongs_to :project
-  belongs_to :state
-  belongs_to :user_assigned,
+  belongs_to_related :project
+  belongs_to_related :state
+  belongs_to_related :user_assigned,
     :class_name => 'User'
-  belongs_to :milestone
-  belongs_to :user_creator,
+  belongs_to_related :milestone
+  belongs_to_related :user_creator,
     :class_name => 'User'
-  belongs_to :priority
+  belongs_to_related :priority
+
+  index :property_id
+  index :project_id
+  index :state_id
+  index :user_assigned_id
+  index :milestone_id
+  index :user_creator_id
 
   # WARNING: what's happen if another event has same id ?
-  many :events,
+  has_many_related :events,
     :class_name => 'Event',
-    :foreign_key => :eventable_id,
-    :dependent => :destroy
+    :foreign_key => :eventable_id #TODO, :dependent => :destroy
 
   validates_true_for :user_assigned,
     :logic => lambda { users_in_members },
@@ -57,7 +61,7 @@ class Ticket
     :logic => lambda { num_already_used_in_same_project },
     :message => "is already used in same project"
 
-  before_validation_on_create :define_num_ticket
+  before_validation :define_num_ticket, :on => :create
   before_validation :define_state_new
   before_validation :copy_user_creator_name
   before_validation :update_tags

@@ -27,6 +27,15 @@ describe TicketsController do
       it { response.should be_success }
       it { response.should have_tag('ul') }
     end
+
+    describe 'failed' do
+      it 'should made something' do
+        get :index, :project_id => @project.id,
+          :q => "<lfi>../../../../../../../../../etc/passwd*"
+        response.should be_success
+
+      end
+    end
   end
   describe 'success show', :shared => true do
     before do

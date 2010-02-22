@@ -6,9 +6,9 @@ class ApplicationController < ActionController::Base
     return_404
   end
 
-  rescue_from MongoMapper::DocumentNotFound do
-    return_404
-  end
+  #rescue_from MongoMapper::DocumentNotFound do
+    #return_404
+  #end
 
   private
 

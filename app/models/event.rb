@@ -1,32 +1,27 @@
 class Event
 
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  # TODO: need test about created_at/updated_at needed
+
 
   ### PROPERTY ###
 
-  key :user_name, String
-  key :event_type, String
-  key :event_title, String
+  field :user_name, :type => String
+  field :event_type, :type => String
+  field :event_title, :type => String
 
-  ### Association ###
-
-  key :user_id, ObjectId
-  key :project_id, ObjectId
-  ensure_index :project_id
-
-  # Polymorphic event
-  key :eventable_type, String
-  key :eventable_id, ObjectId
-
-  belongs_to :user
-  belongs_to :project
-  belongs_to :eventable, :polymorphic => true, :dependent => :destroy
+  # dependencies in other collection
+  belongs_to_related :user
+  index :user_id
+  belongs_to_related :project
+  index :project_id
+  belongs_to_related :eventable, :polymorphic => true #, :dependent => :destroy
+  # TODO: :dependent don't exist on MongoID try to implement it
+  index :eventable_id
 
   before_save :update_event_title
   before_save :update_user_name
-
-  # TODO: need test about created_at/updated_at needed
-  timestamps!
 
   ##
   # get the class eventable in string pluralize

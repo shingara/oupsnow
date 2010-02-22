@@ -2,6 +2,7 @@
 
 # Specifies gem version of Rails to use when vendor/rails is not present
 RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
+require '.bundle/environment'
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -41,12 +42,12 @@ Rails::Initializer.run do |config|
 
   config.gem 'mongo', :version => '0.18.3'
   config.gem 'mongo_ext', :version => '0.18.3', :lib => false
-  config.gem 'mongo_mapper', :version => '0.7.0'
+  config.gem 'mongoid'
   config.gem 'RedCloth', :version => '4.2.2', :lib => 'redcloth'
   config.gem 'haml', :version => '2.2.19'
   config.gem 'warden', :version => '0.9.2'
-  config.gem 'devise', :version => '1.0.0'
+  #config.gem 'devise', :version => '1.0.0'
 
   # gem generate from will_paginate agnostic branch. change it when it's possible
-  config.gem 'agnostic-will_paginate', :version => '3.0.0', :lib => 'will_paginate'
+  #config.gem 'agnostic-will_paginate', :version => '3.0.0', :lib => 'will_paginate'
 end
