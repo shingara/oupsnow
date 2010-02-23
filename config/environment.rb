@@ -50,3 +50,5 @@ Rails::Initializer.run do |config|
   # gem generate from will_paginate agnostic branch. change it when it's possible
   config.gem 'agnostic-will_paginate', :version => '3.0.0', :lib => 'will_paginate'
 end
+
+GOOGLE_ANALYTICS = nil
