@@ -27,7 +27,7 @@
             - unless @project.nil? || @project._id.nil?
               %li{:class => overview_current}=link_to 'Overview', overview_project_url(@project)
               %li{:class => milestone_current}=link_to 'Milestones', project_milestones_url(@project)
-              %li{:class => tickets_current}= link_to 'Tickets', project_tickets_url(@project)
+              %li{:class => tickets_current}= link_to 'Tickets', project_tickets_url(@project, :q => 'closed:false')
               - if user_signed_in?
                 %li{:class => tickets_new_current}= link_to 'Add new ticket', new_project_ticket_url(@project)
               - if admin? @project

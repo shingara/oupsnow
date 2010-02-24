@@ -156,19 +156,17 @@ describe Ticket do
 
     it 'should search in keywords if no prefix in search' do
       Ticket.paginate_by_search("#{@first_tag}",
-                                      :page => 1,
-                                      :per_page => 10).should == [@first_ticket, @third_ticket]
-     Ticket.paginate_by_search("foo #{@third_tag}",
-                                      :page => 1,
-                                      :per_page => 10).should == [@second_ticket]
-
-     Ticket.paginate_by_search("bar #{@second_tag}",
-                                      :page => 1,
-                                      :per_page => 10).should == [@four_ticket]
-
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket]
+      Ticket.paginate_by_search("foo #{@third_tag}",
+                                :page => 1,
+                                :per_page => 10).should == [@second_ticket]
+      Ticket.paginate_by_search("bar #{@second_tag}",
+                                :page => 1,
+                                :per_page => 10).should == [@four_ticket]
       Ticket.paginate_by_search("#{@first_tag} #{@third_tag}",
-                                      :page => 1,
-                                      :per_page => 10).should be_empty
+                                :page => 1,
+                                :per_page => 10).should be_empty
     end
 
     it 'should order by responsabile' do
@@ -222,6 +220,10 @@ describe Ticket do
       Ticket.paginate_by_search(@first_tag,:order => 'milestone_name desc',
                                 :page => 1,
                                 :per_page => 10).should ==[@first_ticket, @third_ticket].sort_by(&:milestone_name).reverse
+    end
+
+    it 'should filter only closed ticket' do
+      Ticket.paginate_by_search('closed:true').should == Ticket.all(:closed => true)
     end
   end
 

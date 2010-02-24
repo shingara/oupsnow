@@ -1,3 +1,7 @@
+== 0.4.2 /
+
+ * Add filter by closed or not with closed keywords
+
 == 0.4.1 / 2010-02-14
 
  * Update all gem dependencies

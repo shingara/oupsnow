@@ -147,6 +147,8 @@ class Ticket
           elsif s[0] == 'tagged'
             query_conditions[:tags] ||= []
             query_conditions[:tags] << s[1]
+          elsif s[0] == 'closed'
+            query_conditions[:closed] = (s[1] == 'true')
           else
             p 'no what'
           end
@@ -160,7 +162,7 @@ class Ticket
       query_conditions['tags'] = {'$all' => query_conditions['tags']}
     end
     conditions.merge!(query_conditions)
-    Ticket.paginate(conditions)
+    Ticket.paginate(conditions.reverse_merge(:page => 1, :per_page => 10))
   end
 
   def self.new_by_params(params, project, user)
