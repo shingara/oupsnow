@@ -89,11 +89,23 @@ class Milestone
   ##
   # Define Milestone like current if no other define before
   def check_current_milestone
-    unless project.current_milestone_id
-      project.current_milestone = self
-      project.current_milestone_name = self.name
-      project.save
-    end
+    is_current_milestone unless project.current_milestone_id
+  end
+
+  def current
+    self.project.current_milestone_id == self.id
+  end
+
+  def current=(current)
+    is_current_milestone if current.eql?('1') || current == true
+  end
+
+
+  private
+
+  def is_current_milestone
+    project.current_milestone = self
+    project.save!
   end
 
 end

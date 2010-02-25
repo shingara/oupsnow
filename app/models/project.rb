@@ -28,7 +28,6 @@ class Project
   many :events, :dependent => :destroy
 
   key :current_milestone_id, ObjectId
-  one :current_milestone, :class => Milestone
 
   ### VALIDATIONS ###
 
@@ -210,6 +209,15 @@ class Project
   # Check if project has one member define like admin
   def have_one_admin
     project_members.any? {|m| m.project_admin?}
+  end
+
+  def current_milestone
+    Milestone.find(current_milestone_id)
+  end
+
+  def current_milestone=(milestone)
+    self.current_milestone_id = milestone.id
+    self.current_milestone_name = milestone.name
   end
 
   private

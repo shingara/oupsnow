@@ -1,6 +1,8 @@
 == 0.4.2 /
 
  * Add filter by closed or not with closed keywords
+ * You can edit a milestone now
+ * You can define one milestone like current. By define the first one created
 
 == 0.4.1 / 2010-02-14
 

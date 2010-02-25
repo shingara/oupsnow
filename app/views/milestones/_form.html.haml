@@ -9,3 +9,7 @@
 .group
   %label.label{:for => 'milestone[description]'} Description
   = f.text_area :description, :class => 'text_area'
+
+.group
+  %label.checkbox{:for => 'milestone[current]'} current
+  = f.check_box :current, :class => 'checkbox'

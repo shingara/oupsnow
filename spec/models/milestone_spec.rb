@@ -76,6 +76,24 @@ describe Milestone do
         @project.current_milestone_name.should == @milestone.name
       end
     end
+
+    describe '#current=' do
+      it 'should define this milestone like current on his project if true' do
+        milestone = Milestone.make(:project => @project)
+        milestone_2 = Milestone.make(:project => @project)
+        @project.current_milestone.should_not == milestone
+        milestone.current = true
+        milestone.save
+        @project = Project.find(@project.id)
+        @project.current_milestone.id.should == milestone.id
+        @project.current_milestone_name.should == milestone.name
+        milestone_2.current = '1'
+        milestone.save
+        @project = Project.find(@project.id)
+        @project.current_milestone.id.should == milestone_2.id
+        @project.current_milestone_name.should == milestone_2.name
+      end
+    end
   end
 
 end
