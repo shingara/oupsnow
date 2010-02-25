@@ -12,7 +12,7 @@
 #block-lists.block
   .content
     .inner
-      - if @current_milestone
+      - unless @current_milestone.nil?
         %ul#milestones.list
           %li.milestone
             = render :partial => @current_milestone

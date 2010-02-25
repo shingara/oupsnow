@@ -131,7 +131,6 @@ describe Project do
       @user_member =  ProjectMember.make(:function => @function)
       @project.project_members << @user_member
       @project.save
-      @project.reload
     end
 
     it 'should made nothing if no change' do
@@ -227,5 +226,20 @@ describe Project do
       @project.num_ticket.should == 3
     end
   end
+
+  describe 'Callback' do
+    before do
+      @project = make_project
+    end
+    it 'should define current_milestone when first milestone attach' do
+      milestone = @project.milestones.build(:name => 'my milestone')
+      milestone.save
+      @project.reload
+      @project.current_milestone.id.should == milestone.id
+      @project.current_milestone_name.should == 'my milestone'
+    end
+
+  end
+
 
 end

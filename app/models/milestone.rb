@@ -6,7 +6,6 @@ class Milestone
   key :description, String
   key :expected_at, Date
 
-
   # denormalisation
   key :nb_tickets_open, Integer, :default => 0
   key :nb_tickets_closed, Integer, :default => 0
@@ -16,6 +15,8 @@ class Milestone
 
   key :project_id, ObjectId, :required => true
   belongs_to :project
+
+  after_save :check_current_milestone
 
   ##
   # Create a event about creation of this milestone
@@ -83,6 +84,16 @@ class Milestone
     self.nb_tickets_closed = tickets.count(:conditions => {:closed => true})
     self.nb_tickets = self.nb_tickets_open + self.nb_tickets_closed
     self.save!
+  end
+
+  ##
+  # Define Milestone like current if no other define before
+  def check_current_milestone
+    unless project.current_milestone_id
+      project.current_milestone = self
+      project.current_milestone_name = self.name
+      project.save
+    end
   end
 
 end

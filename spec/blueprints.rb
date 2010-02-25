@@ -1,4 +1,5 @@
 require 'machinist/mongo_mapper'
+require 'randexp'
 
 User.blueprint {
   login { /\w+/.gen }

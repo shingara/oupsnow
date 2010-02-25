@@ -19,7 +19,9 @@ describe Milestone do
 
   describe 'callback' do
     before do
-      @milestone = Milestone.make
+      @project = make_project
+      @milestone = Milestone.make(:project => @project)
+      @project.reload
     end
     describe '#nb_tickets_open' do
       it 'should change with ticket change' do
@@ -66,7 +68,13 @@ describe Milestone do
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets.should == 2
       end
+    end
 
+    describe '#check_current_milestone' do
+      it 'should update current_milestone of project' do
+        @project.current_milestone.should == @milestone
+        @project.current_milestone_name.should == @milestone.name
+      end
     end
   end
 

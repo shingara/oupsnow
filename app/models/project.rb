@@ -11,6 +11,7 @@ class Project
   # callbacks
   key :num_ticket, Integer
   key :tag_counts, Hash
+  key :current_milestone_name, String
 
   # TODO: need test about created_at and updated_at needed
   timestamps!
@@ -25,6 +26,9 @@ class Project
   many :milestones, :dependent => :destroy
   many :tickets, :dependent => :destroy
   many :events, :dependent => :destroy
+
+  key :current_milestone_id, ObjectId
+  one :current_milestone, :class => Milestone
 
   ### VALIDATIONS ###
 
@@ -42,12 +46,16 @@ class Project
 
   ### Callback ###
 
-  after_create :add_create_event
-  after_update :add_update_event
-
   # Callback about ProjectMember
   before_validation :update_project_admin
   before_validation :update_user_name
+
+  before_save :update_current_milestone
+
+  after_create :add_create_event
+
+  after_update :add_update_event
+
 
   ### DM Compatibility ###
   def self.get(*args)
@@ -122,16 +130,6 @@ class Project
                                          :project_admin => function.project_admin,
                                          :user => user,
                                          :function => function)
-  end
-
-  ##
-  # check the current milestone
-  #
-  # TODO: need test unit
-  #
-  def current_milestone
-    milestones.first(:conditions => {:expected_at => {'$gt' => Time.now}},
-                     :order => 'expected_at ASC') || milestones.first
   end
 
   ##
@@ -251,6 +249,13 @@ class Project
 
   def only_once_each_member
     project_members.map(&:user_id).uniq!.nil?
+  end
+
+  def update_current_milestone
+    if !milestones.empty? && !current_milestone_id
+      self.current_milestone = milestones.first
+      self.current_milestone_name = self.current_milestone.name
+    end
   end
 
 end
