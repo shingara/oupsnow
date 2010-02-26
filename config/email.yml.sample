@@ -9,8 +9,8 @@ production:
     port: 25
     domain: example.net
     authentication: :login
-    user_name: "errornot@example.net"
-    password: "errornot"
+    user_name: "oupsnow@example.net"
+    password: "oupsnow"
 
 development:
   delivery_method: :smtp
@@ -21,8 +21,8 @@ development:
     port: 25
     domain: example.net
     authentication: :login
-    user_name: "errornot@example.net"
-    password: "errornot"
+    user_name: "oupsnow@example.net"
+    password: "oupsnow"
 
 test:
   delivery_method: :test
