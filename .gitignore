@@ -19,3 +19,4 @@ src/*
 config/database.yml
 bin
 gems
+config/email.yml

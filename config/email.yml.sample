@@ -1,0 +1,30 @@
+# Outgoing email settings
+
+production:
+  delivery_method: :smtp
+  default_url_options:
+    :host: 'my_domain.com'
+  smtp_settings:
+    address: smtp.example.net
+    port: 25
+    domain: example.net
+    authentication: :login
+    user_name: "errornot@example.net"
+    password: "errornot"
+
+development:
+  delivery_method: :smtp
+  default_url_options:
+    :host: 'localhost:3000'
+  smtp_settings:
+    address: 127.0.0.1
+    port: 25
+    domain: example.net
+    authentication: :login
+    user_name: "errornot@example.net"
+    password: "errornot"
+
+test:
+  delivery_method: :test
+  default_url_options:
+    :host: 'localhost:3000'

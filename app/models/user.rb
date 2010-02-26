@@ -13,7 +13,7 @@ class User
 
   include MongoMapper::Document
 
-  devise :authenticatable
+  devise :authenticatable, :recoverable, :rememberable
 
 
   key :login,  String , :unique => true

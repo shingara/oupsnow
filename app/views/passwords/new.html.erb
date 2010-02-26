@@ -1,0 +1,25 @@
+<div id="box">
+  <div id="block-login" class="block">
+  <h2>Forgot your password?</h2>
+  <div class="content">
+
+    <% form_for resource_name, resource, :url => password_path(resource_name), :html => {:class => 'form'} do |f| %>
+    <%= f.error_messages %>
+
+    <div class="group">
+      <div class="left">
+        <label class="label right"><%= f.label :email %>:</label>
+      </div>
+      <div class="right">
+        <%= f.text_field :email, :class => 'text_field' %>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <p><%= f.submit "Send me reset password instructions" %></p>
+  <% end %>
+
+  <%= render :partial => "shared/devise_links" %>
+</div>
+</div>
+</div>
