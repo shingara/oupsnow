@@ -16,7 +16,7 @@ Currently you need all of those things to get Oupsnow to run:
  - Ruby of 1.8.6 or greater
  - Rails 2.3.5
  - MongoMapper 0.7.0
- - A MongoDB 1.0.1 or greater
+ - A MongoDB 1.2 or greater
 
 ## Installing
 
@@ -26,6 +26,9 @@ With the tar.gz or any other archive:
 
  - Extract sources to a folder
  - Create a database.yml file in the config directory. You can copy database file from config/database.yml.sample
+ - Create a email.yml file in the config directory.
+   This file is to configure your email settings.
+   You can copy database file from config/email.yml.sample
  - Add first data in your database: <kbd>RAILS_ENV="production" rake db:seed</kbd>
  - Start the server in production mode : <kbd>ruby script/server -e production</kbd>
 
