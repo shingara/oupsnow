@@ -3,6 +3,8 @@
  * Add filter by closed or not with closed keywords
  * You can edit a milestone now
  * You can define one milestone like current. By define the first one created
+ * Add the recover password configuration by your email
+ * Add remember solution when you logged
 
 == 0.4.1 / 2010-02-14
 
