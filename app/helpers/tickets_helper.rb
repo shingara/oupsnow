@@ -31,4 +31,13 @@ module TicketsHelper
     end
   end
 
+  def num_first_item(tickets)
+    (tickets.per_page * (tickets.current_page - 1)) + 1
+  end
+
+  def num_last_item(tickets)
+    max = tickets.per_page * (tickets.current_page)
+    max > tickets.total_entries ? tickets.total_entries : max
+  end
+
 end

@@ -14,8 +14,11 @@
         Find tickets :
       = text_field_tag :q, params[:q]
 
+
   .content
     .inner
+      #nb_ticket
+        Display #{num_first_item(@tickets)} - #{num_last_item(@tickets)} of #{@tickets.total_entries} in total
       %table.table
         %thead
           %tr

@@ -5,6 +5,7 @@
  * You can define one milestone like current. By define the first one created
  * Add the recover password configuration by your email
  * Add remember solution when you logged
+ * Add information about number of ticket in search
 
 == 0.4.1 / 2010-02-14
 
