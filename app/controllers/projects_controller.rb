@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
   end
 
   def overview
-    @events = @project.events.paginate(:order => 'created_at',
+    @events = @project.events.paginate(:order => 'created_at desc',
                                        :page => params[:page],
                                        :per_page => 20)
     return return_404 unless @project
