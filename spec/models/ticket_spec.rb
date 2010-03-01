@@ -140,6 +140,9 @@ describe Ticket do
       Ticket.paginate_by_search("tagged:#{@second_tag} tagged:#{@third_tag}",
                                 :page => 1,
                                   :per_page => 10).sort_by(&:title).should == [@second_ticket, @four_ticket].sort_by(&:title)
+      Ticket.paginate_by_search("tagged:#{@second_tag.upcase} tagged:#{@third_tag.upcase}",
+                                :page => 1,
+                                  :per_page => 10).sort_by(&:title).should == [@second_ticket, @four_ticket].sort_by(&:title)
     end
 
     it 'should return all ticket with all tags define by tagged:xxx and state:xxx in query' do
@@ -590,6 +593,16 @@ describe Ticket do
         desc = make_ticket_update(@ticket, :tag_list => @ticket.tag_list).description
         @ticket._keywords.should == (keys + desc.split(/\W+/)).flatten.map(&:downcase).uniq.sort
 
+      end
+    end
+
+    describe '#update_tags' do
+      it 'should save in downcase' do
+        Ticket.make(:tag_list => 'foo,bar,baz'.upcase).tags.should == Set.new(['bar','baz','foo'])
+
+      end
+      it 'should split tag_list' do
+        Ticket.make(:tag_list => 'foo,bar,baz').tags.should == Set.new(['bar','baz','foo'])
       end
     end
   end

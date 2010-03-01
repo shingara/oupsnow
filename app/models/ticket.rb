@@ -102,7 +102,7 @@ class Ticket
       t.add_update(:tag_list,
                    Ticket.list_tag(self.tag_list).join(','),
                    Ticket.list_tag(ticket[:tag_list]).join(','))
-      self.tag_list = ticket[:tag_list]
+      self.tag_list = ticket[:tag_list].try(:downcase)
     end
 
     [[:state_id, State],
@@ -146,7 +146,7 @@ class Ticket
             query_conditions[:state_name] = s[1]
           elsif s[0] == 'tagged'
             query_conditions[:tags] ||= []
-            query_conditions[:tags] << s[1]
+            query_conditions[:tags] << s[1].downcase
           elsif s[0] == 'closed'
             query_conditions[:closed] = (s[1] == 'true')
           else
@@ -175,7 +175,7 @@ class Ticket
 
   def self.list_tag(string)
     string.to_s.split(',').map { |name|
-      name.gsub(/[^\w_-]/i, '').strip
+      name.gsub(/[^\w_-]/i, '').strip.downcase
     }.uniq.sort
   end
 
@@ -253,6 +253,7 @@ class Ticket
 
   def update_tags
     self.tags = Ticket.list_tag(self.tag_list)
+    self.tag_list = self.tag_list.downcase
   end
 
   def update_priority
