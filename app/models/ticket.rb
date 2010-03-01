@@ -154,7 +154,7 @@ class Ticket
           end
         else
           query_conditions[:_keywords] ||= {'$all' => []}
-          query_conditions[:_keywords]['$all'] <<  v
+          query_conditions[:_keywords]['$all'] <<  v.downcase
         end
       }
     end
@@ -324,7 +324,7 @@ class Ticket
     self.ticket_updates.each do |tu|
       self._keywords += tu.description.split(/\W+/) unless tu.description.blank?
     end
-    self._keywords = self._keywords.flatten.uniq.sort
+    self._keywords = self._keywords.flatten.map(&:downcase).uniq.sort
   end
 
 end

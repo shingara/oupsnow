@@ -158,6 +158,9 @@ describe Ticket do
       Ticket.paginate_by_search("#{@first_tag}",
                                 :page => 1,
                                 :per_page => 10).should == [@first_ticket, @third_ticket]
+      Ticket.paginate_by_search("#{@first_tag.upcase}",
+                                :page => 1,
+                                :per_page => 10).should == [@first_ticket, @third_ticket]
       Ticket.paginate_by_search("foo #{@third_tag}",
                                 :page => 1,
                                 :per_page => 10).should == [@second_ticket]
@@ -569,10 +572,24 @@ describe Ticket do
         @ticket._keywords.uniq!.should be_nil
         keys = [@ticket.title.split(/\W+/),
           @ticket.description.split(/\W+/),
-          @ticket.tag_list.split(',')].flatten.uniq.sort
+          @ticket.tag_list.split(',')].flatten.map(&:downcase).uniq.sort
         @ticket._keywords.should == keys
         desc = make_ticket_update(@ticket, :tag_list => @ticket.tag_list).description
-        @ticket._keywords.should == (keys + desc.split(/\W+/)).flatten.uniq.sort
+        @ticket._keywords.should == (keys + desc.split(/\W+/)).flatten.map(&:downcase).uniq.sort
+      end
+
+      it 'should update _keywords only in downcase' do
+        @ticket = make_ticket(:title => /\w+ \w+/.gen.upcase,
+                              :description => /[:paragraph:]/.generate.upcase)
+        @ticket._keywords.should_not be_empty
+        @ticket._keywords.uniq!.should be_nil
+        keys = [@ticket.title.split(/\W+/),
+          @ticket.description.split(/\W+/),
+          @ticket.tag_list.split(',')].flatten.map(&:downcase).uniq.sort
+        @ticket._keywords.should == keys
+        desc = make_ticket_update(@ticket, :tag_list => @ticket.tag_list).description
+        @ticket._keywords.should == (keys + desc.split(/\W+/)).flatten.map(&:downcase).uniq.sort
+
       end
     end
   end
