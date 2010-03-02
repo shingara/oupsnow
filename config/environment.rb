@@ -49,6 +49,13 @@ Rails::Initializer.run do |config|
 
   # gem generate from will_paginate agnostic branch. change it when it's possible
   config.gem 'agnostic-will_paginate', :version => '3.0.0', :lib => 'will_paginate'
+
+  # Print all log in STDOUT if irb using
+  if $0 == "irb"
+      config.logger = Logger.new(STDOUT)
+  else
+      config.logger = Logger.new(Rails.root.join("log",Rails.env + ".log"),3,5*1024*1024)
+  end
 end
 
 GOOGLE_ANALYTICS = nil
