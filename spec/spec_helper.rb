@@ -108,7 +108,7 @@ def login_request(user = nil)
 end
 
 def function_not_admin
-  fna = Function.first(:conditions => {:name => {'$ne' => Function::ADMIN}})
+  fna = Function.not_admin
   fna = Function.make unless fna
   fna
 end
@@ -117,10 +117,4 @@ def login_admin
   user = create_default_admin
   need_a_milestone
   login_request(user)
-end
-
-def need_developper_function
-  unless Function.first(:name => 'Developper')
-    Function.gen(:name => 'Developper')
-  end
 end

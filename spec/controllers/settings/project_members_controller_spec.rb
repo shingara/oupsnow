@@ -6,7 +6,7 @@ describe Settings::ProjectMembersController do
 
   before :each do
     @project = make_project
-    Function.make(:name => 'Developper')
+    Function.make(:name => 'developper', :project_admin => false)
   end
 
   describe 'like anonymous user' do

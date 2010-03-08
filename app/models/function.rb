@@ -5,8 +5,6 @@ class Function
 
   include MongoMapper::Document
 
-  ADMIN = 'Admin'
-
   # TODO: need test validation of required name and uniqueness of name
   key :name, String, :required => true, :unique => true
   key :project_admin, Boolean

@@ -27,7 +27,7 @@ class Settings::ProjectMembersController < Settings::BaseController
 
   def create
     @member = ProjectMember.new(params[:project_member])
-    @member.function_id = Function.first(:conditions => {:name => 'Developper'}).id
+    @member.function_id = Function.not_admin.id
     @project.project_members << @member
     if @project.save!
       flash[:notice] = "Member was successfully created"

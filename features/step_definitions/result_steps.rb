@@ -106,6 +106,13 @@ Given /^I have user "([^\"]*)" with function "([^\"]*)" on project "([^\"]*)" an
   project.save!
 end
 
+Given /^I have user "([^\"]*)" not in project "([^\"]*)"$/ do |login, project_name|
+  user = user_with_name(login)
+  project = project_with_name(project_name)
+  project.project_members.delete_if{ |pm| pm.user_id == user._id }
+  project.save!
+end
+
 Then /^the member "([^\"]*)" has function "([^\"]*)" in project "([^\"]*)"$/ do |user_name, function_name, project_name|
   u = User.first(:conditions => {:login => user_name})
   pr = Project.first(:conditions => {:name => project_name})
