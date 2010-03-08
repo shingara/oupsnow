@@ -54,7 +54,7 @@ Rails::Initializer.run do |config|
   if $0 == "irb"
       config.logger = Logger.new(STDOUT)
   else
-      config.logger = Logger.new(Rails.root.join("log",Rails.env + ".log"),3,5*1024*1024)
+      config.logger = Logger.new(Rails.root.join("log",RAILS_ENV + ".log"),3,5*1024*1024)
   end
 end
 
