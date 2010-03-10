@@ -4,6 +4,9 @@
   - if @ticket.milestone_id
     = render :partial => 'shared/milestone_sidebar', :locals => {:project => @project, :milestone => @ticket.milestone, :sidebar_title => 'Ticket milestone'}
 
+- content_for :watchers_sidebar do
+  = render :partial => 'shared/watchers', :locals => { :watchers => @ticket.watchers }
+
 - content_for :tag_cloud_sidebar do
   = render :partial => 'shared/tag_cloud', :locals => { :tags => @ticket.tag_counts, :project => @ticket.project }
 
@@ -13,6 +16,13 @@
     .inner
       #ticket_status
         %span=@ticket.state.name
+      - if user_signed_in?
+        #watch_it
+          - if @ticket.watchers?(current_user)
+            = link_to 'unwatch this ticket', unwatch_project_ticket_url(@project, @ticket), :method => :put
+          - else
+            = link_to 'watch this ticket', watch_project_ticket_url(@project, @ticket), :method => :put
+
 
       #ticket
         %h2= @ticket.title

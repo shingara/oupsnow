@@ -10,7 +10,6 @@ describe TicketsController do
   end
 
   describe 'success #index', :shared => true do
-
     integrate_views
     describe '404' do
       it 'should render 404 if project not exist' do
@@ -198,10 +197,29 @@ describe TicketsController do
       end
       it_should_behave_like 'not access'
     end
+    describe 'watch ticket' do
+      def req
+        ticket = make_ticket(:project => @project)
+        put :watch, :project_id => @project.id,
+          :id => ticket.num,
+          :ticket => {:description => 'yahoo',
+            :title => ticket.title}
+      end
+      it_should_behave_like 'not access'
+    end
+    describe 'unwatch ticket' do
+      def req
+        ticket = make_ticket(:project => @project)
+        put :unwatch, :project_id => @project.id,
+          :id => ticket.num,
+          :ticket => {:description => 'yahoo',
+            :title => ticket.title}
+      end
+      it_should_behave_like 'not access'
+    end
   end
 
   describe 'with a user logged not admin project' do
-
     before do
       login_request
     end

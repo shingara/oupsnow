@@ -1,0 +1,10 @@
+.block
+  %h3 Watchers
+  .content
+    - if watchers.empty?
+      %p No watchers on this ticket
+    - else
+      %ul
+        - watchers.each do |watcher|
+          %li= watcher.email
+

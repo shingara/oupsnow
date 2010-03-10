@@ -224,6 +224,14 @@ class Ticket
     num.to_s
   end
 
+  def unwatch(user)
+    self.watchers.delete_if{|watcher| watcher.user_id == user.id }
+  end
+
+  def watchers?(user)
+    self.watchers.any?{|watcher| watcher.user_id == user.id }
+  end
+
   private
 
   # get number of this ticket in project model

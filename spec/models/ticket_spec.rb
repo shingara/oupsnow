@@ -624,4 +624,39 @@ describe Ticket do
     end
   end
 
+  describe '#watchers?' do
+    before do
+      @user = User.make
+      @ticket = Ticket.make
+      @ticket.watchers.build(:user => @user)
+      @ticket.save
+    end
+    it 'should return true if user is watcher' do
+      @ticket.should be_watchers(@user)
+    end
+    it 'should return false if user is not watcher' do
+      @ticket.should_not be_watchers(User.make)
+    end
+  end
+
+  describe 'unwatch' do
+    before do
+      @user = User.make
+      @ticket = Ticket.make
+      @ticket.watchers.build(:user => @user)
+      @ticket.save
+    end
+    it 'should delete user from watch if watcher' do
+      @ticket.unwatch(@user)
+      @ticket.save
+      @ticket.reload.should_not be_watcher(@user)
+    end
+    it 'should made nothing if user not watcher' do
+      lambda do
+        @ticket.unwatch(User.make)
+        @ticket.save
+      end.should_not change(@ticket.reload.watchers, :count)
+    end
+  end
+
 end

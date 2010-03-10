@@ -2,7 +2,7 @@ class TicketsController < ApplicationController
 
   before_filter :projects
   before_filter :load_ticket, :only => [:show, :update, :edit_main_description,
-    :update_main_description]
+    :update_main_description, :watch, :unwatch]
   before_filter :authenticate_user!, :except => [:index, :show]
   before_filter :admin_project, :only => [:edit_main_description,
                                     :update_main_description]
@@ -94,6 +94,18 @@ class TicketsController < ApplicationController
       @ticket_change.attributes = params[:ticket]
       render :show
     end
+  end
+
+  def watch
+    @ticket.watchers.build(:user => current_user)
+    @ticket.save
+    redirect_to project_ticket_url(@project, @ticket)
+  end
+
+  def unwatch
+    @ticket.unwatch(current_user)
+    @ticket.save
+    redirect_to project_ticket_url(@project, @ticket)
   end
 
   private

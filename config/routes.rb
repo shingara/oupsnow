@@ -54,6 +54,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :projects, :member => {:delete => :get, :overview => :get} do |project|
     project.resources :milestones
     project.resources :tickets, :member => {:edit_main_description => :get,
+                                            :watch => :put,
+                                            :unwatch => :put,
                                             :update_main_description => :put} do |ticket|
       ticket.resources :ticket_updates, :only => [:edit, :update]
     end
