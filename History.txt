@@ -1,5 +1,6 @@
-== 0.4.2 /
+== 0.5.0 /
 
+ * A user can change his own email.
  * Add filter by closed or not with closed keywords
  * You can edit a milestone now
  * You can define one milestone like current. By define the first one created

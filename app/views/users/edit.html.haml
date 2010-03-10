@@ -8,8 +8,9 @@
 
       - form_for(@user, :html => {:class => 'form'}) do |f|
         .group
-          %label.label{:for => 'user[email]'} Email
-          = f.text_field :email, :class => 'text_field'
+          %label.label{:for => 'user[email]'}
+            Email :
+            = @user.email
         .group
           %label.label{:for => 'user[firstname]'} Firstname
           = f.text_field :firstname, :class => 'text_field'
