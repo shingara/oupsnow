@@ -19,9 +19,11 @@
       - if user_signed_in?
         #watch_it
           - if @ticket.watchers?(current_user)
-            = link_to 'unwatch this ticket', unwatch_project_ticket_url(@project, @ticket), :method => :put
+            - form_tag unwatch_project_ticket_url(@project, @ticket), {:method => :put} do
+              = submit_tag 'unwatch this ticket'
           - else
-            = link_to 'watch this ticket', watch_project_ticket_url(@project, @ticket), :method => :put
+            - form_tag watch_project_ticket_url(@project, @ticket), {:method => :put} do
+              = submit_tag 'watch this ticket'
 
 
       #ticket

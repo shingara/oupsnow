@@ -141,7 +141,7 @@ Then /^I should see an? ([^\"]*) message with child "([^\"]*)"$/ do |class_name,
   end
 end
 
-Given /^I create (\d+) ticket on project "([^\"]*)"$/ do |number, project_name|
+Given /^I create (\d+) tickets? on project "([^\"]*)"$/ do |number, project_name|
   project = Project.first(:conditions => {:name => project_name})
   number.to_i.times do
     Ticket.make(:project => project)

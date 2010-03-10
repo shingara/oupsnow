@@ -97,5 +97,8 @@ describe User do
     user.errors.on('email').should_not be_empty
   end
 
+  it 'should change login of watcher if change is login'
+  it 'should delete watcher embedded when user is destroy'
+
 
 end
