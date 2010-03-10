@@ -27,6 +27,11 @@ class User
   validates_true_for :global_admin,
     :logic => lambda { allways_one_global_admin },
     :message => 'need a global admin'
+
+  validates_true_for :email,
+    :logic => :not_change_email,
+    :message => 'should not be change'
+
   validates_presence_of :email
   validates_uniqueness_of :email
 
@@ -98,6 +103,10 @@ class User
       end
     end
     return true
+  end
+
+  def not_change_email
+    new_record? || !email_changed?
   end
 
 end

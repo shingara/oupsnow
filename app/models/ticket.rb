@@ -19,6 +19,7 @@ class Ticket
   key :closed, Boolean, :default => false
   key :user_assigned_name, String, :default => ''
 
+  many :watchers
   many :ticket_updates
   many :attachments
 
@@ -67,6 +68,7 @@ class Ticket
   before_save :update_milestone_name
   before_save :update_user_assigned_name
   before_save :update_keywords
+  before_save :update_watcher_email
 
   after_save :update_project_tag_counts
   after_save :update_milestone_tickets_count
@@ -326,6 +328,13 @@ class Ticket
       self._keywords += tu.description.split(/\W+/) unless tu.description.blank?
     end
     self._keywords = self._keywords.flatten.map(&:downcase).uniq.sort
+  end
+
+  # Define the email of watcher if not define
+  def update_watcher_email
+    self.watchers.each do |watcher|
+      watcher.email ||= watcher.user.email
+    end
   end
 
 end

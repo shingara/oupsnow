@@ -90,5 +90,12 @@ describe User do
     end
   end
 
+  it 'should not change his email' do
+    user = User.make
+    user.email = 'new@yahoo.com'
+    user.should_not be_valid
+    user.errors.on('email').should_not be_empty
+  end
+
 
 end

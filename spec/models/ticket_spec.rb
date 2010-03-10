@@ -4,11 +4,6 @@ describe Ticket do
 
   TAG_LIST = 'bar,foo,ko,ok'
 
-  def valid_ticket
-    Ticket.gen(:project_id => Project.first.id,
-              :member_create_id => Project.first.members.first.user_id)
-  end
-
   it "should be valid" do
     Ticket.make.should be_valid
   end
@@ -604,6 +599,28 @@ describe Ticket do
       it 'should split tag_list' do
         Ticket.make(:tag_list => 'foo,bar,baz').tags.should == Set.new(['bar','baz','foo'])
       end
+    end
+
+    describe '#update_watcher_email' do
+      it 'should update user_email with email of watcher' do
+        ticket = Ticket.make
+        user = User.make
+        ticket.watchers.build(:user => user)
+        ticket.save
+        ticket.reload
+        ticket.watchers.first.email.should == user.email
+      end
+    end
+  end
+
+  describe '#add_watcher' do
+    it 'can add some watcher by user model' do
+      ticket = Ticket.make
+      user = User.make
+      lambda do
+        ticket.watchers.build(:user => user)
+      end.should change(ticket.watchers, :size)
+      ticket.watchers.first.user_id.should == user.id
     end
   end
 
