@@ -32,3 +32,4 @@ config.gem 'rspec-rails', :lib => false
 config.gem 'machinist_mongo', :version => '1.0.2', :lib => 'machinist/mongo_mapper'
 config.gem 'webrat', :version => '0.5.3'
 config.gem 'randexp'
+config.gem "email_spec"

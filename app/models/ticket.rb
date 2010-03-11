@@ -128,7 +128,7 @@ class Ticket
     t.created_at = Time.now
     t.write_event(self)
     ticket_updates << t
-    save
+    t.send_update_to_watchers if save
   end
 
   ##

@@ -1,0 +1,27 @@
+<%= "#{@project.name} ##{@root_ticket.num}: #{@root_ticket.title}" %>
+<%= url_for(:controller => 'tickets', :action => 'show', :id => @root_ticket, :project_id => @project.id, :only_path => false)  %>
+
+Resume :
+--------
+Author : <%= @root_ticket.creator_user_name %>
+Date of creation ; <%= @root_ticket.created_at %>
+State : <%= @root_ticket.state_name %>
+Priority : <%= @root_ticket.priority_name %>
+Tags : <%= @root_ticket.tag_list %>
+Milestone : <%= @root_ticket.milestone_name %>
+
+<%= @root_ticket.description %>
+
+Update :
+-------
+
+From : <%= @ticket_update.creator_user_name %> on <%= @ticket_update.created_at %>
+
+<% unless @ticket_update.properties_update.empty? -%>
+Change :
+<% @ticket_update.properties_update.each do |prop| -%>
+<%= update_field(prop) %>
+<% end -%>
+<% end -%>
+
+<%= @ticket_update.description %>

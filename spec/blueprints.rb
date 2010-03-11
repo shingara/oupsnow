@@ -59,7 +59,7 @@ def make_project(params={})
   pr
 end
 
-def make_ticket_update(ticket, params={}, user=User.make)
+def make_ticket_update(ticket, params={}, user=ticket.project.project_members.first.user)
   ticket.generate_update(
     ({:tag_list => ticket.tag_list,
      :state_id => ticket.state_id.to_s,

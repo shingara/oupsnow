@@ -7,6 +7,8 @@
  * Add the recover password configuration by your email
  * Add remember solution when you logged
  * Add information about number of ticket in search
+ * A logged user can watch a ticket. If user watch ticket he received email
+   when ticket is update
 
 == 0.4.1 / 2010-02-14
 

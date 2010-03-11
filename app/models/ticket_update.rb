@@ -36,4 +36,11 @@ class TicketUpdate
     num.to_s
   end
 
+  # TODO: need test
+  def send_update_to_watchers
+    _root_document.watchers.each do |watcher|
+      UserMailer.deliver_ticket_update(_root_document.project, self, watcher)
+    end
+  end
+
 end

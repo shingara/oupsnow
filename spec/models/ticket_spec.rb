@@ -229,7 +229,6 @@ describe Ticket do
   end
 
   describe '#generate_update' do
-
     def generate_ticket(ticket)
       @t = Ticket.make(:project => Project.first || make_project,
                        :tag_list => TAG_LIST,
@@ -248,6 +247,17 @@ describe Ticket do
       it 'should not create ticket_update if no change' do
         @t.ticket_updates.should_not have(1).items
       end
+    end
+
+    it 'should send email to all user if update and watcher' do
+      ticket = generate_ticket({:description => 'start', 'tag_list' => TAG_LIST})
+      user = User.make
+      ticket.watchers.build(:user => user)
+      ticket.save
+      ticket.reload
+      UserMailer.should_receive(:deliver_ticket_update).once
+      ticket.generate_update({:description => 'new description',
+                             'tag_list' => TAG_LIST}, ticket.project.project_members.first.user)
     end
 
     describe 'change only description' do
@@ -291,7 +301,6 @@ describe Ticket do
       it 'should generate ticket update with description' do
         @t.ticket_updates[0].description.should == 'yahoo'
       end
-
     end
 
     describe 'change state with description' do
@@ -346,7 +355,6 @@ describe Ticket do
                                                                  nil,
                                                                  @priority.name])
       end
-
     end
 
     describe 'about tag change' do
@@ -386,7 +394,6 @@ describe Ticket do
         # there are 2 events. One after creation one after update
       end
     end
-
   end
 
   describe 'self#get_by_permalink' do
