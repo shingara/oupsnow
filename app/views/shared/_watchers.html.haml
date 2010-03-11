@@ -1,4 +1,4 @@
-.block
+.block#watchers
   %h3 Watchers
   .content
     - if watchers.empty?
@@ -6,5 +6,5 @@
     - else
       %ul
         - watchers.each do |watcher|
-          %li= watcher.email
+          %li= watcher.login
 

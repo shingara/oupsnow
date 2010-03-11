@@ -16,7 +16,7 @@ class User
   devise :authenticatable, :recoverable, :rememberable
 
 
-  key :login,  String , :unique => true
+  key :login,  String , :unique => true, :required => true
   alias :name :login
   key :email,  String
   key :firstname, String

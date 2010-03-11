@@ -109,6 +109,30 @@ describe TicketsController do
     end
   end
 
+  describe 'watching ticket', :shared => true do
+    before do
+      @ticket = make_ticket(:project => @project)
+    end
+    describe 'can watch' do
+      before do
+        put :watch, :id => @ticket.num,
+          :project_id => @project.id
+      end
+      it { response.should redirect_to(project_ticket_url(@project, @ticket)) }
+      it { Ticket.find(@ticket.id).should be_watchers(@user) }
+    end
+    describe 'can unwatch' do
+      before do
+        @ticket.watchers.build(:user => @user)
+        @ticket.save
+        put :unwatch, :id => @ticket.num,
+          :project_id => @project.id
+      end
+      it { response.should redirect_to(project_ticket_url(@project, @ticket)) }
+      it { Ticket.find(@ticket.id).should_not be_watchers(@user) }
+    end
+  end
+
   describe 'update ticket', :shared => true do
     before do
       @ticket = make_ticket(:project => @project)
@@ -221,8 +245,9 @@ describe TicketsController do
 
   describe 'with a user logged not admin project' do
     before do
-      login_request
+      @user = login_request
     end
+    it_should_behave_like 'watching ticket'
 
     describe '#index' do
       it_should_behave_like 'success #index'
@@ -263,8 +288,9 @@ describe TicketsController do
 
   describe 'with a user logged and admin project' do
     before do
-      login_admin
+      @user = login_admin
     end
+    it_should_behave_like 'watching ticket'
     describe '#index' do
       it_should_behave_like 'success #index'
     end

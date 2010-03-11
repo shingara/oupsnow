@@ -20,6 +20,7 @@ class Ticket
   key :user_assigned_name, String, :default => ''
 
   many :watchers
+  include_errors_from :watchers
   many :ticket_updates
   many :attachments
 
@@ -64,11 +65,11 @@ class Ticket
   before_validation :update_tags
   before_validation :update_priority
   before_validation :update_num_of_ticket_updates
+  before_validation :update_watcher
 
   before_save :update_milestone_name
   before_save :update_user_assigned_name
   before_save :update_keywords
-  before_save :update_watcher_email
 
   after_save :update_project_tag_counts
   after_save :update_milestone_tickets_count
@@ -339,9 +340,10 @@ class Ticket
   end
 
   # Define the email of watcher if not define
-  def update_watcher_email
+  def update_watcher
     self.watchers.each do |watcher|
       watcher.email ||= watcher.user.email
+      watcher.login ||= watcher.user.login
     end
   end
 

@@ -608,7 +608,8 @@ describe Ticket do
       end
     end
 
-    describe '#update_watcher_email' do
+    describe '#update_watcher' do
+
       it 'should update user_email with email of watcher' do
         ticket = Ticket.make
         user = User.make
@@ -616,6 +617,15 @@ describe Ticket do
         ticket.save
         ticket.reload
         ticket.watchers.first.email.should == user.email
+      end
+
+      it 'should update user_login with login of watcher' do
+        ticket = Ticket.make
+        user = User.make
+        ticket.watchers.build(:user => user)
+        ticket.save!
+        ticket.reload
+        ticket.watchers.first.login.should == user.login
       end
     end
   end
