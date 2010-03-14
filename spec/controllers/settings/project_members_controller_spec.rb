@@ -88,14 +88,14 @@ describe Settings::ProjectMembersController do
         @function = Function.make
         @project.project_members << ProjectMember.make
         @project.save!
-        #put :update_all,
-          #:project_id => @project.id,
-          #:member_function => { @project.project_members.last.user_id => @function.id}
+        @project.reload
+        put :update_all,
+          :project_id => @project.id,
+          :member_function => { @project.project_members.last.id.to_s => @function.id.to_s}
       end
 
-      it {pending and response.should redirect_to(project_project_members_url(@project)) }
+      it { response.should redirect_to(project_project_members_url(@project)) }
       it 'should change function of member' do
-        pending
         Project.find(@project.id).project_members.last.function_name.should == @function.name
       end
       it {pending and flash[:notice].should == 'All members was updated'}
