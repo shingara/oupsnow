@@ -1,4 +1,4 @@
-== 0.5.0 /
+== 0.5.0 / 2010-03-15
 
  * A user can change his own email.
  * Add filter by closed or not with closed keywords
