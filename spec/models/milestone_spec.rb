@@ -96,4 +96,34 @@ describe Milestone do
     end
   end
 
+  describe '#tag_counts' do
+    it 'should be empty if no ticket in milestone' do
+      Milestone.make.tag_counts.should be_empty
+    end
+
+    it 'should have all tag in milestone' do
+      @project = make_project
+      @milestone = Milestone.make(:project => @project)
+      make_ticket(:project => @project, :tag_list => 'foo', :milestone => @milestone)
+      @milestone.update_tag_counts
+      @milestone.reload
+      @milestone.tag_counts.should == {'foo' => 1}
+
+      make_ticket(:project => @project, :tag_list => 'foo,bar', :milestone => @milestone)
+      @milestone.update_tag_counts
+      @milestone.reload
+      @milestone.tag_counts.should == {'foo' => 2, 'bar' => 1}
+
+      make_ticket(:project => @project, :tag_list => 'bar', :milestone => @milestone)
+      @milestone.update_tag_counts
+      @milestone.reload
+      @milestone.tag_counts.should == {'foo' => 2, 'bar' => 2}
+
+      make_ticket(:project => @project, :tag_list => 'foo,bar,baz', :milestone => @milestone)
+      @milestone.update_tag_counts
+      @milestone.reload
+      @milestone.tag_counts.should == {'foo' => 3, 'bar' => 3, 'baz' => 1}
+    end
+  end
+
 end

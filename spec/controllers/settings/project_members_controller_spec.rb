@@ -88,14 +88,14 @@ describe Settings::ProjectMembersController do
         @function = Function.make
         @project.project_members << ProjectMember.make
         @project.save!
-        #put :update_all,
-          #:project_id => @project.id,
-          #:member_function => { @project.project_members.last.user_id => @function.id}
+        @project.reload
+        put :update_all,
+          :project_id => @project.id,
+          :member_function => { @project.project_members.last.id.to_s => @function.id.to_s}
       end
 
-      it {pending and response.should redirect_to(project_project_members_url(@project)) }
+      it { response.should redirect_to(project_project_members_url(@project)) }
       it 'should change function of member' do
-        pending
         Project.find(@project.id).project_members.last.function_name.should == @function.name
       end
       it {pending and flash[:notice].should == 'All members was updated'}
@@ -104,52 +104,3 @@ describe Settings::ProjectMembersController do
   end
 
 end
-
-
-#describe 'update_all' do
-  #describe 'like an admin' do
-    #def made_request(member_function)
-      #@response = request(resource(@project,
-                                   #:settings,
-                                   #:project_members,
-                                   #:update_all),
-                            #:method => "PUT",
-                            #:params => {'member_function' => member_function})
-    #end
-
-    #before(:each) do
-      #login_admin
-      #@project = Project.first
-      #@project.project_members.should_not have(3).items
-      #@project.project_members << ProjectMember.make
-      #@project.project_members << ProjectMember.new(:user => User.find_by_login('admin'),
-                                                    #:function => Function.make)
-      #@project.save!
-      #@project.project_members.should have(3).items
-    #end
-
-    #it 'should redirect to project setting member without message because no change in update' do
-      #member_function = {}
-      #@project.project_members.each do |member|
-        #member_function[member.id] = member.function_id
-      #end
-      #made_request(member_function)
-      #@response.should redirect(url(:project_settings_project_members, @project),
-                                #:message => {:notice => ""})
-    #end
-
-    #it 'should redirect to project setting member with message no change yourself because you change just youself' do
-      #member_function = {}
-      #@project.project_members.each do |member|
-        #if member.id != User.find_by_login('admin').id
-          #member_function[member.id] = member.function_id
-        #else
-          #member_function[member.id] = Function.make.id
-        #end
-      #end
-      #made_request(member_function)
-      #@response.should redirect(url(:project_settings_project_members, @project),
-                                #:message => {:notice => ""})
-    #end
-  #end
-#end

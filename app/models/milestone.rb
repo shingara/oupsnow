@@ -10,6 +10,7 @@ class Milestone
   key :nb_tickets_open, Integer, :default => 0
   key :nb_tickets_closed, Integer, :default => 0
   key :nb_tickets, Integer, :default => 0
+  key :tag_counts, Hash
 
   many :tickets
 
@@ -59,24 +60,23 @@ class Milestone
   end
 
   ##
-  # Return a Hash of tagging object
-  # The key is the id number of tag and the value is an Array of Tagging
-  # object. count the number of object and you know how Tag used is on a Tag
+  # check all tag of all tickets on this project.
+  # Generate the tag_counts field
   #
-  # TODO: need some test
-  # TODO: see refactoring because same code of Project#ticket_tag_counts
+  # This method is used in callback after ticket update.
+  # Can be push in queue
   #
-  # @return[Hash] Hash with name of tag in key. and number of tag use in this project in value
-  def tag_counts
-    tag_list = []
-    tickets.all.each do |t|
-      tag_list = t.tags
+  def update_tag_counts
+    tag_counts = {}
+    tickets.all.map{|t| t.tags.to_a }.flatten.each do |tag|
+      if tag_counts[tag]
+        tag_counts[tag] += 1
+      else
+        tag_counts[tag] = 1
+      end
     end
-    res = {}
-    tag_list.each do |v|
-      res[v] = res[v] ? res[v].inc : 1
-    end
-    res
+    self.tag_counts = tag_counts
+    save!
   end
 
   def update_nb_tickets_count

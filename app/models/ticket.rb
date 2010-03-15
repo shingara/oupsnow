@@ -71,7 +71,7 @@ class Ticket
   before_save :update_user_assigned_name
   before_save :update_keywords
 
-  after_save :update_project_tag_counts
+  after_save :update_tag_counts
   after_save :update_milestone_tickets_count
 
   attr_accessor :comment
@@ -295,8 +295,9 @@ class Ticket
   ##
   # Update tag_counts on project where is this ticket
   #
-  def update_project_tag_counts
+  def update_tag_counts
     project.update_tag_counts
+    milestone.update_tag_counts if milestone
   end
 
   ##
