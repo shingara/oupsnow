@@ -116,3 +116,22 @@ statement, only the last is use in filtering. By example :
 If you send any words in ticket searching, the filtering is about all words on you tickets
 and updates. This words can be in description, title or tag.
 
+### Searching by closed status
+
+In your adminstration you can define all state define like closed or not. So you can filter
+by this status. with keywords
+
+ * 'closed:true' filtering all tickets where state are closed
+ * 'closed:false' filtering all tickets where state are not closed
+
+# Watching a ticket
+
+Since Oupsnow 0.5.0 you can watch a ticket. All users logged can watch a ticket. To watch a ticket
+you need click on 'watch this ticket' button. If you watch this ticket, this button mark 'unwatch this ticket'
+So if you click it, you stopping watching this ticket.
+
+All user watching a ticket is mark on side of ticket. You can see all login of this user.
+
+All user watching a ticket received by email new update about this ticket. In first, you see the information about this
+ticket and after the new update about it. An url of this ticket is send to unwatch this ticket or see all update about
+this ticket.
