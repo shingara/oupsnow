@@ -28,7 +28,7 @@
 <div id="main">
     <div id="version" class="clickable" onclick='document.location = "http://rubyforge.org/projects/oupsnow"; return false'>
       <p>Get Version</p>
-      <a href="http://rubyforge.org/projects/oupsnow" class="numbers">0.4.1</a>
+      <a href="http://rubyforge.org/projects/oupsnow" class="numbers">0.5.0</a>
     </div>
 
     <h1 id='oupsnow'>Oupsnow</h1>
@@ -56,7 +56,7 @@
 
 <li>MongoMapper 0.7.0</li>
 
-<li>A MongoDB 1.0.1 or greater</li>
+<li>A MongoDB 1.2 or greater</li>
 </ul>
 
 <h2 id='installing'>Installing</h2>
@@ -69,6 +69,8 @@
 <li>Extract sources to a folder</li>
 
 <li>Create a database.yml file in the config directory. You can copy database file from config/database.yml.sample</li>
+
+<li>Create a email.yml file in the config directory. This file is to configure your email settings. You can copy database file from config/email.yml.sample</li>
 
 <li>Add first data in your database: <kbd>RAILS_ENV="production" rake db:seed</kbd></li>
 
