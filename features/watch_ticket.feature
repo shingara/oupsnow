@@ -27,6 +27,6 @@ Feature: Watching or not ticket
     And I follow "#1"
     Then I should not see "shingara" within ".block#watchers"
     And I press "watch this ticket"
-    Then I should see "shingara@gmail.com" within ".block#watchers"
+    Then I should see "shingara" within ".block#watchers"
     And I press "unwatch this ticket"
     Then I should not see "shingara" within ".block#watchers"
