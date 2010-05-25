@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
 
+  protect_from_forgery
   layout 'application'
 
   rescue_from Mongo::InvalidObjectID do
