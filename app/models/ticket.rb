@@ -1,71 +1,73 @@
 class Ticket
 
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
-  key :title, String, :required => true, :length => 255
-  key :description, String
-  key :num, Integer, :required => true
-  key :tag_list, String, :default => ''
+  field :title, :type => String, :required => true, :length => 255
+  validates_presence_of :title
+  field :description, :type => String
+  field :num, :type => Integer, :required => true
+  validates_presence_of :num
+  field :tag_list, :type => String, :default => ''
 
   #It's all words in ticket. Useful to full text search
-  key :_keywords, Array, :required => true
-  key :tags, Set
+  field :_keywords, :type => Array, :required => true
+  validates_presence_of :_keywords
+  field :tags, :type => Set
 
   ## denormalisation
-  key :priority_name, String
-  key :milestone_name, String
-  key :creator_user_name, String, :required => true
-  key :state_name, String, :required => true
-  key :closed, Boolean, :default => false
-  key :user_assigned_name, String, :default => ''
+  field :priority_name, :type => String
+  field :milestone_name, :type => String
+  field :creator_user_name, :type => String, :required => true
+  validates_presence_of :creator_user_name
+  field :state_name, :type => String, :required => true
+  validates_presence_of :state_name
+  field :closed, :type => Boolean, :default => false
+  validates_presence_of :closed
+  field :user_assigned_name, :type => String, :default => ''
 
-  many :watchers
-  include_errors_from :watchers
-  many :ticket_updates
-  many :attachments
+  embeds_many :watchers
+  #include_errors_from :watchers
+  embeds_many :ticket_updates
+  embeds_many :attachments
 
 
-  key :user_creator_id, ObjectId, :required => true
-  key :project_id, ObjectId
-  key :state_id, ObjectId
-  key :user_assigned_id, ObjectId
-  key :milestone_id, ObjectId
-  key :priority_id, ObjectId
+  field :user_creator_id, :type => BSON::ObjectID, :required => true
+  validates_presence_of :user_creator_id
+  field :project_id, :type => BSON::ObjectID
+  field :state_id, :type => BSON::ObjectID
+  field :user_assigned_id, :type => BSON::ObjectID
+  field :milestone_id, :type => BSON::ObjectID
+  field :priority_id, :type => BSON::ObjectID
 
-  timestamps!
+  #timestamps!
 
-  belongs_to :project
-  belongs_to :state
-  belongs_to :user_assigned,
+  belongs_to_related :project
+  belongs_to_related :state
+  belongs_to_related :user_assigned,
     :class_name => 'User'
-  belongs_to :milestone
-  belongs_to :user_creator,
+  belongs_to_related :milestone
+  belongs_to_related :user_creator,
     :class_name => 'User'
-  belongs_to :priority
+  belongs_to_related :priority
 
   # WARNING: what's happen if another event has same id ?
-  many :events,
+  has_many_related :events,
     :class_name => 'Event',
     :foreign_key => :eventable_id,
     :dependent => :destroy
 
-  validates_true_for :user_assigned,
-    :logic => lambda { users_in_members },
-    :message => 'need to be member of project'
-  validates_true_for :milestone_ticket,
-    :logic => lambda { milestone_in_same_project },
-    :message => "The milestone need to be in same project of this ticket"
-  validates_true_for :num,
-    :logic => lambda { num_already_used_in_same_project },
-    :message => "is already used in same project"
+  validate :users_in_members
+  validate :milestone_in_same_project
+  validate :num_already_used_in_same_project
 
-  before_validation_on_create :define_num_ticket
-  before_validation :define_state_new
-  before_validation :copy_user_creator_name
-  before_validation :update_tags
-  before_validation :update_priority
-  before_validation :update_num_of_ticket_updates
-  before_validation :update_watcher
+  before_validate :define_num_ticket, :on => :create
+  before_validate :define_state_new
+  before_validate :copy_user_creator_name
+  before_validate :update_tags
+  before_validate :update_priority
+  before_validate :update_num_of_ticket_updates
+  before_validate :update_watcher
 
   before_save :update_milestone_name
   before_save :update_user_assigned_name
@@ -249,11 +251,15 @@ class Ticket
   end
 
   def milestone_in_same_project
+    #:message => "The milestone need to be in same project of this ticket"
     return true unless milestone_id
     not project_id != milestone.project_id
   end
 
   def users_in_members
+   #  :user_assigned,
+   #  :logic => lambda { users_in_members },
+   #  :message => 'need to be member of project'
     return true if user_assigned_id.blank?
     project.has_member?(user_assigned_id)
   end
@@ -279,6 +285,10 @@ class Ticket
   # check if num of ticket is already used in project
   #
   def num_already_used_in_same_project
+
+    # validates_true_for :num,
+    #   :logic => lambda { num_already_used_in_same_project },
+    #   :message => "is already used in same project"
     Ticket.first(:conditions => {:project_id => self.project_id,
                  :num => self.num,
                   :_id => {'$ne' => self._id}}).nil?

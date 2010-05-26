@@ -1,20 +1,26 @@
 class ProjectMember
 
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document
 
   # TODO: need test about required user_name and function_name
-  key :user_id, ObjectId
-  key :function_id, ObjectId
+  field :user_id, :type => BSON::ObjectID
+  field :function_id, :type => BSON::ObjectID
 
   # update by callback
-  key :user_name, String, :required => true
-  key :function_name, String, :required => true
-  key :project_admin, Boolean
+  field :user_name, :type => String, :required => true
+  validates_presence_of :user_name
+
+  field :function_name, :type => String, :required => true
+  validates_presence_of :function_name
+
+  field :project_admin, :type => Boolean
+  validates_presence_of :project_admin
 
   # Update field is made on master document
 
-  belongs_to :user
-  belongs_to :function
+  belongs_to_related :user
+  belongs_to_related :function
+  embedded_in :project, :inverse_of => :project_members
 
   validates_presence_of :function_id
   validates_presence_of :user_id

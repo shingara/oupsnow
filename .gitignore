@@ -21,3 +21,4 @@ bin
 gems
 config/email.yml
 .bundle
+config/mongoid.yml

@@ -1,39 +1,27 @@
-# This is a default user class used to activate merb-auth.  Feel free to change from a User to
-# Some other class, or to remove it altogether.  If removed, merb-auth may not work by default.
-#
-# Don't forget that by default the salted_user mixin is used from merb-more
-# You'll need to setup your db as per the salted_user mixin, and you'll need
-# To use :password, and :password_confirmation when creating a user
-#
-# see merb/merb-auth/setup.rb to see how to disable the salted_user mixin
-#
-# You will need to setup your database and create a user.
-
 class User
 
-  include MongoMapper::Document
+  include Mongoid::Document
 
-  devise :authenticatable, :recoverable, :rememberable
+  devise :database_authenticatable, :recoverable, :rememberable
 
 
-  key :login,  String , :unique => true, :required => true
+  field :login, :type =>  String , :unique => true, :required => true
+  validates_uniqueness_of :login
+  validates_presence_of :login
   alias :name :login
-  key :email,  String
-  key :firstname, String
-  key :lastname, String
-  key :global_admin, Boolean
-  key :deleted_at, DateTime
+  field :email,  :type => String
+  field :firstname, :type =>  String
+  field :lastname, :type => String
+  field :global_admin, :type => Boolean
+  field :deleted_at, :type => DateTime
 
-  validates_true_for :global_admin,
-    :logic => lambda { allways_one_global_admin },
-    :message => 'need a global admin'
-
-  validates_true_for :email,
-    :logic => :not_change_email,
-    :message => 'should not be change'
+  before_save :allways_one_global_admin
+  validate :not_change_email
 
   validates_presence_of :email
   validates_uniqueness_of :email
+
+  has_many_related :project_members
 
   ##
   # Check if this user is admin of this project
@@ -64,11 +52,11 @@ class User
     #
     # @params[Array] All user global_admin
     def update_all_global_admin(user_ids)
-      User.all(:_id => user_ids.map{|i| ObjectId.to_mongo(i)}).each do |user|
+      User.criteria.in(:_id => user_ids).each do |user|
         user.global_admin = true
         user.save
       end
-      User.all(:_id => { '$nin' => user_ids.map{|i| ObjectId.to_mongo(i)} }).each do |user|
+      User.criteria.not_in(:_id => user_ids).each do |user|
         user.global_admin = false
         user.save
       end
@@ -92,21 +80,15 @@ class User
   private
 
   def allways_one_global_admin
-    if User.count == 0
-      self.global_admin = true
-      return true
-    end
     unless self.global_admin
-      if User.first(:conditions => {:_id => {'$ne' => self._id},
-                                    :global_admin => true}) == nil
-        return false
+      if User.where(:_id.ne => self._id, :global_admin => true).count < 1
+        self.global_admin = true
       end
     end
-    return true
   end
 
   def not_change_email
-    new_record? || !email_changed?
+    errors.add(:email, 'should not be change') if !new_record? && email_changed?
   end
 
 end

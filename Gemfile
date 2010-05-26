@@ -8,7 +8,7 @@ gem 'haml'
 gem 'responders', :git => 'http://github.com/plataformatec/responders.git'
 gem 'rails3-generators'
 gem 'inherited_resources', '1.1.2'
-gem 'bson_ext'
+gem 'bson_ext', :require => 'bson'
 gem 'RedCloth', :require => 'redcloth'
 
 group :test do

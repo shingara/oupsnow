@@ -1,43 +1,40 @@
 class Project
 
-  include MongoMapper::Document
+  include Mongoid::Document
+  include Mongoid::Timestamps
 
   ### PROPERTY ###
 
-  key :name, String, :unique => true
+  field :name, :type => String
+  validates_uniqueness_of :name
   alias_method :title, :name
-  key :description, String
+  field :description, :type => String
 
   # callbacks
-  key :num_ticket, Integer
-  key :tag_counts, Hash
-  key :current_milestone_name, String
+  field :num_ticket, :type => Integer
+  field :tag_counts, :type => Hash
+  field :current_milestone_name, :type => String
 
   # TODO: need test about created_at and updated_at needed
-  timestamps!
+  #timestamps!
 
   ### EmbeddedDocument ###
 
-  many :project_members
-  include_errors_from :project_members
+  embeds_many :project_members
+  #include_errors_from :project_members
 
   ### Other Documents ###
 
-  many :milestones, :dependent => :destroy
-  many :tickets, :dependent => :destroy
-  many :events, :dependent => :destroy
+  has_many_related :milestones, :dependent => :destroy
+  has_many_related :tickets, :dependent => :destroy
+  has_many_related :events, :dependent => :destroy
 
-  key :current_milestone_id, ObjectId
+  field :current_milestone_id, :type => BSON::ObjectID
 
   ### VALIDATIONS ###
 
-  validates_true_for :project_members,
-    :logic => lambda { have_one_admin },
-    :message => 'need an admin'
-
-  validates_true_for :same_project_members,
-    :logic => lambda { only_once_each_member },
-    :message => 'not several same member in project'
+  validate :have_one_admin
+  validate :only_once_each_member
 
   validates_presence_of :name
 
@@ -46,8 +43,8 @@ class Project
   ### Callback ###
 
   # Callback about ProjectMember
-  before_validation :update_project_admin
-  before_validation :update_user_name
+  before_validate :update_project_admin
+  before_validate :update_user_name
 
   before_save :update_current_milestone
 
@@ -208,6 +205,10 @@ class Project
   ##
   # Check if project has one member define like admin
   def have_one_admin
+
+    # validates_true_for :project_members,
+    #   :logic => lambda { have_one_admin },
+    #   :message => 'need an admin'
     project_members.any? {|m| m.project_admin?}
   end
 
@@ -256,6 +257,10 @@ class Project
   end
 
   def only_once_each_member
+
+    # validates_true_for :same_project_members,
+    #   :logic => lambda { only_once_each_member },
+    #   :message => 'not several same member in project'
     project_members.map(&:user_id).uniq!.nil?
   end
 

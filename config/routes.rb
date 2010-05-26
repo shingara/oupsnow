@@ -55,28 +55,60 @@ Oupsnow::Application.routes.draw do |map|
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
-  map.devise_for :users
+  devise_for :users
 
-  map.admin_root '/admin', :controller => 'admin/functions', :action => 'index'
-  map.namespace :admin do |admin|
-    admin.resources :functions, :collection => {:update_all => :put}
-    admin.resources :priorities
-    admin.resources :users, :collection => {:update_all => :put}
-    admin.resources :states, :collection => {:update_all => :put}
+  namespace :admin do
+
+    match '/' => 'functions#index', :as => 'root'
+
+    resources :functions do
+      collection do
+        put :update_all
+      end
+    end
+
+    resources :users do
+      collection do
+        put :update_all
+      end
+    end
+
+    resources :states do
+      collection do
+        put :update_all
+      end
+    end
+
+    resources :priorities
   end
 
-  map.resources :users
-  map.resources :projects, :member => {:delete => :get, :overview => :get} do |project|
-    project.resources :milestones
-    project.resources :tickets, :member => {:edit_main_description => :get,
-                                            :watch => :put,
-                                            :unwatch => :put,
-                                            :update_main_description => :put} do |ticket|
-      ticket.resources :ticket_updates, :only => [:edit, :update]
+  resources :users
+  resources :projects do
+    member do
+      get :delete
+      put :overview
     end
+
+    resources :milestones
+
+    resources :tickets do
+      member do
+        get :edit_main_description
+        get :watch
+        put :unwatch
+        put :update_main_description
+      end
+
+      resources :ticket_updates, :only => [:edit, :update]
+    end
+
     #project.settings '/settings', :controller => 'project_members', :action => 'index'
-    project.namespace :settings do |setting|
-      setting.resources :project_members, :collection => {:update_all => :put}
+    namespace :settings do
+      resources :project_members do
+        collection do
+          put :update_all
+        end
+      end
     end
   end
 

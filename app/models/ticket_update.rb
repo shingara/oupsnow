@@ -1,15 +1,18 @@
 class TicketUpdate
 
-  include MongoMapper::EmbeddedDocument
+  include Mongoid::Document
 
-  key :properties_update, Array
-  key :description, String
-  key :created_at, Time, :required => true
-  key :creator_user_name, String, :required => true
-  key :num, Integer, :required => true
+  field :properties_update, :type => Array
+  field :description, :type => String
+  field :created_at, :type => Time, :required => true
+  validates_presence_of :created_at
+  field :creator_user_name, :type => String, :required => true
+  validates_presence_of :creator_user_name
+  field :num, :type => Integer, :required => true
+  validates_presence_of :num
 
-  key :user_id, ObjectId
-  belongs_to :user
+  field :user_id, :type => ObjectId
+  belongs_to_related :user
 
   def write_event(ticket)
     Event.create(:eventable => ticket,

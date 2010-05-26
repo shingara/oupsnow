@@ -3,14 +3,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout 'application'
 
-  rescue_from Mongo::InvalidObjectID do
-    return_404
-  end
-
-  rescue_from MongoMapper::DocumentNotFound do
-    return_404
-  end
-
   private
 
   def need_admin

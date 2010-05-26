@@ -1,9 +1,9 @@
 class Attachment
-  include MongoMapper::EmbeddedDocument
-  
+  include Mongoid::Document
+
   #class << self
 
-    #include CarrierWave::Mount 
+    #include CarrierWave::Mount
 
     #def mount_uploader(column, uploader, options={}, &block)
 
