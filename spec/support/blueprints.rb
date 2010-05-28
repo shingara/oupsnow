@@ -31,7 +31,7 @@ Factory.define(:project) do |f|
 end
 
 
-Factory.define(:project_member) do |m|
+Factory.define(:project_member, :default_strategy => :build) do |m|
   m.user { Factory(:user) }
   m.function { Factory(:function) }
 end
@@ -79,10 +79,11 @@ Factory.define(:ticket) do |t|
   t.description { (0..3).of { /[:paragraph:]/.generate }.join("\n") }
   t.tag_list { 'foo,bar' }
   t.project { make_project }
-  t.tuser_creator { self.project.project_members.first.user }
-  t.state { State.first(:conditions => {:name => 'new'}) || Factory(:state, :name => 'new') }
-  t.milestone { Milestone.first(:project_id => self.project.id) || Factory(:milestone, :project => self.project) }
+  t.user_creator {|ti| ti.project.project_members.first.user }
+  t.state { State.where({:name => 'new'}).first || Factory(:state, :name => 'new') }
+  t.milestone { |ti| Milestone.where(:project_id => ti.project.id).first || Factory(:milestone, :project => ti.project) }
   t.user_assigned_id {nil}
+  t.priority { Priority.first || Factory(:priority) }
 end
 
 def make_ticket(opts={})

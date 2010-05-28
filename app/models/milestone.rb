@@ -81,8 +81,8 @@ class Milestone
   end
 
   def update_nb_tickets_count
-    self.nb_tickets_open = tickets.count(:conditions => {:closed => false})
-    self.nb_tickets_closed = tickets.count(:conditions => {:closed => true})
+    self.nb_tickets_open = tickets.where({:closed => false}).count
+    self.nb_tickets_closed = tickets.where({:closed => true}).count
     self.nb_tickets = self.nb_tickets_open + self.nb_tickets_closed
     self.save!
   end

@@ -8,10 +8,10 @@ class TicketUpdate
   validates_presence_of :created_at
   field :creator_user_name, :type => String, :required => true
   validates_presence_of :creator_user_name
-  field :num, :type => Integer, :required => true
-  validates_presence_of :num
+  field :num, :type => Integer#, :required => true
+  #validates_presence_of :num
 
-  field :user_id, :type => ObjectId
+  field :user_id, :type => BSON::ObjectID
   belongs_to_related :user
 
   def write_event(ticket)

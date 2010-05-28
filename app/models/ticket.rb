@@ -3,27 +3,21 @@ class Ticket
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :title, :type => String, :required => true, :length => 255
-  validates_presence_of :title
+  field :title, :type => String, :length => 255
   field :description, :type => String
-  field :num, :type => Integer, :required => true
-  validates_presence_of :num
+  field :num, :type => Integer#, :required => true
   field :tag_list, :type => String, :default => ''
 
   #It's all words in ticket. Useful to full text search
-  field :_keywords, :type => Array, :required => true
-  validates_presence_of :_keywords
+  field :_keywords, :type => Array
   field :tags, :type => Set
 
   ## denormalisation
   field :priority_name, :type => String
   field :milestone_name, :type => String
-  field :creator_user_name, :type => String, :required => true
-  validates_presence_of :creator_user_name
-  field :state_name, :type => String, :required => true
-  validates_presence_of :state_name
+  field :creator_user_name, :type => String
+  field :state_name, :type => String
   field :closed, :type => Boolean, :default => false
-  validates_presence_of :closed
   field :user_assigned_name, :type => String, :default => ''
 
   embeds_many :watchers
@@ -32,13 +26,13 @@ class Ticket
   embeds_many :attachments
 
 
-  field :user_creator_id, :type => BSON::ObjectID, :required => true
-  validates_presence_of :user_creator_id
+  field :user_creator_id, :type => BSON::ObjectID
   field :project_id, :type => BSON::ObjectID
   field :state_id, :type => BSON::ObjectID
   field :user_assigned_id, :type => BSON::ObjectID
   field :milestone_id, :type => BSON::ObjectID
   field :priority_id, :type => BSON::ObjectID
+
 
   #timestamps!
 
@@ -57,21 +51,30 @@ class Ticket
     :foreign_key => :eventable_id,
     :dependent => :destroy
 
+
+
   validate :users_in_members
   validate :milestone_in_same_project
   validate :num_already_used_in_same_project
 
-  before_validate :define_num_ticket, :on => :create
-  before_validate :define_state_new
-  before_validate :copy_user_creator_name
-  before_validate :update_tags
-  before_validate :update_priority
-  before_validate :update_num_of_ticket_updates
-  before_validate :update_watcher
+  validates_presence_of :num
+  validates_presence_of :_keywords
+  validates_presence_of :creator_user_name
+  validates_presence_of :state_name
+  validates_presence_of :user_creator_id
+  validates_presence_of :title
+
+  before_validation :define_num_ticket, :on => :create
+  before_validation :define_state_new
+  before_validation :copy_user_creator_name
+  before_validation :update_tags
+  before_validation :update_priority
+  before_validation :update_num_of_ticket_updates
+  before_validation :update_watcher
+  before_validation :update_keywords
 
   before_save :update_milestone_name
   before_save :update_user_assigned_name
-  before_save :update_keywords
 
   after_save :update_tag_counts
   after_save :update_milestone_tickets_count
@@ -239,7 +242,11 @@ class Ticket
 
   # get number of this ticket in project model
   def define_num_ticket
+    p project
+    p project.new_num_ticket
+    p self.num
     self.num ||= project.new_num_ticket
+    p self.num
   end
 
   def define_state_new
@@ -260,6 +267,7 @@ class Ticket
    #  :user_assigned,
    #  :logic => lambda { users_in_members },
    #  :message => 'need to be member of project'
+    p 'validate'
     return true if user_assigned_id.blank?
     project.has_member?(user_assigned_id)
   end

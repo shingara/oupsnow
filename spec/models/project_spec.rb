@@ -27,8 +27,8 @@ describe Project do
   end
 
   it "should not valid project without admin member" do
-    project_member = ProjectMember.make(:user => nil,
-                                        :function => (Function.not_admin || Function.make))
+    project_member = Factory(:project_member, :user => nil,
+                                        :function => (Function.not_admin || Factory(:function)))
     make_project(:project_members => [project_member]).should_not be_valid
   end
 
@@ -87,9 +87,9 @@ describe Project do
 
   describe '#has_member?' do
     before do
-      @user = User.make
+      @user = Factory(:user)
       @project = make_project
-      @function = Function.first || Function.make
+      @function = Function.first || Factory(:function)
       @project.add_member(@user, Function.first)
     end
 
@@ -98,7 +98,7 @@ describe Project do
     end
 
     it 'should return false if has not this member' do
-      user = User.make
+      user = Factory(:user)
       @project.has_member?(user).should_not be_true
     end
   end
@@ -106,9 +106,9 @@ describe Project do
   describe 'Project#new_with_admin_member' do
     before :each do
       Function.destroy_all
-      @function = Function.make(:admin)
-      @admin_user = User.make(:admin)
-      @user = User.make
+      @function = Factory(:admin_function)
+      @admin_user = Factory(:admin)
+      @user = Factory(:user)
     end
 
     it 'should create a project with user like admin function' do
@@ -126,9 +126,9 @@ describe Project do
 
     before do
       @project = make_project # there are 1 user by default
-      @function = Function.make
+      @function = Factory(:function)
       @admin_member = @project.project_members.first
-      @user_member =  ProjectMember.make(:function => @function)
+      @user_member =  Factory(:project_member, :function => @function)
       @project.project_members << @user_member
       @project.save
     end
@@ -149,7 +149,7 @@ describe Project do
 
     it 'should made nothing if no admin define' do
       @project.change_functions({@admin_member.id.to_s => @function.id.to_s,
-                                @user_member.id.to_s => Function.make.id.to_s}).should be_false
+                                @user_member.id.to_s => Factory(:function).id.to_s}).should be_false
       @project.project_members.first.function_id.should == Function.admin._id
       @project.project_members.second.function_id.should == @function._id
     end
@@ -158,10 +158,10 @@ describe Project do
   describe '#project_membership(user)' do
     before do
       @project = make_project
-      @user = User.make
+      @user = Factory(:user)
     end
     it 'should return project_member with this user if user member of this project' do
-      @member = @project.project_members.build(:user => @user, :function => Function.make)
+      @member = @project.project_members.build(:user => @user, :function => Factory(:function))
       @project.save! && @user.reload
       @project.project_membership(@user).should == @member
     end

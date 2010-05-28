@@ -43,8 +43,8 @@ class Project
   ### Callback ###
 
   # Callback about ProjectMember
-  before_validate :update_project_admin
-  before_validate :update_user_name
+  before_validation :update_project_admin
+  before_validation :update_user_name
 
   before_save :update_current_milestone
 
