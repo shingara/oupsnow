@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe ProjectsController do
 
-  integrate_views
+  render_views
 
   describe "resource(:projects)" do
     describe 'with anonymous user' do

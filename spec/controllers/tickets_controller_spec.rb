@@ -2,15 +2,14 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe TicketsController do
 
-  integrate_views
+  render_views
 
   before :each do
     @project = make_project
     State.make
   end
 
-  describe 'success #index', :shared => true do
-    integrate_views
+  shared_examples_for 'success #index' do
     describe '404' do
       it 'should render 404 if project not exist' do
         get :index, :project_id => @project.id.to_s.succ
@@ -27,7 +26,8 @@ describe TicketsController do
       it { response.should have_tag('ul') }
     end
   end
-  describe 'success show', :shared => true do
+
+  shared_examples_for 'success show' do
     before do
       @ticket = make_ticket(:project => @project)
       make_ticket_update(@ticket, {:user_assigned_id => nil})
@@ -55,12 +55,12 @@ describe TicketsController do
     end
   end
 
-  describe 'success', :shared => true do
+  shared_examples_for 'success' do
     before { req }
     it { response.should be_success }
   end
 
-  describe 'create ticket', :shared => true do
+  shared_examples_for 'create ticket' do
     describe 'valid creation of ticket' do
       before do
         @nb_tickets = @project.tickets.size
@@ -102,14 +102,14 @@ describe TicketsController do
     end
   end
 
-  describe 'not access', :shared => true do
+  shared_examples_for 'not access' do
     it 'should not access' do
       req
       response.should redirect_to(new_user_session_url(:unauthenticated=>true))
     end
   end
 
-  describe 'watching ticket', :shared => true do
+  shared_examples_for 'watching ticket' do
     before do
       @ticket = make_ticket(:project => @project)
     end
@@ -133,7 +133,7 @@ describe TicketsController do
     end
   end
 
-  describe 'update ticket', :shared => true do
+  shared_examples_for 'update ticket' do
     before do
       @ticket = make_ticket(:project => @project)
     end

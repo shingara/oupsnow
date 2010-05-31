@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 describe Admin::UsersController do
 
-  integrate_views
+  render_views
 
   describe 'with admin user' do
     before do

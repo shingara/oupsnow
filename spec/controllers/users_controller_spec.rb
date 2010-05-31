@@ -2,6 +2,8 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe UsersController do
 
+  render_views
+
   describe "resource(:users)" do
 
     describe "a successful POST" do
@@ -21,7 +23,7 @@ describe UsersController do
     end
   end
 
-  describe "resource(@user)" do 
+  describe "resource(@user)" do
     describe "a successful DELETE" do
       before(:each) do
         login_request

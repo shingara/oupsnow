@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 describe Settings::ProjectMembersController do
 
-  integrate_views
+  render_views
 
   before :each do
     @project = make_project

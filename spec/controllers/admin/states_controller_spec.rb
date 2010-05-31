@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), '..', '..', 'spec_helper.rb')
 
 describe Admin::StatesController do
 
-  integrate_views
+  render_views
 
   before do
     State.make
