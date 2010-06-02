@@ -11,7 +11,7 @@ describe Project do
   it "should invalid without name" do
     project = make_project(:name => nil)
     project.should_not be_valid
-    project.errors.on(:name).should_not be_blank
+    project.errors[:name].should_not be_blank
   end
 
   it "should have name uniq" do
@@ -19,7 +19,7 @@ describe Project do
     project_2 = make_project(:name => project_1.name)
     project_2.should_not be_valid
     project_2.errors.length.should == 1
-    project_2.errors.on(:name).should_not be_blank
+    project_2.errors[:name].should_not be_blank
   end
 
   it "should not valid project without member" do

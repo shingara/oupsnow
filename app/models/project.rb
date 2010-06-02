@@ -215,6 +215,7 @@ class Project
     if project_members.empty?
       errors.add(:project_members, 'need an admin')
     end
+
     unless project_members.any? {|m| m.project_admin?}
       errors.add(:project_members, 'need an admin')
     end

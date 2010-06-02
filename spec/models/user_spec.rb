@@ -89,7 +89,7 @@ describe User do
     user = Factory(:user)
     user.email = 'new@yahoo.com'
     user.should_not be_valid
-    user.errors.on('email').should_not be_empty
+    user.errors['email'].should_not be_empty
   end
 
   it 'should change login of watcher if change is login'

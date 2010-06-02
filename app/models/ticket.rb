@@ -263,7 +263,6 @@ class Ticket
    #  :user_assigned,
    #  :logic => lambda { users_in_members },
    #  :message => 'need to be member of project'
-    p 'validate'
     return true if user_assigned_id.blank?
     project.has_member?(user_assigned_id)
   end
