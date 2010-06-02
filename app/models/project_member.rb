@@ -13,13 +13,13 @@ class ProjectMember
   field :function_name, :type => String, :required => true
   validates_presence_of :function_name
 
-  field :project_admin, :type => Boolean
-  validates_presence_of :project_admin
+  field :project_admin, :type => Boolean, :default => false
 
   # Update field is made on master document
 
   belongs_to_related :user
   belongs_to_related :function
+
   embedded_in :project, :inverse_of => :project_members
 
   validates_presence_of :function_id

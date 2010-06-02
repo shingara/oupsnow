@@ -21,7 +21,6 @@ class Project
   ### EmbeddedDocument ###
 
   embeds_many :project_members
-  #include_errors_from :project_members
 
   ### Other Documents ###
 
@@ -29,13 +28,21 @@ class Project
   has_many_related :tickets, :dependent => :destroy
   has_many_related :events, :dependent => :destroy
 
+  # TODO: need add :dependent feature in mongoid
+  before_destroy :delete_dependencies
+  def delete_dependencies
+    milestones.map(&:destroy)
+    tickets.map(&:destroy)
+    events.map(&:destroy)
+  end
+
   field :current_milestone_id, :type => BSON::ObjectID
 
   ### VALIDATIONS ###
 
   validate :have_one_admin
   validate :only_once_each_member
-
+  validates_associated :project_members
   validates_presence_of :name
 
   # TODO: avoid 2 users members of this project
@@ -100,12 +107,12 @@ class Project
   # @returns[Boolean] true if change works false instead of
   def change_functions(member_function)
     return false unless member_function.values.any?{|m|
-      Function.exists?(:project_admin => true,
-                       :id => m)}
+      Function.exists?(:conditions => {:project_admin => true,
+                       :id => BSON::ObjectID.from_string(m)})}
     member_function.each do |pm_id, function_id|
       project_members.detect{ |pm|
         pm.id.to_s == pm_id.to_s
-      }.function_id = Function.find(function_id).id
+      }.function_id = Function.find(BSON::ObjectID.from_string(function_id)).id
     end
     save
   end
@@ -205,11 +212,12 @@ class Project
   ##
   # Check if project has one member define like admin
   def have_one_admin
-
-    # validates_true_for :project_members,
-    #   :logic => lambda { have_one_admin },
-    #   :message => 'need an admin'
-    project_members.any? {|m| m.project_admin?}
+    if project_members.empty?
+      errors.add(:project_members, 'need an admin')
+    end
+    unless project_members.any? {|m| m.project_admin?}
+      errors.add(:project_members, 'need an admin')
+    end
   end
 
   def current_milestone
@@ -252,7 +260,7 @@ class Project
 
   def update_user_name
     project_members.each do |pr|
-      pr.user_name = pr.user.login
+      pr.user_name = pr.user.try(:login)
     end
   end
 

@@ -31,7 +31,7 @@ class Function
     #
     # @returns[Function]
     def admin
-      Function.first(:conditions => {:project_admin => true})
+      Function.where(:project_admin => true).first
     end
 
     ##
@@ -42,7 +42,7 @@ class Function
     #
     # @returns[Function]
     def not_admin
-      Function.first(:conditions => {:project_admin => false})
+      Function.where(:project_admin => false).first
     end
 
     ##

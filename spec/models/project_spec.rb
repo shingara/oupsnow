@@ -50,8 +50,8 @@ describe Project do
   describe 'destroy project' do
     before :each do
       @project = make_project
-      Ticket.make(:project => @project)
-      @project.milestones << Milestone.make
+      Factory(:ticket, :project => @project)
+      @project.milestones << Factory(:milestone)
     end
 
     it 'should destroy himself' do
@@ -115,7 +115,7 @@ describe Project do
       pr = Project.new_with_admin_member({'name' => 'first project',
                                     'description' => 'so cool'},
                                     @user)
-      pr.should be_new
+      pr.should be_new_record
       pr.project_members.should have(1).items
       pr.project_members.first.function_id.should == Function.admin._id
       pr.project_members.first.user_id.should == @user._id

@@ -242,11 +242,7 @@ class Ticket
 
   # get number of this ticket in project model
   def define_num_ticket
-    p project
-    p project.new_num_ticket
-    p self.num
     self.num ||= project.new_num_ticket
-    p self.num
   end
 
   def define_state_new
