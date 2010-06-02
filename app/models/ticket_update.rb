@@ -2,7 +2,7 @@ class TicketUpdate
 
   include Mongoid::Document
 
-  field :properties_update, :type => Array
+  field :properties_update, :type => Array, :default => []
   field :description, :type => String
   field :created_at, :type => Time, :required => true
   validates_presence_of :created_at
@@ -41,8 +41,8 @@ class TicketUpdate
 
   # TODO: need test
   def send_update_to_watchers
-    _root_document.watchers.each do |watcher|
-      UserMailer.deliver_ticket_update(_root_document.project, self, watcher)
+    _parent.watchers.each do |watcher|
+      UserMailer.deliver_ticket_update(_parent.project, self, watcher)
     end
   end
 

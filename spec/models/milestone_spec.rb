@@ -3,37 +3,37 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 describe Milestone do
 
   it "should have dm-sweatshop valid" do
-    Milestone.make.should be_valid
+    Factory(:milestone).should be_valid
   end
 
   describe 'validation' do
     it 'should not valid if no project_id' do
-      Milestone.make_unsaved(:project => nil).should_not be_valid
+      Factory.build(:milestone, :project => nil).should_not be_valid
     end
 
     it 'should not valid if no name' do
       project = make_project
-      Milestone.make_unsaved(:name => '', :project => project).should_not be_valid
+      Factory.build(:milestone, :name => '', :project => project).should_not be_valid
     end
   end
 
   describe 'callback' do
     before do
       @project = make_project
-      @milestone = Milestone.make(:project => @project)
+      @milestone = Factory(:milestone, :project => @project)
       @project.reload
     end
     describe '#nb_tickets_open' do
       it 'should change with ticket change' do
         @milestone.nb_tickets_open.should == 0
-        new_ticket = make_ticket(:project => @milestone.project, :state => State.make(:closed => false))
+        new_ticket = make_ticket(:project => @milestone.project, :state => Factory(:state, :closed => false))
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_open.should == 1
-        other_ticket = make_ticket(:project => @milestone.project, :state => State.make(:closed => false))
+        other_ticket = make_ticket(:project => @milestone.project, :state => Factory(:state, :closed => false))
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_open.should == 2
 
-        make_ticket_update(new_ticket, :state_id => State.make(:closed => true).id)
+        make_ticket_update(new_ticket, :state_id => Factory(:state, :closed => true).id)
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets_open.should == 1
       end
@@ -42,17 +42,14 @@ describe Milestone do
       it 'should change with ticket change' do
         @milestone.nb_tickets_closed.should == 0
         new_ticket = make_ticket(:project => @milestone.project,
-                                 :state => State.make(:closed => true))
-        @milestone = Milestone.find(@milestone.id)
-        @milestone.nb_tickets_closed.should == 1
+                                 :state => Factory(:state, :closed => true))
+        @milestone.reload.nb_tickets_closed.should == 1
         other_ticket = make_ticket(:project => @milestone.project,
-                                   :state => State.make(:closed => true))
-        @milestone = Milestone.find(@milestone.id)
-        @milestone.nb_tickets_closed.should == 2
+                                   :state => Factory(:state, :closed => true))
+        @milestone.reload.nb_tickets_closed.should == 2
 
-        make_ticket_update(new_ticket, :state_id => State.make(:closed => false).id)
-        @milestone = Milestone.find(@milestone.id)
-        @milestone.nb_tickets_closed.should == 1
+        make_ticket_update(new_ticket, :state_id => Factory(:state, :closed => false).id)
+        @milestone.reload.nb_tickets_closed.should == 1
       end
     end
 
@@ -60,11 +57,11 @@ describe Milestone do
       it 'should change with ticket change' do
         @milestone.nb_tickets.should == 0
         new_ticket = make_ticket(:project => @milestone.project,
-                                 :state => State.make(:closed => true))
+                                 :state => Factory(:state, :closed => true))
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets.should == 1
         other_ticket = make_ticket(:project => @milestone.project,
-                                   :state => State.make(:closed => false))
+                                   :state => Factory(:state, :closed => false))
         @milestone = Milestone.find(@milestone.id)
         @milestone.nb_tickets.should == 2
       end
@@ -79,8 +76,8 @@ describe Milestone do
 
     describe '#current=' do
       it 'should define this milestone like current on his project if true' do
-        milestone = Milestone.make(:project => @project)
-        milestone_2 = Milestone.make(:project => @project)
+        milestone = Factory(:milestone, :project => @project)
+        milestone_2 = Factory(:milestone, :project => @project)
         @project.current_milestone.should_not == milestone
         milestone.current = true
         milestone.save
@@ -98,12 +95,12 @@ describe Milestone do
 
   describe '#tag_counts' do
     it 'should be empty if no ticket in milestone' do
-      Milestone.make.tag_counts.should be_empty
+      Factory(:milestone).tag_counts.should be_empty
     end
 
     it 'should have all tag in milestone' do
       @project = make_project
-      @milestone = Milestone.make(:project => @project)
+      @milestone = Factory(:milestone, :project => @project)
       make_ticket(:project => @project, :tag_list => 'foo', :milestone => @milestone)
       @milestone.update_tag_counts
       @milestone.reload

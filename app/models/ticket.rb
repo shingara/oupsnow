@@ -119,7 +119,7 @@ class Ticket
       [:user_assigned_id, User]].each do |property|
       if ticket[property[0]].to_s != self.send(property[0]).to_s
         property_klass = property[0].to_s.gsub('_id', '')
-        new_value = property[1].find(ticket[property[0]])
+        new_value = ticket[property[0]] ? property[1].find(ticket[property[0]]) : nil
         t.add_update(property_klass.to_sym,
                      send(property_klass) ? send(property_klass).name : '',
                      new_value ? new_value.name : '')
@@ -310,7 +310,10 @@ class Ticket
   #
   def update_tag_counts
     project.update_tag_counts
-    milestone.update_tag_counts if milestone
+    if milestone
+      self.milestone.update_tag_counts
+      self.milestone.reload
+    end
   end
 
   ##
@@ -341,6 +344,7 @@ class Ticket
   # TODO: what's happen if milestone change ?
   def update_milestone_tickets_count
     self.milestone.update_nb_tickets_count
+    self.milestone.reload
   end
 
   def update_keywords

@@ -3,6 +3,7 @@ class Milestone
   include Mongoid::Document
 
   field :name, :type => String, :required => true
+  validates_presence_of :name
   field :description, :type => String
   field :expected_at, :type => Date
 
@@ -10,7 +11,7 @@ class Milestone
   field :nb_tickets_open, :type => Integer, :default => 0
   field :nb_tickets_closed, :type => Integer, :default => 0
   field :nb_tickets, :type => Integer, :default => 0
-  field :tag_counts, :type => Hash
+  field :tag_counts, :type => Hash, :default => {}
 
   has_many_related :tickets
 
