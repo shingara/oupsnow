@@ -241,7 +241,7 @@ describe ProjectsController do
   end
 
 
-  describe 'it should be successful' , :shared => true do
+  shared_examples_for 'it should be successful' do
     it 'should be successful' do
       response.should be_success
     end
@@ -253,7 +253,7 @@ describe ProjectsController do
       get :overview, :id => @project.id
     end
 
-    describe 'with event desapear', :shared => true do
+    shared_examples_for 'with event desapear' do
       before :each do
         login_anonymous
         ticket = Ticket.make
@@ -268,7 +268,7 @@ describe ProjectsController do
       end
     end
 
-    describe 'with project unexist', :shared => true do
+    shared_examples_for 'with project unexist' do
       it 'should render 404' do
         get :overview, :id => @project.id.to_s.succ
         response.code.should == '404'
