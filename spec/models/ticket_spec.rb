@@ -5,7 +5,7 @@ describe Ticket do
   TAG_LIST = 'bar,foo,ko,ok'
 
   it "should be valid" do
-    Ticket.make.should be_valid
+    Factory(:ticket).should be_valid
   end
 
   describe 'validation' do
@@ -13,16 +13,16 @@ describe Ticket do
     it 'should not be valid if no same project between ticket and milestone' do
       project = make_project
       project_2 = make_project
-      milestone = Milestone.make(:project => project_2)
-      Ticket.make_unsaved(:project => project,
+      milestone = Factory(:milestone, project => project_2)
+      Factory.build(:ticket, :project => project,
                   :milestone => milestone).should_not be_valid
     end
 
     it 'shoud not have same num in same project' do
       project = make_project
-      t1 = Ticket.make(:project => project,
+      t1 = Factory(:ticket, :project => project,
                   :num => 1)
-      t = Ticket.make_unsaved(:project => project,
+      t = Factory.build(:ticket, :project => project,
                           :num => 1)
       t.should_not be_valid
     end
@@ -31,7 +31,7 @@ describe Ticket do
   describe '#create' do
     it 'should generate Event of ticket creation' do
       lambda do
-        t = Ticket.make
+        t = Factory(:ticket)
         t.write_create_event
       end.should change(Event, :count)
     end
@@ -40,25 +40,25 @@ describe Ticket do
   describe 'Ticket#paginate_by_search' do
 
     before :each  do
-      @state = State.make
-      @state_2 = State.make
+      @state = Factory(:state)
+      @state_2 = Factory(:state)
       @first_tag = /\w+/.generate
       @second_tag = /\w+/.generate
       @third_tag = /\w+/.generate
-      @first_ticket = Ticket.make(:state => @state,
+      @first_ticket = Factory(:ticket, :state => @state,
                                  :tag_list => @first_tag,
-                                 :priority => Priority.make)
+                                 :priority => Factory(:priority))
 
-      @second_ticket = Ticket.make(:state => @state,
+      @second_ticket = Factory(:ticket, :state => @state,
                                    :title => 'foo',
                                    :tag_list => "#{@second_tag},#{@third_tag}")
-      @third_ticket = Ticket.make(:state => @state_2,
+      @third_ticket = Factory(:ticket, :state => @state_2,
                                  :tag_list => @first_tag,
-                                  :priority => Priority.make)
-      @four_ticket = Ticket.make(:state => @state_2,
+                                  :priority => Factory(:priority))
+      @four_ticket = Factory(:ticket, :state => @state_2,
                                  :tag_list => @second_tag)
       second_project = @second_ticket.project
-      second_user = User.make
+      second_user = Factory(:user)
       second_project.project_members.build(:user => second_user,
                                           :function => Function.make)
       second_project.save!
@@ -68,7 +68,7 @@ describe Ticket do
                          :user_assigned_id => second_user.id})
 
       third_project = @third_ticket.project
-      third_user = User.make
+      third_user = Factory(:user)
       third_project.project_members.build(:user => third_user,
                                           :function => Function.make)
       third_project.save!
@@ -78,7 +78,7 @@ describe Ticket do
                          :user_assigned_id => third_user.id})
 
       four_project = @four_ticket.project
-      user_four = User.make
+      user_four = Factory(:user)
       four_project.project_members.build(:user => user_four,
                                           :function => Function.make)
       four_project.save!
@@ -230,7 +230,7 @@ describe Ticket do
 
   describe '#generate_update' do
     def generate_ticket(ticket)
-      @t = Ticket.make(:project => Project.first || make_project,
+      @t = Factory(:ticket, :project => Project.first || make_project,
                        :tag_list => TAG_LIST,
                        :user_creator => Project.first.project_members.first.user)
       @old_description = @t.description
@@ -251,7 +251,7 @@ describe Ticket do
 
     it 'should send email to all user if update and watcher' do
       ticket = generate_ticket({:description => 'start', 'tag_list' => TAG_LIST})
-      user = User.make
+      user = Factory(:user)
       ticket.watchers.build(:user => user)
       ticket.save
       ticket.reload
@@ -305,7 +305,7 @@ describe Ticket do
 
     describe 'change state with description' do
       before(:each) do
-        state = State.first(:conditions => {:name => 'check'}) || State.make(:name => 'check')
+        state = State.first(:conditions => {:name => 'check'}) || Factory(:state, :name => 'check')
         generate_ticket({:description => 'yahoo',
                         :state_id => state.id,
                         :tag_list => TAG_LIST})
@@ -336,7 +336,7 @@ describe Ticket do
 
     describe 'change priority' do
       before(:each) do
-        @priority = Priority.make
+        @priority = Factory(:priority)
         generate_ticket({:description => '',
                         :priority_id => @priority.id.to_s,
                         :tag_list => TAG_LIST})
@@ -376,7 +376,7 @@ describe Ticket do
 
     describe 'destroy' do
       before :each do
-        @ticket = Ticket.make
+        @ticket = Factory(:ticket)
         @ticket.write_create_event
         @ticket.generate_update({:description => 'new title'}, User.first)
       end
@@ -399,8 +399,8 @@ describe Ticket do
   describe 'self#get_by_permalink' do
     before do
       @pr = make_project
-      @t1 = Ticket.make(:project => @pr)
-      @t2 = Ticket.make(:project => @pr)
+      @t1 = Factory(:ticket, :project => @pr)
+      @t2 = Factory(:ticket, :project => @pr)
     end
 
     it 'should get ticket with this project_id and permlink in string' do
@@ -443,9 +443,9 @@ describe Ticket do
 
   describe 'self#new_by_params' do
     before do
-      @state = State.make
+      @state = Factory(:state)
       @project = make_project
-      @user = User.make
+      @user = Factory(:user)
     end
 
     def new_by_params(args={})
@@ -497,12 +497,12 @@ describe Ticket do
       it 'should update state_name after each state change' do
         @ticket = make_ticket
         @ticket.state_name.should == 'new'
-        new_state = State.make
+        new_state = Factory(:state)
         @ticket.state_id = new_state.id
         @ticket.save!
         @ticket = Ticket.find(@ticket.id)
         @ticket.state_name.should == new_state.name
-        new_state = State.make
+        new_state = Factory(:state)
         @ticket.state = new_state
         @ticket.save!
         @ticket = Ticket.find(@ticket.id)
@@ -514,7 +514,7 @@ describe Ticket do
       it 'should update milestone_name if milestone define' do
         @ticket = make_ticket
         @ticket.milestone_name.should_not be_blank
-        new_milestone = Milestone.make(:project => @ticket.project)
+        new_milestone = Factory(:milestone, :project => @ticket.project)
         @ticket.milestone = new_milestone
         @ticket.save!
         @ticket.milestone_name.should == new_milestone.name
@@ -525,7 +525,7 @@ describe Ticket do
         @ticket.milestone_name.should be_blank
 
         @ticket = Ticket.find(@ticket.id)
-        other_milestone = Milestone.make(:project => @ticket.project)
+        other_milestone = Factory(:milestone, :project => @ticket.project)
         @ticket.milestone_id = other_milestone.id
         @ticket.save!
         @ticket.milestone_name.should == other_milestone.name
@@ -541,7 +541,7 @@ describe Ticket do
       it 'should update user_assigned_name if user_assigned define' do
         @ticket = make_ticket
         @ticket.user_assigned_name.should be_blank
-        new_user = User.make
+        new_user = Factory(:user)
         @ticket.project.project_members << ProjectMember.make(:user => new_user,
                                                   :function => Function.make)
         @ticket.project.save!
@@ -555,7 +555,7 @@ describe Ticket do
         @ticket.user_assigned_name.should be_blank
 
         @ticket = Ticket.find(@ticket.id)
-        other_user = User.make
+        other_user = Factory(:user)
         @ticket.project.project_members << ProjectMember.make(:user => other_user,
                                                   :function => Function.make)
         @ticket.project.save!
@@ -600,19 +600,20 @@ describe Ticket do
 
     describe '#update_tags' do
       it 'should save in downcase' do
-        Ticket.make(:tag_list => 'foo,bar,baz'.upcase).tags.should == Set.new(['bar','baz','foo'])
+        Factory(:ticket, :tag_list => 'foo,bar,baz'.upcase).tags.should == Set.new(['bar','baz','foo'])
 
       end
       it 'should split tag_list' do
-        Ticket.make(:tag_list => 'foo,bar,baz').tags.should == Set.new(['bar','baz','foo'])
+        Factory(:ticket, :tag_list => 'foo,bar,baz').tags.should == Set.new(['bar','baz','foo'])
       end
     end
 
     describe '#update_watcher' do
 
+      let (:ticket) {Factory(:ticket) }
+      let (:user)  {Factory(:user) }
+
       it 'should update user_email with email of watcher' do
-        ticket = Ticket.make
-        user = User.make
         ticket.watchers.build(:user => user)
         ticket.save
         ticket.reload
@@ -620,8 +621,6 @@ describe Ticket do
       end
 
       it 'should update user_login with login of watcher' do
-        ticket = Ticket.make
-        user = User.make
         ticket.watchers.build(:user => user)
         ticket.save!
         ticket.reload
@@ -632,8 +631,8 @@ describe Ticket do
 
   describe '#add_watcher' do
     it 'can add some watcher by user model' do
-      ticket = Ticket.make
-      user = User.make
+      ticket = Factory(:ticket)
+      user = Factory(:user)
       lambda do
         ticket.watchers.build(:user => user)
       end.should change(ticket.watchers, :size)
@@ -643,8 +642,8 @@ describe Ticket do
 
   describe '#watchers?' do
     before do
-      @user = User.make
-      @ticket = Ticket.make
+      @user = Factory(:user)
+      @ticket = Factory(:ticket)
       @ticket.watchers.build(:user => @user)
       @ticket.save
     end
@@ -652,14 +651,14 @@ describe Ticket do
       @ticket.should be_watchers(@user)
     end
     it 'should return false if user is not watcher' do
-      @ticket.should_not be_watchers(User.make)
+      @ticket.should_not be_watchers(Factory(:user))
     end
   end
 
   describe 'unwatch' do
     before do
-      @user = User.make
-      @ticket = Ticket.make
+      @user = Factory(:user)
+      @ticket = Factory(:ticket)
       @ticket.watchers.build(:user => @user)
       @ticket.save
     end
@@ -670,7 +669,7 @@ describe Ticket do
     end
     it 'should made nothing if user not watcher' do
       lambda do
-        @ticket.unwatch(User.make)
+        @ticket.unwatch(Factory(:user))
         @ticket.save
       end.should_not change(@ticket.reload.watchers, :count)
     end
