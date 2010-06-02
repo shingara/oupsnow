@@ -3,13 +3,13 @@ require File.join( File.dirname(__FILE__), '..', "spec_helper" )
 describe Function do
 
   it "should have dm-sweatshop valid" do
-    Function.make.should be_valid
+    Factory(:function).should be_valid
   end
 
   describe 'self#update_project_admin' do
     before do
-      @admin = Function.make(:admin)
-      @dev = Function.make(:project_admin => false)
+      @admin = Factory(:admin_function)
+      @dev = Factory(:function, :project_admin => false)
     end
     it 'should change project admin flag to function' do
       Function.update_project_admin([@dev.id.to_s, @admin.id.to_s])
